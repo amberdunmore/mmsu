@@ -1,0 +1,31 @@
+Package: mmsu
+Title: Malaria model start up
+Version: 0.0.1
+Authors@R: 
+    person("Amber", "Dunmore", , "amber.dunmore24@imperial.ac.uk", role = c("aut", "cre"))
+Description: This package provides functions to run a simple malaria model using odin.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+    odin,
+    ICDMM,
+    tidyr,
+    stats,
+    ggplot2,
+    utils,
+    dplyr,
+    magrittr
+Suggests:
+    testthat,
+    knitr,
+    rmarkdown,
+    devtools
+Remotes: 
+    mrc-ide/odin,
+    mrc-ide/dde,
+    mrc-ide/deterministic-malaria-model
+LinkingTo: Rcpp
+RoxygenNote: 7.3.2
+Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
