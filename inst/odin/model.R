@@ -118,7 +118,7 @@ rD <- user()
 rA <- user()
 rT_s <- user()
 rT_r_true <- user()
-rT_r <- if (t > ton && t < toff) rT_r_true else rT_s
+rT_r <- if (t > ton && t < toff) rT_r_true else (rT_s / resistance_dur_mult)
 Sv0 <- user()
 Ev_s0 <- user()
 Iv_s0 <- user()
