@@ -109,7 +109,7 @@ m <- user()
 a <- user()
 b <- user()
 lambda_s <- m * a * b * Iv_s
-lambda_r <- m * a * b * Iv_r * resistance_trans_multdev
+lambda_r <- m * a * b * Iv_r * resistance_trans_mult
 lambda_v_s <- a * (cA * A_s + cD * D_s + cT * T_s)
 lambda_v_r <- a * (cA * A_r + cD * D_r + cT * T_r)
 phi <- user()
