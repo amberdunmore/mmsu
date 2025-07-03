@@ -42,7 +42,7 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
     params$rT_r_true <- rT_r_true
     params$resistance_trans_mult <- resistance_trans_mult  # add transmission multiplier (default 1 if not provided)
     params$resistance_dur_mult <- resistance_dur_mult      # add duration multiplier (default 1 if not provided)
-    parmas$resistance_baseline_ratio <- resistance_baseline_ratio
+    params$resistance_baseline_ratio <- resistance_baseline_ratio
     params$resistance_treated_ratio <- resistance_treated_ratio
 
     # Generate initial parameters if not already present
