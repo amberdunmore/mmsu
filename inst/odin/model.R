@@ -110,8 +110,8 @@ a <- user()
 b <- user()
 lambda_s <- m * a * b * Iv_s
 lambda_r <- m * a * b * Iv_r * resistance_trans_mult
-lambda_v_s <- a * (cA * A_s + cD * D_s + cT * T_s)
-lambda_v_r <- a * (cA * A_r + cD * D_r + cT * T_r)
+lambda_v_s <- a * (cA_s * A_s + cD_s * D_s + cT_s * T_s) # Updated to incorporate separate infectiousness
+lambda_v_r <- a * (cA_r * A_r + cD_r * D_r + cT_r * T_r)
 phi <- user()
 ft <- user()
 rD <- user()
@@ -138,3 +138,17 @@ init_res <- user()
 # Sexual commitment/transmission advantage parameters
 resistance_trans_mult <- user()  # Transmission advantage multiplier for resistant strain
 resistance_dur_mult <- user()    # Duration advantage multiplier for resistant strain
+
+# NEW: Resistance infectiousness ratio parameters
+resistance_baseline_ratio <- user()
+resistance_treated_ratio <- user()
+
+# Defining separate infectiousness parameters for sensitive and resistant strains
+cA_s <- cA  # baseline asymptomatic infectiousness (sensitive)
+cD_s <- cD  # baseline diseased infectiousness (sensitive)
+cT_s <- cT  # baseline treated infectiousness (sensitive)
+
+# Resistant infectiousness parameters (derived from ratios with time-dependent activation)
+cA_r <- cA * if (t > ton && t < toff) resistance_baseline_ratio else 1
+cD_r <- cD * if (t > ton && t < toff) resistance_baseline_ratio else 1
+cT_r <- cT * if (t > ton && t < toff) resistance_treated_ratio else 1
