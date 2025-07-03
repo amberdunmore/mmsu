@@ -80,10 +80,13 @@ equilibrium_init_create <- function(par) {
 #' @param rT_r_true True treatment rate for resistant parasites
 #' @param resistance_trans_mult transmission multiplier for resistant parasites (default = 1)
 #' @param resistance_dur_mult duration multiplier for resistant infections (default = 1)
+#' @param resistance_baseline_ratio baseline infectiousness ratio for untreated resistant parasites (default = 1)
+#' @param resistance_treated_ratio post-treatment infectiousness ratio for treated resistant parasites (default = 1)
 #' @return A list of generated parameters.
 #' @export
 phi_eir_rel <- function(EIR, ft, ton = 5000, toff = 50000, init_res = 0.01, res_time = 3000, rT_r_true = 0.2, day0_res = 0.01,
-                        resistance_trans_mult = 1, resistance_dur_mult = 1) {
+                        resistance_trans_mult = 1, resistance_dur_mult = 1,
+                        resistance_baseline_ratio = 1, resistance_treated_ratio = 1) {
   mpl <- ICDMM::model_param_list_create(rho=0, rA = 1/(250), rU = Inf, rP = Inf, sigma2 = 0)
   eq <- ICDMM::equilibrium_init_create(
     age_vector=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80),
@@ -132,7 +135,9 @@ phi_eir_rel <- function(EIR, ft, ton = 5000, toff = 50000, init_res = 0.01, res_
     init_res = init_res,
     rT_r_true = rT_r_true,
     resistance_trans_mult = resistance_trans_mult,   # include user-specified resistance multipliers
-    resistance_dur_mult = resistance_dur_mult        # (defaults are 1 if not provided)
+    resistance_dur_mult = resistance_dur_mult,       # (defaults are 1 if not provided)
+    resistance_baseline_ratio = resistance_baseline_ratio,
+    resistance_treated_ratio = resistance_treated_ratio
   )
 
   equilibrium_init_create(par)
