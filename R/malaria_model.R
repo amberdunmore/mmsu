@@ -11,6 +11,8 @@
 #' @param rT_r_true True treatment rate for resistant parasites
 #' @param resistance_trans_mult transmission multiplier for resistant parasites (default = 1)
 #' @param resistance_dur_mult duration multiplier for resistant infections (default = 1)
+#' @param resistance_baseline_ratio baseline infectiousness ratio for untreated resistant parasites (default = 1)
+#' @param resistance_treated_ratio post-treatment infectiousness ratio for treated resistant parasites (default = 1)
 #' @param verbose Logical. If TRUE, prints detailed logs. Default is FALSE.
 #' @return An object of class `odin_model`.
 #' @export
@@ -18,6 +20,7 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           ton = 365, toff = 4015, day0_res = 0.01,
                           init_res = 0.0, res_time = 0, rT_r_true = 0.0,
                           resistance_trans_mult = 1, resistance_dur_mult = 1,
+                          resistance_baseline_ratio = 1, resistance_treated_ratio = 1,
                           verbose = FALSE) {
 
     if (is.null(params)) {
@@ -26,7 +29,9 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
       }
       params <- phi_eir_rel(EIR, ft, ton, toff, init_res, res_time, rT_r_true,
                             resistance_trans_mult = resistance_trans_mult,
-                            resistance_dur_mult = resistance_dur_mult)
+                            resistance_dur_mult = resistance_dur_mult,
+                            resistance_baseline_ratio = resistance_baseline_ratio,
+                            resistance_treated_ratio = resistance_treated_ratio)
     }
 
     # Update parameters
@@ -37,6 +42,8 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
     params$rT_r_true <- rT_r_true
     params$resistance_trans_mult <- resistance_trans_mult  # add transmission multiplier (default 1 if not provided)
     params$resistance_dur_mult <- resistance_dur_mult      # add duration multiplier (default 1 if not provided)
+    parmas$resistance_baseline_ratio <- resistance_baseline_ratio
+    params$resistance_treated_ratio <- resistance_treated_ratio
 
     # Generate initial parameters if not already present
     if (!"S0" %in% names(params)) {
@@ -63,7 +70,8 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                          "m", "a", "b", "phi", "ft", "rD", "rA", "rT_s", "rT_r",
                          "mu", "n", "cA", "cD", "cT",
                          "ton", "toff", "res_time", "init_res",
-                         "resistance_trans_mult", "resistance_dur_mult")
+                         "resistance_trans_mult", "resistance_dur_mult",
+                         "resistance_baseline_ratio", "resistance_treated_ratio")
     missing_params <- setdiff(required_params, names(params))
     if (length(missing_params) > 0) {
       stop("Missing required parameters: ", paste(missing_params, collapse = ", "))
