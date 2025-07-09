@@ -8,30 +8,39 @@
 #' @param init_res Initial resistance level at res_time
 #' @param day0_res Resistant at Day 0. Default = 0.01
 #' @param res_time Time at which resistance is introduced
-#' @param rT_r_true True treatment rate for resistant parasites
+#' @param treatment_failure_rate Proportion of treatments that fail completely (default = 0.3)
+#' @param rT_r_cleared Recovery rate for delayed clearance treatment (default = 0.1)
+#' @param rT_r_failed Rate of transition from failed treatment to asymptomatic (default = 0.1)
 #' @param resistance_trans_mult transmission multiplier for resistant parasites (default = 1)
 #' @param resistance_dur_mult duration multiplier for resistant infections (default = 1)
 #' @param resistance_baseline_ratio baseline infectiousness ratio for untreated resistant parasites (default = 1)
-#' @param resistance_treated_ratio post-treatment infectiousness ratio for treated resistant parasites (default = 1)
+#' @param resistance_cleared_ratio infectiousness ratio for partial treatment response (default = 1)
+#' @param resistance_failed_ratio infectiousness ratio for treatment failure (default = 1)
 #' @param verbose Logical. If TRUE, prints detailed logs. Default is FALSE.
 #' @return An object of class `odin_model`.
 #' @export
 malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           ton = 365, toff = 4015, day0_res = 0.01,
-                          init_res = 0.0, res_time = 0, rT_r_true = 0.0,
+                          init_res = 0.0, res_time = 0, treatment_failure_rate = 0.3,
+                          rT_r_cleared = 0.1, rT_r_failed = 0.1,
                           resistance_trans_mult = 1, resistance_dur_mult = 1,
                           resistance_baseline_ratio = 1, resistance_treated_ratio = 1,
+                          resistance_failed_ratio = 1,
                           verbose = FALSE) {
 
     if (is.null(params)) {
       if (is.null(EIR) || is.null(ft)) {
         stop("Either params or both EIR and ft must be provided")
       }
-      params <- phi_eir_rel(EIR, ft, ton, toff, init_res, res_time, rT_r_true,
+      params <- phi_eir_rel(EIR, ft, ton, toff, init_res, res_time,
+                            treatment_failure_rate = treatment_failure_rate,
+                            rT_r_cleared = rT_r_cleared,
+                            rT_r_failed = rT_r_failed,
                             resistance_trans_mult = resistance_trans_mult,
                             resistance_dur_mult = resistance_dur_mult,
                             resistance_baseline_ratio = resistance_baseline_ratio,
-                            resistance_treated_ratio = resistance_treated_ratio)
+                            resistance_cleared_ratio = resistance_cleared_ratio,
+                            resistance_failed_ratio = resistance_failed_ratio)
     }
 
     # Update parameters
@@ -39,11 +48,14 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
     params$toff <- toff
     params$init_res <- init_res
     params$res_time <- res_time
-    params$rT_r_true <- rT_r_true
+    params$treatment_failure_rate <- treatment_failure_rate
+    params$rT_r_cleared <- rT_r_cleared
+    params$rT_r_failed <- rT_r_failed
     params$resistance_trans_mult <- resistance_trans_mult  # add transmission multiplier (default 1 if not provided)
     params$resistance_dur_mult <- resistance_dur_mult      # add duration multiplier (default 1 if not provided)
     params$resistance_baseline_ratio <- resistance_baseline_ratio
-    params$resistance_treated_ratio <- resistance_treated_ratio
+    params$resistance_cleared_ratio <- resistance_cleared_ratio
+    params$resistance_failed_ratio <- resistance_failed_ratio
 
     # Generate initial parameters if not already present
     if (!"S0" %in% names(params)) {
@@ -52,8 +64,13 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
       params$D_r0 <- params$D * day0_res
       params$A_s0 <- params$A * (1 - day0_res)
       params$A_r0 <- params$A * day0_res
-      params$T_s0 <- params$T * (1 - day0_res)
-      params$T_r0 <- params$T * day0_res
+
+      # Splitting total T between sensitive and split resistant treatments
+      total_T <- params$T_cleared + params$T_failed
+      params$T_s0 <- total_T * (1 - day0_res)
+      params$T_r_cleared0 <- params$T_cleared * day0_res
+      params$T_r_failed0 <- params$T_failed * day0_res
+
       params$Sv0 <- params$Sv
       params$Ev_s0 <- params$Ev * (1 - day0_res)
       params$Iv_s0 <- params$Iv * (1 - day0_res)
@@ -65,13 +82,18 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
     params <- lapply(params, function(x) if(length(x) > 1) x[1] else x)
 
     # Check if all required parameters are present and numeric
-    required_params <- c("S0", "D_s0", "A_s0", "T_s0", "D_r0", "A_r0", "T_r0",
+    required_params <- c("S0", "D_s0", "A_s0", "T_s0", "D_r0", "A_r0",
+                         "T_r_cleared0","T_r_failed0",
                          "Sv0", "Ev_s0", "Iv_s0", "Ev_r0", "Iv_r0",
-                         "m", "a", "b", "phi", "ft", "rD", "rA", "rT_s", "rT_r",
+                         "m", "a", "b", "phi", "ft", "rD", "rA", "rT_s",
+                         "rT_r_cleared","rT_r_failed",
                          "mu", "n", "cA", "cD", "cT",
                          "ton", "toff", "res_time", "init_res",
                          "resistance_trans_mult", "resistance_dur_mult",
-                         "resistance_baseline_ratio", "resistance_treated_ratio")
+                         "resistance_baseline_ratio",
+                         "resistance_cleared_ratio",
+                         "resistance_failed_ratio")
+
     missing_params <- setdiff(required_params, names(params))
     if (length(missing_params) > 0) {
       stop("Missing required parameters: ", paste(missing_params, collapse = ", "))
