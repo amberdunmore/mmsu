@@ -11,10 +11,15 @@ phi_eir_rel(
   toff = 50000,
   init_res = 0.01,
   res_time = 3000,
-  rT_r_true = 0.2,
+  treatment_failure_rate = 0.3,
+  rT_r_cleared = 0.1,
+  rT_r_failed = 0.1,
   day0_res = 0.01,
   resistance_trans_mult = 1,
-  resistance_dur_mult = 1
+  resistance_dur_mult = 1,
+  resistance_baseline_ratio = 1,
+  resistance_cleared_ratio = 1,
+  resistance_failed_ratio = 1
 )
 }
 \arguments{
@@ -30,13 +35,23 @@ phi_eir_rel(
 
 \item{res_time}{Time at which resistance is introduced}
 
-\item{rT_r_true}{True treatment rate for resistant parasites}
+\item{treatment_failure_rate}{Proportion of treatments that fail completely (default = 0.3)}
+
+\item{rT_r_cleared}{Recovery rate for delayed clearance treatment (default = 0.1)}
+
+\item{rT_r_failed}{Rate of transition from failed treatment to asymptomatic (default = 0.1)}
 
 \item{day0_res}{Resistant at Day 0. Default = 0}
 
 \item{resistance_trans_mult}{transmission multiplier for resistant parasites (default = 1)}
 
 \item{resistance_dur_mult}{duration multiplier for resistant infections (default = 1)}
+
+\item{resistance_baseline_ratio}{baseline infectiousness ratio for untreated resistant parasites (default = 1)}
+
+\item{resistance_cleared_ratio}{infectiousness ratio for partial treatment response (default = 1)}
+
+\item{resistance_failed_ratio}{infectiousness ratio for treatment failure (default = 1)}
 }
 \value{
 A list of generated parameters.

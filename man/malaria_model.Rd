@@ -13,9 +13,14 @@ malaria_model(
   day0_res = 0.01,
   init_res = 0,
   res_time = 0,
-  rT_r_true = 0,
+  treatment_failure_rate = 0.3,
+  rT_r_cleared = 0.1,
+  rT_r_failed = 0.1,
   resistance_trans_mult = 1,
   resistance_dur_mult = 1,
+  resistance_baseline_ratio = 1,
+  resistance_cleared_ratio = 1,
+  resistance_failed_ratio = 1,
   verbose = FALSE
 )
 }
@@ -36,11 +41,21 @@ malaria_model(
 
 \item{res_time}{Time at which resistance is introduced}
 
-\item{rT_r_true}{True treatment rate for resistant parasites}
+\item{treatment_failure_rate}{Proportion of treatments that fail completely (default = 0.3)}
+
+\item{rT_r_cleared}{Recovery rate for delayed clearance treatment (default = 0.1)}
+
+\item{rT_r_failed}{Rate of transition from failed treatment to asymptomatic (default = 0.1)}
 
 \item{resistance_trans_mult}{transmission multiplier for resistant parasites (default = 1)}
 
 \item{resistance_dur_mult}{duration multiplier for resistant infections (default = 1)}
+
+\item{resistance_baseline_ratio}{baseline infectiousness ratio for untreated resistant parasites (default = 1)}
+
+\item{resistance_cleared_ratio}{infectiousness ratio for partial treatment response (default = 1)}
+
+\item{resistance_failed_ratio}{infectiousness ratio for treatment failure (default = 1)}
 
 \item{verbose}{Logical. If TRUE, prints detailed logs. Default is FALSE.}
 }
