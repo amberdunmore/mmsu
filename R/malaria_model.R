@@ -118,7 +118,7 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
     }
 
     # create our model
-    model_instance <- model$new(user = params, unused_user_action = "ignore")
+    model_instance <- model_$new(user = params, unused_user_action = "ignore")
 
     if (verbose) {
       cat("Model initialized successfully.\n")
