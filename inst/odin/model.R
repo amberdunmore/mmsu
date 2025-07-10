@@ -28,18 +28,18 @@ deriv(T_s) <- (S * lambda_s * phi * ft +
 deriv(D_r) <- invading_D_r + (S * lambda_r * phi * (1 - ft) +
                 lambda_r * A_s * phi * (1 - ft) +
                 lambda_r * A_r * phi * (1 - ft) -
-                D_r * rD)
+                D_r * rD_r)
 
 deriv(A_r) <- invading_A_r + (S * lambda_r * (1 - phi) +
                               lambda_r * A_s * (1 - phi) +
-                              D_r * rD +
+                              D_r * rD_r +
                               T_r_failed * rT_r_failed -
                               lambda_r * A_r * phi * (1 - ft) -
                               lambda_r * A_r * phi * ft -
                               lambda_s * A_r * phi * (1 - ft) -
                               lambda_s * A_r * phi * ft -
                               lambda_s * A_r * (1 - phi) -
-                              A_r * rA)
+                              A_r * rA_r)
 
 # NEW: Split resistant treatment compartments
 
@@ -168,3 +168,8 @@ cA_r <- cA * if (t > ton && t < toff) resistance_baseline_ratio else 1
 cD_r <- cD * if (t > ton && t < toff) resistance_baseline_ratio else 1
 cT_r_cleared <- cT * if (t > ton && t < toff) resistance_cleared_ratio else 1
 cT_r_failed <- cT * if (t > ton && t < toff) resistance_failed_ratio else 1
+
+
+# FIXED: Actually use resistance_dur_mult in the resistant recovery rates
+rD_r <- rD / if (t > ton && t < toff) resistance_dur_mult else 1   # symptomatic (untreated) infection duration for resistant
+rA_r <- rA / if (t > ton && t < toff) resistance_dur_mult else 1   # asymptomatic infection duration for resistant
