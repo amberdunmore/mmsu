@@ -24,7 +24,7 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           init_res = 0.0, res_time = 0, treatment_failure_rate = 0.3,
                           rT_r_cleared = 0.1, rT_r_failed = 0.1,
                           resistance_trans_mult = 1, resistance_dur_mult = 1,
-                          resistance_baseline_ratio = 1, resistance_treated_ratio = 1,
+                          resistance_baseline_ratio = 1, resistance_cleared_ratio = 1,
                           resistance_failed_ratio = 1,
                           verbose = FALSE) {
 
