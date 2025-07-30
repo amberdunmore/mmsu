@@ -1,4 +1,3 @@
-
 library(mmsu)
 library(ggplot2)
 library(dplyr)
@@ -14,23 +13,23 @@ library(patchwork)
 define_experimental_ranges <- function() {
   estimates <- list(
     in_vivo_baseline = list(
-      conservative = 3.9596,
-      realistic = 5.6698,
-      optimistic = 7.9159
+      conservative = 2.68,
+      realistic = 3.73,
+      optimistic = 5.10
     ),
     in_vivo_treated = list(
-      conservative = 2.2095,
-      realistic = 4.0163,
-      optimistic = 7.0732
+      conservative = 0.70,
+      realistic = 1.72,
+      optimistic = 4.06
     ),
     in_vitro_baseline = list(
-      conservative = 0.8,
-      realistic = 1.0,
+      conservative = 0.8, # Just set this myself, not provided by study
+      realistic = 1.0,   # Proellochs 2024
       optimistic = 1.0
     ),
     in_vitro_treated = list(
       conservative = 7.0,
-      realistic = 7.5,
+      realistic = 7.5, # Rajapandi 2019
       optimistic = 8.0
     )
   )
@@ -140,7 +139,7 @@ create_model_demonstration_data <- function() {
       ton = 365,
       toff = 365 + (simulation_years * 365),
       day0_res = 0.01,
-      treatment_failure_rate = 0.3,
+      treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1,
       rT_r_failed = 0.1,
       resistance_baseline_ratio = params$baseline_ratio,
@@ -170,11 +169,11 @@ create_transmission_mechanism_data <- function() {
 
   model <- malaria_model(
     EIR = 50, ft = 0.6, ton = 365, toff = 365 + (2*365),
-    day0_res = 0.05, treatment_failure_rate = 0.3,
+    day0_res = 0.05, treatment_failure_rate = 0.43,
     rT_r_cleared = 0.1, rT_r_failed = 0.1,
-    resistance_baseline_ratio = 5.0,
-    resistance_cleared_ratio = 4.0,
-    resistance_failed_ratio = 4.0
+    resistance_baseline_ratio = 3.7,
+    resistance_cleared_ratio = 1.7,
+    resistance_failed_ratio = 1.7
   )
 
   times <- seq(0, 365 + (2*365), by = 14)
@@ -203,7 +202,7 @@ create_parameter_sweep_data <- function() {
   for (ratio in infectiousness_ratios) {
     model <- malaria_model(
       EIR = 50, ft = 0.6, ton = 365, toff = 365 + (2*365),
-      day0_res = 0.01, treatment_failure_rate = 0.3,
+      day0_res = 0.01, treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
       resistance_baseline_ratio = ratio,
       resistance_cleared_ratio = ratio,
@@ -234,11 +233,11 @@ create_duration_analysis_data <- function() {
     model <- malaria_model(
       EIR = 50, ft = 0.6, ton = 365,
       toff = 365 + duration,
-      day0_res = 0.01, treatment_failure_rate = 0.3,
+      day0_res = 0.01, treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
-      resistance_baseline_ratio = 5.67,
-      resistance_cleared_ratio = 4.02,
-      resistance_failed_ratio = 4.02
+      resistance_baseline_ratio = 3.73,
+      resistance_cleared_ratio = 1.72,
+      resistance_failed_ratio = 1.72
     )
 
     times <- seq(0, 365 + (3*365), by = 14)
@@ -261,11 +260,11 @@ create_duration_analysis_data <- function() {
 
 
 create_simple_timeseries_data <- function() {
-    scenarios <- data.frame(
+  scenarios <- data.frame(
     study_type = c("In vitro", "In vitro", "In vivo", "In vivo", "In vivo"),
     confidence = c("Central", "Optimistic", "Conservative", "Central", "Optimistic"),
-    baseline_ratio = c(1.0, 1.0, 3.96, 5.67, 7.92),
-    treated_ratio = c(7.5, 8.0, 2.21, 4.02, 7.07),
+    baseline_ratio = c(1.0, 1.0, 2.68, 3.73, 5.10),
+    treated_ratio = c(7.5, 8.0, 0.7, 1.72, 4.06),
     color = c("blue", "lightblue", "orange", "red", "darkred")
   )
 
@@ -276,7 +275,7 @@ create_simple_timeseries_data <- function() {
 
     model <- malaria_model(
       EIR = 50, ft = 0.6, ton = 365, toff = 365 + (4*365),
-      day0_res = 0.01, treatment_failure_rate = 0.3,
+      day0_res = 0.01, treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
       resistance_baseline_ratio = scenario$baseline_ratio,
       resistance_cleared_ratio = scenario$treated_ratio,
@@ -313,9 +312,9 @@ create_comprehensive_heatmap_data <- function() {
 
   scenarios <- list(
     "Wild-type" = list(baseline = 1.0, treated = 1.0, color = "#2C3E50"),
-    "In vivo" = list(baseline = 5.67, treated = 4.02, color = "#E74C3C"),
+    "In vivo" = list(baseline = 3.73, treated = 1.72, color = "#E74C3C"),
     "In vitro" = list(baseline = 1.0, treated = 7.5, color = "#3498DB"),
-    "Combined" = list(baseline = 5.67, treated = 7.5, color = "#9B59B6")
+    "Combined" = list(baseline = 3.73, treated = 7.5, color = "#9B59B6")
   )
 
   param_grid <- expand.grid(
@@ -336,7 +335,7 @@ create_comprehensive_heatmap_data <- function() {
 
     model <- malaria_model(
       EIR = eir, ft = ft, ton = 365, toff = 365 + (5*365),
-      day0_res = 0.01, treatment_failure_rate = 0.3,
+      day0_res = 0.01, treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
       resistance_baseline_ratio = params$baseline,
       resistance_cleared_ratio = params$treated,
@@ -420,7 +419,7 @@ comprehensive_parameter_analysis <- function() {
         ton = 365,
         toff = 365 + (5*365),
         day0_res = 0.01,
-        treatment_failure_rate = 0.3,
+        treatment_failure_rate = 0.43,
         rT_r_cleared = 0.1,
         rT_r_failed = 0.1,
         resistance_baseline_ratio = combo$baseline_ratio,
@@ -800,7 +799,7 @@ plot_selection_comparison <- function() {
 
     model <- malaria_model(
       EIR = 50, ft = 0.6, ton = 365, toff = 365 + (2*365),
-      day0_res = 0.01, treatment_failure_rate = 0.3,
+      day0_res = 0.01, treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
       resistance_baseline_ratio = est$baseline_ratio,
       resistance_cleared_ratio = est$treated_ratio,
