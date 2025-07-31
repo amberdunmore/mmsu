@@ -1,3 +1,6 @@
+
+devtools::load_all()
+
 library(mmsu)
 library(ggplot2)
 library(dplyr)
@@ -9,18 +12,17 @@ library(patchwork)
 
 # EXPERIMENTAL PARAMETER RANGES -------------------------------------------
 
-
 define_experimental_ranges <- function() {
   estimates <- list(
     in_vivo_baseline = list(
-      conservative = 2.68,
-      realistic = 3.73,
-      optimistic = 5.10
+      conservative = 2.08,
+      realistic = 2.9,
+      optimistic = 3.98
     ),
     in_vivo_treated = list(
-      conservative = 0.70,
-      realistic = 1.72,
-      optimistic = 4.06
+      conservative = 0.39,
+      realistic = 0.89,
+      optimistic = 1.98
     ),
     in_vitro_baseline = list(
       conservative = 0.8, # Just set this myself, not provided by study
@@ -171,9 +173,9 @@ create_transmission_mechanism_data <- function() {
     EIR = 50, ft = 0.6, ton = 365, toff = 365 + (2*365),
     day0_res = 0.05, treatment_failure_rate = 0.43,
     rT_r_cleared = 0.1, rT_r_failed = 0.1,
-    resistance_baseline_ratio = 3.7,
-    resistance_cleared_ratio = 1.7,
-    resistance_failed_ratio = 1.7
+    resistance_baseline_ratio = 2.9,
+    resistance_cleared_ratio = 0.89,
+    resistance_failed_ratio = 0.89
   )
 
   times <- seq(0, 365 + (2*365), by = 14)
@@ -235,9 +237,9 @@ create_duration_analysis_data <- function() {
       toff = 365 + duration,
       day0_res = 0.01, treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
-      resistance_baseline_ratio = 3.73,
-      resistance_cleared_ratio = 1.72,
-      resistance_failed_ratio = 1.72
+      resistance_baseline_ratio = 2.9,
+      resistance_cleared_ratio = 0.89,
+      resistance_failed_ratio = 0.89
     )
 
     times <- seq(0, 365 + (3*365), by = 14)
@@ -263,8 +265,8 @@ create_simple_timeseries_data <- function() {
   scenarios <- data.frame(
     study_type = c("In vitro", "In vitro", "In vivo", "In vivo", "In vivo"),
     confidence = c("Central", "Optimistic", "Conservative", "Central", "Optimistic"),
-    baseline_ratio = c(1.0, 1.0, 2.68, 3.73, 5.10),
-    treated_ratio = c(7.5, 8.0, 0.7, 1.72, 4.06),
+    baseline_ratio = c(1.0, 1.0, 2.08, 2.9, 3.98),
+    treated_ratio = c(7.5, 8.0, 0.39, 0.89, 1.98),
     color = c("blue", "lightblue", "orange", "red", "darkred")
   )
 
@@ -312,7 +314,7 @@ create_comprehensive_heatmap_data <- function() {
 
   scenarios <- list(
     "Wild-type" = list(baseline = 1.0, treated = 1.0, color = "#2C3E50"),
-    "In vivo" = list(baseline = 3.73, treated = 1.72, color = "#E74C3C"),
+    "In vivo" = list(baseline = 2.9, treated = 0.89, color = "#E74C3C"),
     "In vitro" = list(baseline = 1.0, treated = 7.5, color = "#3498DB"),
     "Combined" = list(baseline = 3.73, treated = 7.5, color = "#9B59B6")
   )
@@ -786,8 +788,8 @@ plot_selection_comparison <- function() {
   estimates <- data.frame(
     scenario = c("In vitro\n(central)", "In vitro\n(optimistic)",
                  "In vivo\n(conservative)", "In vivo\n(central)", "In vivo\n(optimistic)"),
-    baseline_ratio = c(1.0, 1.0, 3.96, 5.67, 7.92),
-    treated_ratio = c(7.5, 8.0, 2.21, 4.02, 7.07),
+    baseline_ratio = c(1.0, 1.0, 2.08, 2.9, 3.98),
+    treated_ratio = c(7.5, 8.0, 0.39, 0.89, 1.98),
     study_type = c("In vitro", "In vitro", "In vivo", "In vivo", "In vivo"),
     confidence = c("Central", "Optimistic", "Conservative", "Central", "Optimistic")
   )
@@ -973,3 +975,4 @@ run_complete_gametocyte_analysis <- function() {
 # RUNNING THE COMPLETE ANALYSIS -----------------------------------------------
 
 complete_results <- run_complete_gametocyte_analysis()
+
