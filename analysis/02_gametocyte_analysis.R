@@ -634,28 +634,88 @@ plot_simple_timeseries <- function(timeseries_data) {
 }
 
 # Plot 7: Comprehensive heatmap
-plot_comprehensive_heatmap <- function(heatmap_data) {
-  p <- ggplot(heatmap_data, aes(x = factor(ft), y = factor(EIR), fill = final_resistance)) +
-    geom_tile(color = "white", size = 0.2) +
-    geom_text(aes(label = round(final_resistance, 2)), size = 2.5, color = "white") +
-    facet_wrap(~scenario, nrow = 2) +
-    scale_fill_viridis_c(name = "Final\nresistance\nprevalence", option = "plasma") +
-    scale_x_discrete(breaks = seq(0.1, 0.9, 0.2)) +
-    labs(
-      title = "Gametocytogenesis Impact on Resistance Spread Across Epidemiological Settings",
-      subtitle = "Final resistance prevalence after 5 years",
-      x = "Treatment coverage (ft)",
-      y = "Annual EIR",
-      caption = "Numbers show final resistance prevalence"
-    ) +
-    theme_minimal() +
-    theme(
-      strip.text = element_text(face = "bold"),
-      plot.title = element_text(face = "bold"),
-      axis.text.x = element_text(angle = 45, hjust = 1)
+# COMPREHENSIVE HEATMAP DATA (FIXED) --------------------------------------
+
+create_comprehensive_heatmap_data <- function() {
+
+  EIR_values <- c(1, 5, 10, 20, 50, 100, 200, 400)
+  ft_values <- seq(0.1, 0.9, 0.1)
+
+  scenarios <- list(
+    "Wild-type" = list(
+      baseline = 1.0,
+      treated = 1.0,
+      color = "#2C3E50",
+      treatment_failure_rate = 0.0  # No treatment failure for wild-type
+    ),
+    "In vivo" = list(
+      baseline = 2.9,
+      treated = 0.89,
+      color = "#E74C3C",
+      treatment_failure_rate = 0.43
+    ),
+    "In vitro" = list(
+      baseline = 1.0,
+      treated = 7.5,
+      color = "#3498DB",
+      treatment_failure_rate = 0.43
+    ),
+    "Combined" = list(
+      baseline = 3.73,
+      treated = 7.5,
+      color = "#9B59B6",
+      treatment_failure_rate = 0.43
+    )
+  )
+
+  param_grid <- expand.grid(
+    EIR = EIR_values,
+    ft = ft_values,
+    scenario = names(scenarios)
+  )
+
+  results_list <- list()
+
+  for (i in 1:nrow(param_grid)) {
+    eir <- param_grid$EIR[i]
+    ft <- param_grid$ft[i]
+    scenario <- param_grid$scenario[i]
+    params <- scenarios[[scenario]]
+
+    if (i %% 50 == 0) cat(paste("Heatmap progress:", i, "/", nrow(param_grid), "\n"))
+
+    model <- malaria_model(
+      EIR = eir,
+      ft = ft,
+      ton = 365,
+      toff = 365 + (5*365),
+      day0_res = 0.01,
+      treatment_failure_rate = params$treatment_failure_rate,  # Now scenario-specific
+      rT_r_cleared = 0.1,
+      rT_r_failed = 0.1,
+      resistance_baseline_ratio = params$baseline,
+      resistance_cleared_ratio = params$treated,
+      resistance_failed_ratio = params$treated
     )
 
-  return(p)
+    times <- seq(0, 365 + (5*365), by = 30)
+    output <- model$run(times)
+
+    final_resistance <- output[nrow(output), "prevalence_res"]
+
+    results_list[[i]] <- data.frame(
+      EIR = eir,
+      ft = ft,
+      scenario = scenario,
+      final_resistance = final_resistance,
+      baseline_ratio = params$baseline,
+      treated_ratio = params$treated,
+      treatment_failure_rate = params$treatment_failure_rate
+    )
+  }
+
+  combined_results <- do.call(rbind, results_list)
+  return(combined_results)
 }
 
 # Plot 8: Detailed parameter heatmap
