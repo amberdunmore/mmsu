@@ -28,103 +28,103 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           resistance_failed_ratio = 1,
                           verbose = FALSE) {
 
-    if (is.null(params)) {
-      if (is.null(EIR) || is.null(ft)) {
-        stop("Either params or both EIR and ft must be provided")
-      }
-      params <- phi_eir_rel(EIR, ft, ton, toff, init_res, res_time,
-                            treatment_failure_rate = treatment_failure_rate,
-                            rT_r_cleared = rT_r_cleared,
-                            rT_r_failed = rT_r_failed,
-                            resistance_trans_mult = resistance_trans_mult,
-                            resistance_dur_mult = resistance_dur_mult,
-                            resistance_baseline_ratio = resistance_baseline_ratio,
-                            resistance_cleared_ratio = resistance_cleared_ratio,
-                            resistance_failed_ratio = resistance_failed_ratio)
+  if (is.null(params)) {
+    if (is.null(EIR) || is.null(ft)) {
+      stop("Either params or both EIR and ft must be provided")
     }
+    params <- phi_eir_rel(EIR, ft, ton, toff, init_res, res_time,
+                          treatment_failure_rate = treatment_failure_rate,
+                          rT_r_cleared = rT_r_cleared,
+                          rT_r_failed = rT_r_failed,
+                          resistance_trans_mult = resistance_trans_mult,
+                          resistance_dur_mult = resistance_dur_mult,
+                          resistance_baseline_ratio = resistance_baseline_ratio,
+                          resistance_cleared_ratio = resistance_cleared_ratio,
+                          resistance_failed_ratio = resistance_failed_ratio)
+  }
 
-    # Update parameters
-    params$ton <- ton
-    params$toff <- toff
-    params$init_res <- init_res
-    params$res_time <- res_time
-    params$treatment_failure_rate <- treatment_failure_rate
-    params$rT_r_cleared <- rT_r_cleared
-    params$rT_r_failed <- rT_r_failed
-    params$resistance_trans_mult <- resistance_trans_mult  # add transmission multiplier (default 1 if not provided)
-    params$resistance_dur_mult <- resistance_dur_mult      # add duration multiplier (default 1 if not provided)
-    params$resistance_baseline_ratio <- resistance_baseline_ratio
-    params$resistance_cleared_ratio <- resistance_cleared_ratio
-    params$resistance_failed_ratio <- resistance_failed_ratio
+  # Update parameters
+  params$ton <- ton
+  params$toff <- toff
+  params$init_res <- init_res
+  params$res_time <- res_time
+  params$treatment_failure_rate <- treatment_failure_rate
+  params$rT_r_cleared <- rT_r_cleared
+  params$rT_r_failed <- rT_r_failed
+  params$resistance_trans_mult <- resistance_trans_mult  # add transmission multiplier (default 1 if not provided)
+  params$resistance_dur_mult <- resistance_dur_mult      # add duration multiplier (default 1 if not provided)
+  params$resistance_baseline_ratio <- resistance_baseline_ratio
+  params$resistance_cleared_ratio <- resistance_cleared_ratio
+  params$resistance_failed_ratio <- resistance_failed_ratio
 
-    # Generate initial parameters if not already present
-    if (!"S0" %in% names(params)) {
-      params$S0 <- params$S
-      params$D_s0 <- params$D * (1 - day0_res)
-      params$D_r0 <- params$D * day0_res
-      params$A_s0 <- params$A * (1 - day0_res)
-      params$A_r0 <- params$A * day0_res
+  # Generate initial parameters if not already present
+  if (!"S0" %in% names(params)) {
+    params$S0 <- params$S
+    params$D_s0 <- params$D * (1 - day0_res)
+    params$D_r0 <- params$D * day0_res
+    params$A_s0 <- params$A * (1 - day0_res)
+    params$A_r0 <- params$A * day0_res
 
-      # Splitting total T between sensitive and split resistant treatments
-      total_T <- params$T_cleared + params$T_failed
-      params$T_s0 <- total_T * (1 - day0_res)
-      params$T_r_cleared0 <- params$T_cleared * day0_res
-      params$T_r_failed0 <- params$T_failed * day0_res
+    # Splitting total T between sensitive and split resistant treatments
+    total_T <- params$T_cleared + params$T_failed
+    params$T_s0 <- total_T * (1 - day0_res)
+    params$T_r_cleared0 <- params$T_cleared * day0_res
+    params$T_r_failed0 <- params$T_failed * day0_res
 
-      params$Sv0 <- params$Sv
-      params$Ev_s0 <- params$Ev * (1 - day0_res)
-      params$Iv_s0 <- params$Iv * (1 - day0_res)
-      params$Ev_r0 <- params$Ev * day0_res
-      params$Iv_r0 <- params$Iv * day0_res
-    }
+    params$Sv0 <- params$Sv
+    params$Ev_s0 <- params$Ev * (1 - day0_res)
+    params$Iv_s0 <- params$Iv * (1 - day0_res)
+    params$Ev_r0 <- params$Ev * day0_res
+    params$Iv_r0 <- params$Iv * day0_res
+  }
 
-    # Ensure all parameters are scalar
-    params <- lapply(params, function(x) if(length(x) > 1) x[1] else x)
+  # Ensure all parameters are scalar
+  params <- lapply(params, function(x) if(length(x) > 1) x[1] else x)
 
-    # Check if all required parameters are present and numeric
-    required_params <- c("S0", "D_s0", "A_s0", "T_s0", "D_r0", "A_r0",
-                         "T_r_cleared0","T_r_failed0",
-                         "Sv0", "Ev_s0", "Iv_s0", "Ev_r0", "Iv_r0",
-                         "m", "a", "b", "phi", "ft", "rD", "rA", "rT_s",
-                         "rT_r_cleared","rT_r_failed",
-                         "mu", "n", "cA", "cD", "cT",
-                         "ton", "toff", "res_time", "init_res",
-                         "resistance_trans_mult", "resistance_dur_mult",
-                         "resistance_baseline_ratio",
-                         "resistance_cleared_ratio",
-                         "resistance_failed_ratio")
+  # Check if all required parameters are present and numeric
+  required_params <- c("S0", "D_s0", "A_s0", "T_s0", "D_r0", "A_r0",
+                       "T_r_cleared0","T_r_failed0",
+                       "Sv0", "Ev_s0", "Iv_s0", "Ev_r0", "Iv_r0",
+                       "m", "a", "b", "phi", "ft", "rD", "rA", "rT_s",
+                       "rT_r_cleared","rT_r_failed",
+                       "mu", "n", "cA", "cD", "cT",
+                       "ton", "toff", "res_time", "init_res",
+                       "resistance_trans_mult", "resistance_dur_mult",
+                       "resistance_baseline_ratio",
+                       "resistance_cleared_ratio",
+                       "resistance_failed_ratio")
 
-    missing_params <- setdiff(required_params, names(params))
-    if (length(missing_params) > 0) {
-      stop("Missing required parameters: ", paste(missing_params, collapse = ", "))
-    }
+  missing_params <- setdiff(required_params, names(params))
+  if (length(missing_params) > 0) {
+    stop("Missing required parameters: ", paste(missing_params, collapse = ", "))
+  }
 
-    # Calculate EIR if not provided
-    if (!"EIR" %in% names(params)) {
-      params$EIR <- params$m * params$a * params$Iv_s0 * 365  # Annual EIR
-    }
+  # Calculate EIR if not provided
+  if (!"EIR" %in% names(params)) {
+    params$EIR <- params$m * params$a * params$Iv_s0 * 365  # Annual EIR
+  }
 
-    non_numeric_params <- names(params)[!sapply(params, is.numeric)]
-    if (length(non_numeric_params) > 0) {
-      stop("Non-numeric parameters: ", paste(non_numeric_params, collapse = ", "))
-    }
+  non_numeric_params <- names(params)[!sapply(params, is.numeric)]
+  if (length(non_numeric_params) > 0) {
+    stop("Non-numeric parameters: ", paste(non_numeric_params, collapse = ", "))
+  }
 
-    if (verbose) {
-      cat("Creating odin model...\n")
-    }
+  if (verbose) {
+    cat("Creating odin model...\n")
+  }
 
-    if (verbose) {
-      cat("Initializing model with parameters...\n")
-    }
+  if (verbose) {
+    cat("Initializing model with parameters...\n")
+  }
 
-    # create our model
-    model_instance <- model_$new(user = params, unused_user_action = "ignore")
+  # create our model
+  model_instance <- model_$new(user = params, unused_user_action = "ignore")
 
-    if (verbose) {
-      cat("Model initialized successfully.\n")
-    }
+  if (verbose) {
+    cat("Model initialized successfully.\n")
+  }
 
-    return(model_instance)
+  return(model_instance)
 
 }
 
