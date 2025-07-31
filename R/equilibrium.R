@@ -141,7 +141,7 @@ phi_eir_rel <- function(EIR, ft, ton = 5000, toff = 50000, init_res = 0.01, res_
 
   par <- list(
     EIR = EIR, ft = ft,
-    S = S, D = D, A = A, T = T, phi = phi, b = b,
+    S = S, D = D, A = A, T_cleared = T_cleared, T_failed = T_failed, phi = phi, b = b,
     m = eq$mv0, Sv = eq$init_Sv, Ev = eq$init_Ev, Iv = eq$init_Iv, a = eq$av0,
     cA = c_A, cD = mean(eq$cD, na.rm = TRUE), cT = mean(eq$cT, na.rm = TRUE),
     n = eq$delayMos,
