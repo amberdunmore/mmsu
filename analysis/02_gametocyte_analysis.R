@@ -104,7 +104,6 @@ classify_parameter_combination <- function(baseline_r, treated_r, estimates) {
 
 # Basic model demonstration data
 create_model_demonstration_data <- function() {
-
   scenarios <- list(
     "Wild-type (no advantage)" = list(
       baseline_ratio = 1.0,
@@ -130,11 +129,10 @@ create_model_demonstration_data <- function() {
   ft <- 0.6
   simulation_years <- 3
 
-  results_list <- list()
-
+  results_list <- list() # Initalise list to store results
   for (scenario_name in names(scenarios)) {
     params <- scenarios[[scenario_name]]
-
+# Create and configure the malaria model
     model <- malaria_model(
       EIR = EIR,
       ft = ft,
@@ -168,10 +166,11 @@ create_model_demonstration_data <- function() {
 
 # Transmission mechanism data
 create_transmission_mechanism_data <- function() {
-
   model <- malaria_model(
-    EIR = 50, ft = 0.6, ton = 365, toff = 365 + (2*365),
-    day0_res = 0.05, treatment_failure_rate = 0.43,
+    EIR = 50, ft = 0.6,
+    ton = 365, toff = 365 + (2*365),
+    day0_res = 0.05,
+    treatment_failure_rate = 0.43,
     rT_r_cleared = 0.1, rT_r_failed = 0.1,
     resistance_baseline_ratio = 2.9,
     resistance_cleared_ratio = 0.89,
@@ -197,45 +196,45 @@ create_transmission_mechanism_data <- function() {
 
 # Parameter sweep data
 create_parameter_sweep_data <- function() {
-
   infectiousness_ratios <- c(1, 2, 4, 6, 8, 10)
   results_list <- list()
-
   for (ratio in infectiousness_ratios) {
+    # Run model with current ratio applied to both baseline and treated conditions
     model <- malaria_model(
-      EIR = 50, ft = 0.6, ton = 365, toff = 365 + (2*365),
-      day0_res = 0.01, treatment_failure_rate = 0.43,
+      EIR = 50, ft = 0.6, # Standard conditions
+      ton = 365, toff = 365 + (2*365), # 2-year advantage period
+      day0_res = 0.01,
+      treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
-      resistance_baseline_ratio = ratio,
-      resistance_cleared_ratio = ratio,
+      resistance_baseline_ratio = ratio, # USe current ratio for baseline
+      resistance_cleared_ratio = ratio, # Use current ratio for treated
       resistance_failed_ratio = ratio
     )
-
+# Run simulation with monthly output
     times <- seq(0, 365 + (2*365), by = 30)
     output <- model$run(times)
-
+# Store results with ratio identifier
     results_list[[paste0("ratio_", ratio)]] <- data.frame(
       time_years = output[, "t"] / 365,
       resistance_prevalence = output[, "prevalence_res"] * 100,
       infectiousness_ratio = ratio
     )
   }
-
   combined_results <- do.call(rbind, results_list)
   return(combined_results)
 }
 
 # Duration analysis data
 create_duration_analysis_data <- function() {
-
   infectiousness_durations <- c(5, 10, 20, 50, 100)
   results_list <- list()
-
   for (duration in infectiousness_durations) {
     model <- malaria_model(
-      EIR = 50, ft = 0.6, ton = 365,
+      EIR = 50, ft = 0.6,
+      ton = 365,
       toff = 365 + duration,
-      day0_res = 0.01, treatment_failure_rate = 0.43,
+      day0_res = 0.01,
+      treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
       resistance_baseline_ratio = 2.9,
       resistance_cleared_ratio = 0.89,
@@ -263,21 +262,21 @@ create_duration_analysis_data <- function() {
 
 create_simple_timeseries_data <- function() {
   scenarios <- data.frame(
-    study_type = c("In vitro", "In vitro", "In vivo", "In vivo", "In vivo"),
-    confidence = c("Central", "Optimistic", "Conservative", "Central", "Optimistic"),
-    baseline_ratio = c(1.0, 1.0, 2.08, 2.9, 3.98),
-    treated_ratio = c(7.5, 8.0, 0.39, 0.89, 1.98),
-    color = c("blue", "lightblue", "orange", "red", "darkred")
+    study_type = c("In vitro", "In vitro", "In vitro", "In vivo", "In vivo", "In vivo"),
+    confidence = c("Conservative", "Central", "Optimistic", "Conservative", "Central", "Optimistic"),
+    baseline_ratio = c(0.8, 1.0, 1.0, 2.08, 2.9, 3.98), # Baseline infectiousness ratios
+    treated_ratio = c(7.0, 7.5, 8.0, 0.39, 0.89, 1.98), # Post-treatment ratios
+    color = c("darkblue", "blue", "lightblue", "orange", "red", "darkred")
   )
 
   results_list <- list()
-
   for (i in 1:nrow(scenarios)) {
     scenario <- scenarios[i, ]
-
     model <- malaria_model(
-      EIR = 50, ft = 0.6, ton = 365, toff = 365 + (4*365),
-      day0_res = 0.01, treatment_failure_rate = 0.43,
+      EIR = 50, ft = 0.6,
+      ton = 365, toff = 365 + (4*365),
+      day0_res = 0.01,
+      treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
       resistance_baseline_ratio = scenario$baseline_ratio,
       resistance_cleared_ratio = scenario$treated_ratio,
@@ -308,15 +307,30 @@ create_simple_timeseries_data <- function() {
 
 
 create_comprehensive_heatmap_data <- function() {
-
+# Defining ranges of epidemiological parameters to test
   EIR_values <- c(1, 5, 10, 20, 50, 100, 200, 400)
   ft_values <- seq(0.1, 0.9, 0.1)
 
   scenarios <- list(
-    "Wild-type" = list(baseline = 1.0, treated = 1.0, color = "#2C3E50"),
-    "In vivo" = list(baseline = 2.9, treated = 0.89, color = "#E74C3C"),
-    "In vitro" = list(baseline = 1.0, treated = 7.5, color = "#3498DB"),
-    "Combined" = list(baseline = 3.73, treated = 7.5, color = "#9B59B6")
+    "Wild-type" = list(
+      baseline = 1.0, # No baseline advantage
+      treated = 1.0, # No post-treatment advantage
+      color = "#2C3E50",
+      treatment_failure_rate = 0.0 # No treatment failure for WT
+      ),
+    "In vivo" = list(
+      baseline = 2.9, # In vivo central baseline estimate
+      treated = 0.89, # In vivo central treated estimate
+      color = "#E74C3C",
+      treatment_failure_rate = 0.43 # Standard failure rate
+      ),
+    "In vitro" = list(
+      baseline = 1.0, # No baseline advantage (in vitro)
+      treated = 7.5, # Large post-treatment advantage (Rajapandi)
+      color = "#3498DB",
+      treatment_failure_rate = 0.43
+      ),
+    "Combined" = list(baseline = 3.98, treated = 8.0, color = "#9B59B6", treatment_failure_rate = 0.43) # Worst of both worlds
   )
 
   param_grid <- expand.grid(
@@ -336,8 +350,12 @@ create_comprehensive_heatmap_data <- function() {
     if (i %% 50 == 0) cat(paste("Heatmap progress:", i, "/", nrow(param_grid), "\n"))
 
     model <- malaria_model(
-      EIR = eir, ft = ft, ton = 365, toff = 365 + (5*365),
-      day0_res = 0.01, treatment_failure_rate = 0.43,
+      EIR = eir,
+      ft = ft,
+      ton = 365,
+      toff = 365 + (5*365),
+      day0_res = 0.01,
+      treatment_failure_rate = params$treatment_failure_rate,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
       resistance_baseline_ratio = params$baseline,
       resistance_cleared_ratio = params$treated,
@@ -355,10 +373,11 @@ create_comprehensive_heatmap_data <- function() {
       scenario = scenario,
       final_resistance = final_resistance,
       baseline_ratio = params$baseline,
-      treated_ratio = params$treated
+      treated_ratio = params$treated,
+      treatment_failure_rate = params$treatment_failure_rate
     )
   }
-
+# Combine all parameter combination results
   combined_results <- do.call(rbind, results_list)
   return(combined_results)
 }
@@ -392,7 +411,7 @@ comprehensive_parameter_analysis <- function() {
     estimates$in_vitro_treated$optimistic,
     9.0, 10.0
   )
-
+# Defining epidemiological parameter sweeps
   EIR_values <- c(10, 25, 50, 100)
   ft_values <- c(0.3, 0.5, 0.7)
 
@@ -434,14 +453,13 @@ comprehensive_parameter_analysis <- function() {
 
       final_resistance <- output[nrow(output), "prevalence_res"]
 
+
       p0_idx <- which.min(abs(output[, "t"] - 395))
       p1_idx <- which.min(abs(output[, "t"] - 730))
 
       p0 <- max(min(output[p0_idx, "prevalence_res"], 0.999), 0.001)
       p1 <- max(min(output[p1_idx, "prevalence_res"], 0.999), 0.001)
-
       sel_coeff <- log(p1*(1-p0)/(p0*(1-p1)))
-
       param_type <- classify_parameter_combination(combo$baseline_ratio, combo$treated_ratio, estimates)
 
       results_list[[i]] <- data.frame(
@@ -456,10 +474,9 @@ comprehensive_parameter_analysis <- function() {
       )
 
     }, error = function(e) {
-      # Skip failed runs
+
     })
   }
-
   results_df <- do.call(rbind, results_list)
   results_df <- results_df[!is.na(results_df$final_resistance), ]
 
@@ -720,32 +737,44 @@ create_comprehensive_heatmap_data <- function() {
 
 # Plot 8: Detailed parameter heatmap
 plot_detailed_heatmap <- function(results_df) {
-  p <- ggplot(results_df, aes(x = baseline_ratio, y = treated_ratio,
-                              fill = final_resistance)) +
-    geom_point(aes(size = ifelse(is_experimental_estimate, 3, 1),
-                   color = parameter_type), alpha = 0.8) +
+  p <- ggplot(results_df, aes(x = baseline_ratio, y = treated_ratio)) +
+    geom_point(aes(color = final_resistance,
+                   shape = parameter_type,
+                   size = ifelse(is_experimental_estimate, "Large", "Small")),
+               alpha = 0.8, stroke = 1) +
+
+    scale_size_manual(
+      name = "Point type",
+      values = c("Large" = 4, "Small" = 2),
+      guide = "none"  # Hide size legend
+    ) +  # <-- ADDED MISSING PLUS
+
+    scale_color_viridis_c(name = "Final\nresistance\nprevalence",
+                          limits = c(0, 1)) +
+
+    scale_shape_manual(
+      name = "Parameter type",
+      values = c(
+        "In vivo (central)" = 18,
+        "In vivo (conservative)" = 17,
+        "In vivo (optimistic)" = 25,
+        "In vitro (central)" = 15,
+        "In vitro (conservative)" = 0,
+        "In vitro (optimistic)" = 22,
+        "Within experimental range" = 1,
+        "Other" = 3
+      )
+    ) +
+
+    # ADD FACETING (you were missing this!)
     facet_grid(EIR ~ ft, labeller = labeller(
       EIR = function(x) paste("EIR =", x),
       ft = function(x) paste("Treatment =", round(as.numeric(x)*100), "%")
     )) +
-    scale_fill_viridis_c(name = "Final\nresistance\nprevalence", limits = c(0, 1)) +
-    scale_size_identity() +
-    scale_color_manual(
-      name = "Parameter type",
-      values = c(
-        "In vivo (central)" = "red",
-        "In vivo (conservative)" = "orange",
-        "In vivo (optimistic)" = "darkred",
-        "In vitro (central)" = "blue",
-        "In vitro (conservative)" = "lightblue",
-        "In vitro (optimistic)" = "darkblue",
-        "Within experimental range" = "purple",
-        "Other" = "gray"
-      )
-    ) +
+
     labs(
-      title = "Resistance Spread Across Parameter Space",
-      subtitle = "Colored points show experimental estimates and ranges",
+      title = "Final Resistance Prevalence Across Parameter Space",
+      subtitle = "Color = resistance outcome, Shape = experimental classification",
       x = "Baseline infectiousness ratio",
       y = "Post-treatment infectiousness ratio",
       caption = "Larger points = exact experimental estimates"
@@ -755,35 +784,44 @@ plot_detailed_heatmap <- function(results_df) {
       plot.title = element_text(face = "bold"),
       legend.position = "bottom"
     ) +
-    guides(color = guide_legend(override.aes = list(size = 3)))
+
+    # CORRECTED GUIDES
+    guides(
+      color = guide_colorbar(barwidth = 15, barheight = 1),  # For continuous color
+      shape = guide_legend(override.aes = list(size = 3))     # For shapes
+    )
 
   return(p)
 }
 
 # Plot 9: Selection coefficient landscape
 plot_selection_landscape <- function(results_df) {
-  p <- ggplot(results_df, aes(x = baseline_ratio, y = treated_ratio,
-                              fill = selection_coefficient)) +
-    geom_point(aes(size = ifelse(is_experimental_estimate, 3, 1),
-                   color = parameter_type), alpha = 0.8) +
+  p <- ggplot(results_df, aes(x = baseline_ratio, y = treated_ratio)) +
+    # Use selection coefficient as color, parameter type as shape
+    geom_point(aes(color = selection_coefficient,
+                   shape = parameter_type,
+                   size = ifelse(is_experimental_estimate, 4, 2)),
+               alpha = 0.8, stroke = 1) +
     facet_grid(EIR ~ ft, labeller = labeller(
       EIR = function(x) paste("EIR =", x),
       ft = function(x) paste("Treatment =", round(as.numeric(x)*100), "%")
     )) +
-    scale_fill_gradient2(name = "Selection\ncoefficient\n(per year)",
-                         low = "blue", mid = "white", high = "red", midpoint = 0) +
+    scale_color_gradient2(name = "Selection\ncoefficient\n(per year)",
+                          low = "blue", mid = "white", high = "red",
+                          midpoint = 0,
+                          limits = c(-2, 15)) +
     scale_size_identity() +
-    scale_color_manual(
+    scale_shape_manual(
       name = "Parameter type",
       values = c(
-        "In vivo (central)" = "red",
-        "In vivo (conservative)" = "orange",
-        "In vivo (optimistic)" = "darkred",
-        "In vitro (central)" = "blue",
-        "In vitro (conservative)" = "lightblue",
-        "In vitro (optimistic)" = "darkblue",
-        "Within experimental range" = "purple",
-        "Other" = "gray"
+        "In vivo (central)" = 18,           # Diamond (♦)
+        "In vivo (conservative)" = 17,      # Triangle up (▲)
+        "In vivo (optimistic)" = 25,        # Triangle down (▼)
+        "In vitro (central)" = 15,          # Square (■)
+        "In vitro (conservative)" = 0,      # Open square (□)
+        "In vitro (optimistic)" = 22,       # Filled square with X
+        "Within experimental range" = 1,    # Open circle (○)
+        "Other" = 3                         # Plus sign (+)
       )
     ) +
     labs(
@@ -844,7 +882,7 @@ plot_experimental_summary <- function(results_df) {
 # Plot 11: Selection coefficient comparison
 plot_selection_comparison <- function() {
   cat("Creating selection coefficient comparison...\n")
-
+# Defining the specific experimental estimates to compare
   estimates <- data.frame(
     scenario = c("In vitro\n(central)", "In vitro\n(optimistic)",
                  "In vivo\n(conservative)", "In vivo\n(central)", "In vivo\n(optimistic)"),
@@ -854,14 +892,16 @@ plot_selection_comparison <- function() {
     confidence = c("Central", "Optimistic", "Conservative", "Central", "Optimistic")
   )
 
-  selection_results <- list()
-
+  selection_results <- list() # Store calculations
+# Calculating selection coefficient for each estimate
   for (i in 1:nrow(estimates)) {
     est <- estimates[i, ]
 
     model <- malaria_model(
-      EIR = 50, ft = 0.6, ton = 365, toff = 365 + (2*365),
-      day0_res = 0.01, treatment_failure_rate = 0.43,
+      EIR = 50, ft = 0.6,
+      ton = 365, toff = 365 + (2*365),
+      day0_res = 0.01,
+      treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
       resistance_baseline_ratio = est$baseline_ratio,
       resistance_cleared_ratio = est$treated_ratio,
@@ -870,15 +910,18 @@ plot_selection_comparison <- function() {
 
     times <- seq(0, 365 + (2*365), by = 14)
     output <- model$run(times)
-
+# Find time points for selection coefficient calculation
+    # p0 = resistance prevalence at ~1 year (395 days)
     p0_idx <- which.min(abs(output[, "t"] - 395))
+    # p1 = resistance prevalence at ~2 years
     p1_idx <- which.min(abs(output[, "t"] - 730))
-
+# Extract prevalence values with bounds to avoid log(0) or log(1)
     p0 <- max(min(output[p0_idx, "prevalence_res"], 0.999), 0.001)
     p1 <- max(min(output[p1_idx, "prevalence_res"], 0.999), 0.001)
-
+# Calculate selection coefficeint
+# s = ln[p1(1-p0) / p0(1-p1)] where p0, p1 are prevalences at times 0, 1
     sel_coeff <- log(p1*(1-p0)/(p0*(1-p1)))
-
+# STore results for current estimate
     selection_results[[i]] <- data.frame(
       scenario = est$scenario,
       study_type = est$study_type,
@@ -888,7 +931,7 @@ plot_selection_comparison <- function() {
       selection_coefficient = sel_coeff
     )
   }
-
+# Combine all selection coefficient results
   selection_data <- do.call(rbind, selection_results)
 
   colors <- c("In vitro" = "#3498DB", "In vivo" = "#E74C3C")
@@ -917,22 +960,23 @@ plot_selection_comparison <- function() {
 # Plot 12: Key findings summary
 plot_key_findings <- function(timeseries_data, selection_data) {
   # Extract key numbers
+  # Final resistance prevalence for in vitro central estimate
   in_vitro_final <- timeseries_data %>%
     filter(study_type == "In vitro", confidence == "Central", time_years == max(time_years)) %>%
     pull(resistance_prevalence)
-
+# Final resistance prevalence for in vivo central estimate
   in_vivo_final <- timeseries_data %>%
     filter(study_type == "In vivo", confidence == "Central", time_years == max(time_years)) %>%
     pull(resistance_prevalence)
-
+# Selection coefficient for in vitro central estimate
   in_vitro_sel <- selection_data %>%
     filter(study_type == "In vitro", confidence == "Central") %>%
     pull(selection_coefficient)
-
+# Selection coefifcient for in vivo central estimate
   in_vivo_sel <- selection_data %>%
     filter(study_type == "In vivo", confidence == "Central") %>%
     pull(selection_coefficient)
-
+# Create summary data frame with key metrics
   summary_data <- data.frame(
     metric = rep(c("Final resistance (%)", "Selection coefficient"), each = 2),
     study_type = rep(c("In vitro", "In vivo"), 2),
