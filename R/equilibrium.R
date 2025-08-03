@@ -20,36 +20,26 @@ equilibrium_init_create <- function(par) {
   # FOI
   FOI_eq <- EIR_eq * par$b
 
-  # FOI to T_cleared and T_failed (split based on failure rate)
-  aT_cleared <- FOI_eq * par$phi * par$ft * (1 - par$treatment_failure_rate) / par$rT_r_cleared
-  aT_failed <- FOI_eq * par$phi * par$ft * par$treatment_failure_rate / par$rT_r_failed
-  aD <- FOI_eq * par$phi * (1 - par$ft) / par$rD
+  # FOI to T and D
+  aT <- FOI_eq * par$phi * par$ft/par$rT_s
+  aD <- FOI_eq * par$phi * (1 - par$ft)/par$rD
 
-  # Updated equilibrium calculations
-  Z_eq <- rep(NA, 4)  # Now 4 states: S, D, T_cleared, T_failed
-  Z_eq[1] <- 1/(1 + aT_cleared + aT_failed + aD)  # S
-  Z_eq[2] <- aD * Z_eq[1]  # D
-  Z_eq[3] <- aT_cleared * Z_eq[1]  # T_cleared
-  Z_eq[4] <- aT_failed * Z_eq[1]  # T_failed
+  Z_eq <- rep(NA, 3)
+  Z_eq[1] <- 1/(1 + aT + aD)
+  Z_eq[2] <- aT * Z_eq[1]
+  Z_eq[3] <- aD * Z_eq[1]
 
   Y_eq <- Z_eq[1]
-  D_eq <- Z_eq[2]
-  T_cleared_eq <- Z_eq[3]
-  T_failed_eq <- Z_eq[4]
+  T_eq <- Z_eq[2]
+  D_eq <- Z_eq[3]
 
   betaS <- FOI_eq
   betaA <- FOI_eq * par$phi + par$rA
 
-  # A includes flows from failed treatments (not cleared)
-  # T_r_cleared flows back to S, so doesn't contribute to A equilibrium
-  A_eq <- (FOI_eq * (1 - par$phi) * Y_eq + par$rD * D_eq +
-             par$rT_r_failed * T_failed_eq) / (betaA + FOI_eq * (1 - par$phi))
+  A_eq <- (FOI_eq * (1 - par$phi) * Y_eq + par$rD * D_eq)/(betaA + FOI_eq * (1 - par$phi))
+  S_eq <- Y_eq - A_eq
 
-  # S equilibrium includes people recovering from T_r_cleared
-  S_eq <- Y_eq - A_eq + par$rT_r_cleared * T_cleared_eq / (FOI_eq)
-
-  # Updated FOIv calculation including both treatment compartments
-  FOIv_eq <- par$a * (par$cT * (T_cleared_eq + T_failed_eq) + par$cD * D_eq + par$cA * A_eq)
+  FOIv_eq <- par$a * (par$cT*T_eq + par$cD*D_eq + par$cA*A_eq)
 
   # mosquito states
   Iv_eq <- FOIv_eq * exp(-par$mu * par$n)/(FOIv_eq + par$mu)
@@ -62,8 +52,7 @@ equilibrium_init_create <- function(par) {
   ## collate init
   list(
     EIR = par$EIR, ft = par$ft,
-    S = S_eq, D = D_eq, A = A_eq,
-    T_cleared = T_cleared_eq, T_failed = T_failed_eq,
+    S = S_eq, D = D_eq, A = A_eq, T = T_eq,
     phi = par$phi, b = par$b,
     m = mv0, Sv = Sv_eq, Ev = Ev_eq, Iv = Iv_eq, a = par$a,
     cA = par$cA, cD = par$cD, cT = par$cT,
@@ -72,8 +61,6 @@ equilibrium_init_create <- function(par) {
     rD = par$rD,
     rA = 1/(1/par$rA +1/par$rU),
     rT_s = par$rT_s,
-    rT_r_cleared = par$rT_r_cleared,
-    rT_r_failed = par$rT_r_failed,
     treatment_failure_rate = par$treatment_failure_rate,
     resistance_trans_mult = ifelse(is.null(par$resistance_trans_mult), 1, par$resistance_trans_mult),
     resistance_dur_mult = ifelse(is.null(par$resistance_dur_mult), 1, par$resistance_dur_mult),
@@ -94,8 +81,8 @@ equilibrium_init_create <- function(par) {
 #' @param init_res Initial resistance level at res_time
 #' @param res_time Time at which resistance is introduced
 #' @param treatment_failure_rate Proportion of treatments that fail completely (default = 0.3)
-#' @param rT_r_cleared Recovery rate for delayed clearance treatment (default = 0.1)
-#' @param rT_r_failed Rate of transition from failed treatment to asymptomatic (default = 0.1)
+#' @param rT_r_cleared Recovery rate for delayed clearance treatment (default = 0.2)
+#' @param rT_r_failed Rate of transition from failed treatment to asymptomatic (default = 0.2)
 #' @param resistance_trans_mult transmission multiplier for resistant parasites (default = 1)
 #' @param resistance_dur_mult duration multiplier for resistant infections (default = 1)
 #' @param resistance_baseline_ratio baseline infectiousness ratio for untreated resistant parasites (default = 1)
@@ -104,7 +91,7 @@ equilibrium_init_create <- function(par) {
 #' @return A list of generated parameters.
 #' @export
 phi_eir_rel <- function(EIR, ft, ton = 5000, toff = 50000, init_res = 0.01, res_time = 3000,
-                        treatment_failure_rate = 0.3, rT_r_cleared = 0.1, rT_r_failed = 0.1,
+                        treatment_failure_rate = 0.3, rT_r_cleared = 0.2, rT_r_failed = 0.2,
                         day0_res = 0.01, resistance_trans_mult = 1, resistance_dur_mult = 1,
                         resistance_baseline_ratio = 1, resistance_cleared_ratio = 1, resistance_failed_ratio = 1) {
   mpl <- ICDMM::model_param_list_create(rho=0, rA = 1/(250), rU = Inf, rP = Inf, sigma2 = 0)
@@ -131,17 +118,13 @@ phi_eir_rel <- function(EIR, ft, ton = 5000, toff = 50000, init_res = 0.01, res_
   S <- sum(eq$init_S) + sum(eq$init_P)
   D <- sum(eq$init_D)
   A <- sum(eq$init_A + eq$init_U)
-  T_total <- sum(eq$init_T)
+  T <- sum(eq$init_T)
 
-  # Initial populations (split treatments by failure rate)
-  T_cleared <- T_total * (1 - treatment_failure_rate)
-  T_failed <- T_total * treatment_failure_rate
-
-  lambda_v_scale <- ((eq$av0 * (c_A*A + eq$cD*D + eq$cT*(T_cleared + T_failed)))/eq$FOIv_eq)
+  lambda_v_scale <- ((eq$av0 * (c_A*A + eq$cD*D + eq$cT*T))/eq$FOIv_eq)
 
   par <- list(
     EIR = EIR, ft = ft,
-    S = S, D = D, A = A, T_cleared = T_cleared, T_failed = T_failed, phi = phi, b = b,
+    S = S, D = D, A = A, T = T, phi = phi, b = b,
     m = eq$mv0, Sv = eq$init_Sv, Ev = eq$init_Ev, Iv = eq$init_Iv, a = eq$av0,
     cA = c_A, cD = mean(eq$cD, na.rm = TRUE), cT = mean(eq$cT, na.rm = TRUE),
     n = eq$delayMos,

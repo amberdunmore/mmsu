@@ -31,6 +31,10 @@ library(mmsu)
 
 The package imports several other R packages, including: **odin**, **ICDMM**, **tidyr**, **stats**, **ggplot2**, **data.table**, **utils**, **dplyr**, **Rcpp**, **magrittr**. These packages will be installed automatically when you install the **mmsu** package.
 
+for ICDMM though please install this branch:
+
+`devtools::install_github("mrc-ide/deterministic-malaria-model", ref = "fix/compilers")`
+
 ## Usage
 
 ### Creating a Malaria Model
@@ -66,7 +70,7 @@ params <- list(
   S = 1000, D = 10, A = 5, T = 3, Sv = 200, Ev = 10, Iv = 5,
   m = 0.1, a = 0.3, b = 0.55, phi = 0.3, ft = 0.5, rD = 0.1, rA = 0.1,
   rT_s = 0.1, rT_r = 0.1, e = 0.2, mu = 0.1, n = 10, cA = 0.1, cD = 0.2, cT = 0.3,
-  ton = 5000, toff = 50000, res_time = 3000, init_res = 0.01, rT_r_true = 0.1
+  ton = 5000, toff = 50000, res_time = 3000, init_res = 0.01
 )
 
 # Create the model
@@ -96,7 +100,7 @@ before this and we can more easily see the impact of resistance when it is turne
 ```{r}
 
 # Create the model using EIR and ft
-model <- malaria_model(EIR = 10, ft = 0.5, rT_r_true = 0.002, day0_res = 0.1, ton = 500)
+model <- malaria_model(EIR = 10, ft = 0.5, day0_res = 0.1, ton = 500)
 
 # Run the model for 5000 days
 results <- model$run(0:5000)
@@ -108,36 +112,6 @@ plot <- plot_model(results, c("S", "prevalence", "prevalence_res"))
 ### Creating Equilibrium Initial Conditions
 
 We have discussed the concept of the equilibrium state and solution. The malaria model has been created so that it has a steady state equilibrium. To see a bit more about how this is created internally by some of the funcitons above.
-
-#### Example: Create equilibrium initial conditions
-
-```{r}
-# Define parameters
-params <- list(
-  EIR = 10,
-  ft = 0.5,
-  phi = 0.3,
-  b = 0.55,
-  m = 0.1,
-  a = 0.3,
-  cA = 0.1,
-  cD = 0.2,
-  cT = 0.3,
-  n = 10,
-  mu = 0.1,
-  rD = 0.1,
-  rA = 0.1,
-  rU = 1 / 110.299,
-  rT_s = 0.1,
-  rT_r = 0.1
-)
-
-# Create equilibrium initial conditions
-equilibrium_init <- equilibrium_init_create(params)
-
-# Print equilibrium initial conditions
-print(equilibrium_init)
-```
 
 #### Example: Generate parameters based on EIR and ft using `phi_eir_rel`
 
