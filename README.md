@@ -25,6 +25,10 @@ The package imports several other R packages, including: **odin**,
 **dplyr**, **Rcpp**, **magrittr**. These packages will be installed
 automatically when you install the **mmsu** package.
 
+for ICDMM though please install this branch:
+
+`devtools::install_github("mrc-ide/deterministic-malaria-model", ref = "fix/compilers")`
+
 ## Usage
 
 ### Creating a Malaria Model
@@ -66,7 +70,7 @@ params <- list(
   S = 1000, D = 10, A = 5, T = 3, Sv = 200, Ev = 10, Iv = 5,
   m = 0.1, a = 0.3, b = 0.55, phi = 0.3, ft = 0.5, rD = 0.1, rA = 0.1,
   rT_s = 0.1, rT_r = 0.1, e = 0.2, mu = 0.1, n = 10, cA = 0.1, cD = 0.2, cT = 0.3,
-  ton = 5000, toff = 50000, res_time = 3000, init_res = 0.01, rT_r_true = 0.1
+  ton = 5000, toff = 50000, res_time = 3000, init_res = 0.01
 )
 
 # Create the model
@@ -100,7 +104,7 @@ we can more easily see the impact of resistance when it is turned on
 ``` r
 
 # Create the model using EIR and ft
-model <- malaria_model(EIR = 10, ft = 0.5, rT_r_true = 0.002, day0_res = 0.1, ton = 500)
+model <- malaria_model(EIR = 10, ft = 0.5, day0_res = 0.1, ton = 500)
 
 # Run the model for 5000 days
 results <- model$run(0:5000)
@@ -118,40 +122,6 @@ malaria model has been created so that it has a steady state
 equilibrium. To see a bit more about how this is created internally by
 some of the funcitons above.
 
-#### Example: Create equilibrium initial conditions
-
-``` r
-# Define parameters
-params <- list(
-  EIR = 10,
-  ft = 0.5,
-  phi = 0.3,
-  b = 0.55,
-  m = 0.1,
-  a = 0.3,
-  cA = 0.1,
-  cD = 0.2,
-  cT = 0.3,
-  n = 10,
-  mu = 0.1,
-  rD = 0.1,
-  rA = 0.1,
-  rU = 1 / 110.299,
-  rT_s = 0.1,
-  rT_r = 0.1
-)
-
-# Create equilibrium initial conditions
-equilibrium_init <- equilibrium_init_create(params)
-
-# Print equilibrium initial conditions
-print(equilibrium_init)
-#>   EIR  ft         S          D         A          T phi    b        m        Sv
-#> 1  10 0.5 0.8502543 0.02162516 0.1064954 0.02162516 0.3 0.55 4.103797 0.9395085
-#>           Ev         Iv   a  cA  cD  cT  n  mu  rD          rA rT_s rT_r
-#> 1 0.03823793 0.02225359 0.3 0.1 0.2 0.3 10 0.1 0.1 0.008312621  0.1  0.1
-```
-
 #### Example: Generate parameters based on EIR and ft using `phi_eir_rel`
 
 ``` r
@@ -164,8 +134,12 @@ print(params)
 #> 1  10 0.5 0.3142287 0.004491399 0.6767885 0.004491399 0.157997 0.418798
 #>          m        Sv         Ev        Iv         a         cA        cD
 #> 1 5.508219 0.9392847 0.04449609 0.0162192 0.3066667 0.04051686 0.0676909
-#>           cT  n    mu  rD    rA rT_s rT_r
-#> 1 0.02179647 10 0.132 0.2 0.004  0.2  0.2
+#>           cT  n    mu  rD    rA rT_s treatment_failure_rate
+#> 1 0.02179647 10 0.132 0.2 0.004  0.2                    0.3
+#>   resistance_trans_mult resistance_dur_mult resistance_baseline_ratio
+#> 1                     1                   1                         1
+#>   resistance_cleared_ratio resistance_failed_ratio
+#> 1                        1                       1
 ```
 
 ## Contributing

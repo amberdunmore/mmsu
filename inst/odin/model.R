@@ -3,7 +3,7 @@
 # Human Equations
 deriv(S) <- (-S * lambda_s * (phi * ft + phi * (1 - ft) + (1 - phi)) -
                S * lambda_r * (phi * ft + phi * (1 - ft) + (1 - phi)) +
-               T_s * rT_s + A_s * rA + A_r * rA + T_r_cleared * rT_r_cleared)
+               T_s * rT_s + A_s * rA + A_r * rA + T_r_cleared * rT_r_cleared_on)
 
 deriv(D_s) <- (S * lambda_s * phi * (1 - ft) +
                 lambda_s * A_r * phi * (1 - ft) +
@@ -33,7 +33,7 @@ deriv(D_r) <- invading_D_r + (S * lambda_r * phi * (1 - ft) +
 deriv(A_r) <- invading_A_r + (S * lambda_r * (1 - phi) +
                               lambda_r * A_s * (1 - phi) +
                               D_r * rD_r +
-                              T_r_failed * rT_r_failed -
+                              T_r_failed * rT_r_failed_on -
                               lambda_r * A_r * phi * (1 - ft) -
                               lambda_r * A_r * phi * ft -
                               lambda_s * A_r * phi * (1 - ft) -
@@ -43,15 +43,15 @@ deriv(A_r) <- invading_A_r + (S * lambda_r * (1 - phi) +
 
 # NEW: Split resistant treatment compartments
 
-deriv(T_r_cleared) <- invading_T_r_cleared + (S * lambda_r * phi * ft * (1 - treatment_failure_rate) +
-                lambda_r * A_r * phi * ft * (1 - treatment_failure_rate) +
-                lambda_r * A_s * phi * ft * (1 - treatment_failure_rate) -
-                T_r_cleared * rT_r_cleared)
+deriv(T_r_cleared) <- invading_T_r_cleared + (S * lambda_r * phi * ft * (1 - treatment_failure_rate_on) +
+                lambda_r * A_r * phi * ft * (1 - treatment_failure_rate_on) +
+                lambda_r * A_s * phi * ft * (1 - treatment_failure_rate_on) -
+                T_r_cleared * rT_r_cleared_on)
 
-deriv(T_r_failed) <- invading_T_r_failed + (S * lambda_r * phi * ft * treatment_failure_rate +
-                lambda_r * A_r * phi * ft * treatment_failure_rate +
-                lambda_r * A_s * phi * ft * treatment_failure_rate -
-                T_r_failed * rT_r_failed)
+deriv(T_r_failed) <- invading_T_r_failed + (S * lambda_r * phi * ft * treatment_failure_rate_on +
+                lambda_r * A_r * phi * ft * treatment_failure_rate_on +
+                lambda_r * A_s * phi * ft * treatment_failure_rate_on -
+                T_r_failed * rT_r_failed_on)
 
 
 # Mosquito Equations
@@ -89,8 +89,8 @@ output(EIR_global) <- EIR_global
 
 # Resistance introduction
 invading_A_r <- if(t < res_time || t > (res_time+1)) 0 else A_s*log(1/(1-init_res))
-invading_T_r_cleared <- if(t < res_time || t > (res_time+1)) 0 else T_s*log(1/(1-init_res))*(1-treatment_failure_rate)
-invading_T_r_failed <- if(t < res_time || t > (res_time+1)) 0 else T_s*log(1/(1-init_res))*treatment_failure_rate
+invading_T_r_cleared <- if(t < res_time || t > (res_time+1)) 0 else T_s*log(1/(1-init_res))*(1-treatment_failure_rate_on)
+invading_T_r_failed <- if(t < res_time || t > (res_time+1)) 0 else T_s*log(1/(1-init_res))*treatment_failure_rate_on
 invading_D_r <- if(t < res_time || t > (res_time+1)) 0 else D_s*log(1/(1-init_res))
 invading_Ev_r <- if(t < res_time || t > (res_time+1)) 0 else Ev_s*log(1/(1-init_res))
 invading_Iv_r <- if(t < res_time || t > (res_time+1)) 0 else Iv_s*log(1/(1-init_res))
@@ -157,6 +157,11 @@ resistance_dur_mult <- user()
 resistance_baseline_ratio <- user()
 resistance_cleared_ratio <- user()
 resistance_failed_ratio <- user()
+
+# Have all resistance related parameters switch on only during ton gap
+rT_r_cleared_on <- if (t > ton && t < toff) rT_r_cleared else rT_s
+rT_r_failed_on <- if (t > ton && t < toff) rT_r_failed else rT_s
+treatment_failure_rate_on <- if (t > ton && t < toff) treatment_failure_rate else 0
 
 # Defining separate infectiousness parameters for sensitive and resistant strains
 cA_s <- cA  # baseline asymptomatic infectiousness (sensitive)

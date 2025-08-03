@@ -16,17 +16,22 @@
 #' @param resistance_baseline_ratio baseline infectiousness ratio for untreated resistant parasites (default = 1)
 #' @param resistance_cleared_ratio infectiousness ratio for partial treatment response (default = 1)
 #' @param resistance_failed_ratio infectiousness ratio for treatment failure (default = 1)
+#' @param c_mult function to convert ratios into adjusted onward contibution terms
 #' @param verbose Logical. If TRUE, prints detailed logs. Default is FALSE.
 #' @return An object of class `odin_model`.
 #' @export
 malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           ton = 365, toff = 4015, day0_res = 0.01,
                           init_res = 0.0, res_time = 0, treatment_failure_rate = 0.3,
-                          rT_r_cleared = 0.1, rT_r_failed = 0.1,
+                          rT_r_cleared = 0.2, rT_r_failed = 0.2,
                           resistance_trans_mult = 1, resistance_dur_mult = 1,
                           resistance_baseline_ratio = 1, resistance_cleared_ratio = 1,
-                          resistance_failed_ratio = 1,
+                          resistance_failed_ratio = 1, c_mult = c_multiplier,
                           verbose = FALSE) {
+
+  resistance_baseline_ratio <- c_mult(resistance_baseline_ratio)
+  resistance_cleared_ratio <- c_mult(resistance_cleared_ratio)
+  resistance_failed_ratio <- c_mult(resistance_failed_ratio)
 
   if (is.null(params)) {
     if (is.null(EIR) || is.null(ft)) {
@@ -66,10 +71,9 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
     params$A_r0 <- params$A * day0_res
 
     # Splitting total T between sensitive and split resistant treatments
-    total_T <- params$T_cleared + params$T_failed
-    params$T_s0 <- total_T * (1 - day0_res)
-    params$T_r_cleared0 <- params$T_cleared * day0_res
-    params$T_r_failed0 <- params$T_failed * day0_res
+    params$T_s0 <- params$T * (1 - day0_res)
+    params$T_r_cleared0 <- params$T * day0_res * (1-params$treatment_failure_rate)
+    params$T_r_failed0 <- params$T * day0_res * params$treatment_failure_rate
 
     params$Sv0 <- params$Sv
     params$Ev_s0 <- params$Ev * (1 - day0_res)

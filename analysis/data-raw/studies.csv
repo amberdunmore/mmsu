@@ -1,0 +1,1466 @@
+Title,Study Identification ,Country,Setting,Study Period,Treatment Regimen,Sample Size,Age Range,Gender,Asexual Parasite Density,Sexual Parasite Density,Artemisinin Resistance Status,Sexual/asexual Ratio,Resistance Stratified Analysis,Gametocyte Carriage Rate,Follow-up Duration,Detection Method,Study Quality/Notes,Quality Scoring (Poor/Moderate/Good),Grading (/18),Justification 
+"Artemether-lumefantrine-amodiaquine or artesunateamodiaquine combined with single low-dose primaquine to reduce Plasmodium falciparum malaria transmission in Ouélessébougou, Mali: a five-arm, phase 2, single-blind, randomised controlled trial",Almahamoudou 2023,Mali,"Ouélessébougou, Ouélessébougou Clinical Research Unit (rural, seasonal transmission)",October 2022 - December 2022,"- Artemether-Lumefantrine: 3 days
+- Artemether-Lumefantrine-Amodiaquine: 3 days
+- Artemether-Lumefantrine-Amodiaquine plus Primaquine (0.25 mg/kg): 3 days
+- Artesunate-Amodiaquine: 3 days
+- Artesunate-Amodiaquine plus Primaquine (0.25 mg/kg): 3 days","100 (98 completed day 2 follow-up, 96 completed all visits to day 28)",10-50 years,"49 males, 51 females","- Baseline: 
+  - Artemether-lumefantrine: 37.9 (0.0-300.0) parasites/?L
+  - Artemether-lumefantrine-amodiaquine: 0.0 (0.0-79.8) parasites/?L
+  - Artemether-lumefantrine-amodiaquine plus primaquine: 0.0 (0.0-37.6) parasites/?L
+  - Artesunate-amodiaquine: 0.0 (0.0-1654.9) parasites/?L
+  - Artesunate-amodiaquine plus primaquine: 0.0 (0.0-720.0) parasites/?L
+- Day 2: 
+  - Artemether-lumefantrine: 1 (5%) of 20 participants had asexual stages
+  - Artesunate-amodiaquine: 1 (5%) of 20 participants had asexual stages
+- Measurement method: Microscopy","Baseline: 
+- Artemether-lumefantrine: 31.0 gametocytes/?L (IQR 19.9-92.7)
+- Artemether-lumefantrine-amodiaquine: 28.6 gametocytes/?L (IQR 11.5-130.5)
+- Artemether-lumefantrine-amodiaquine plus primaquine: 42.3 gametocytes/?L (IQR 11.8-97.0)
+- Artesunate-amodiaquine: 52.5 gametocytes/?L (IQR 33.6-129.0)
+- Artesunate-amodiaquine plus primaquine: 24.8 gametocytes/?L (IQR 10.7-115.2)
+Day 7:
+- Without primaquine: 13.3 gametocytes/?L (IQR 5.6-21.0), 6.9 gametocytes/?L (IQR 1.1-49.9), 31.7 gametocytes/?L (IQR 7.3-61.6)
+- With primaquine: 0.0 gametocytes/?L (IQR 0.0-0.0), 0.2 gametocytes/?L (IQR 0.0-0.9)
+Prevalence:
+- Baseline: 100% for all groups
+- Day 28: 95% for artesunate-amodiaquine, 80% for artemether-lumefantrine, 72% for artemether-lumefantrine-amodiaquine",Not mentioned (the paper does not provide specific data on artemisinin resistance status),"Baseline: 
+- Artemether–lumefantrine: 31.0 / 37.9 = 0.819 (calculated from densities, Day 0)
+- Artemether–lumefantrine–amodiaquine: 28.6 / 0 = Not calculable (asexual parasite density is 0)
+- Artemether–lumefantrine–amodiaquine plus primaquine: 42.3 / 0 = Not calculable (asexual parasite density is 0)
+- Artesunate–amodiaquine: 52.5 / 0 = Not calculable (asexual parasite density is 0)
+- Artesunate–amodiaquine plus primaquine: 24.8 / 0 = Not calculable (asexual parasite density is 0)",No,"- Baseline: 61% (61/100, microscopy)
+- Day 7: 35% (7/20, artesunate-amodiaquine group)
+- Day 14: 16% (3/19, artesunate-amodiaquine group)
+- Day 28: 95% (18/19, artesunate-amodiaquine group); 80% (16/20, artemether-lumefantrine group); 72% (13/18, artemether-lumefantrine-amodiaquine group)","28 days; Days 2, 7, 14, 21, 28",Microscopy; RT-qPCR,"RCT, good follow-up (96%), density data available, limitations include multiple secondary outcomes and focus on high gametocyte density participants",Moderate ,10.8,"1. Study Design & Methodology- Score: 1/3 (Fair)
+Single-arm prospective study with no control group
+Clear methodology for artemisinin tolerance assessment
+Well-defined primary outcomes (day 3 parasitemia, ex vivo RSA)
+Limitation: No comparison group for resistance analysis
+2. Sample Size & Power- Score: 2/3 (Good)
+Sample size: 115 participants (moderate size)
+Adequate for basic tolerance assessment
+Some stratification possible for RSA analysis (90 successful assays)
+Limitation: No formal power calculation provided
+3. Representativeness- Score: 1/3 (Fair)
+Convenience sampling from 3 health facilities
+Limited to Greater Accra Region only
+Clear inclusion/exclusion criteria
+Limitation: Geographically restricted, potential selection bias
+4. Parasitological Methods- Score: 3/3 (Excellent)
+Resistance Assessment: Novel K13 mutations (K188*) and Pfcoronin (V424I) identified via sWGS
+Gametocyte Detection: Not primary focus, but standard microscopy used
+Quality Control: Multiple validation methods (RSA, IC50 assays, molecular markers)
+Innovative Methods: Ex vivo ring-stage survival assay (RSA) with 700nM DHA threshold
+5. Follow-up & Attrition- Score: 2/3 (Good)
+Follow-up rate: 73.9% (85/115) to day 3
+Appropriate duration for artemisinin clearance assessment
+Clear documentation of losses
+Limitation: <80% follow-up rate
+6. Confounding Control- Score: 2/3 (Good)
+Age, parasitemia, clinical characteristics controlled
+Appropriate statistical methods
+Multiple resistance markers analysed
+Some limitations: Single-arm design limits confounding control                                                                                   "
+No Clinical or Molecular Evidence of Plasmodium falciparum Resistance to Artesunate-Mefloquine in Northwestern Brazil,Ladeia-Andrade 2016,Brazil,"Juruá Valley, Cruzeiro do Sul (urban, high transmission)",November 2010 - February 2013,ASMQ (Artesunate-Mefloquine) 3 days,162 (154 completed 42-day follow-up),26.6 years (4-73 years),"92:70 (56.8% male, 43.2% female)","Baseline: 4,581.2 parasites/?L mean (range 250-62,069, microscopy); 
+Baseline: 4,700.1 parasites/?L mean (range 10-53,500, qPCR)","Prevalence: 35.2% Day 0, 23.6% Day 3 (microscopy)",0% K13 mutations associated with resistance; 43.6% K189T mutation (not associated with resistance); fully sensitive population,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 35.2% (57/162, microscopy)
+- Peak: 46.3% (microscopy)
+- Day 3: 23.6% (microscopy)
+- Day 42: 0% (microscopy)","42 days; Days 0,1,2,3,7,14,21,28,35,42",Microscopy + qPCR; Microscopy,"Single-arm trial, good follow-up (95.1%), density data available, monoinfections confirmed by microscopy and qPCR",Good,15,"1. Study Design & Methodology- Score: 2/3 (Good)
+Well-designed single-arm efficacy trial following WHO/PAHO protocols
+Clear primary endpoint (ACPR) and secondary endpoints defined
+Appropriate for efficacy assessment in low-resistance setting
+Limitation: Single-arm design limits resistance comparison capabilities
+2. Sample Size & Power- Score: 3/3 (Excellent)
+Sample size: 162 participants (exceeded target of 101)
+Formal power calculation provided (98% ACPR, ?=5%, 20% dropout)
+Adequate for primary efficacy assessment
+Sufficient for stratified molecular analysis
+3. Representativeness- Score: 2/3 (Good)
+Enrolled from 11 health centers in main P. falciparum transmission hotspot
+Urban area focus limits rural generalizability
+Clear inclusion/exclusion criteria
+Representative of local clinical population (low parasitemias common)
+4. Parasitological Methods- Score: 3/3 (Excellent)
+Resistance Assessment: Comprehensive molecular analysis:
+pfmdr1 copy number analysis (99.4% of samples); Full-length K13 gene sequencing (86.4% of samples); No resistance markers detected
+Detection Methods: Dual microscopy + qPCR confirmation
+Quality Control: Expert microscopist review, qPCR validation
+Innovative: Day 3 residual parasitemia assessment
+5. Follow-up & Attrition- Score: 3/3 (Excellent)
+Follow-up rate: 95.1% (154/162) over 42 days
+Excellent retention with clear documentation of withdrawals
+Appropriate duration for efficacy assessment
+Home visits ensuring good compliance
+6. Confounding Control- Score: 2/3 (Good)
+Age, gender, parasitemia stratification
+Correlation analysis between variables
+Appropriate statistical methods
+Limitation: Single-arm design inherently limits confounding control                                                                                                                                                                                                                                                                                                               "
+Single dose primaquine to reduce gametocyte carriage and Plasmodium falciparum transmission in Cambodia: An open-label randomized trial,Lin 2017,Cambodia,"Oddar Meanchey Province, Anlong Veng District Hospital, low transmission, seasonal transmission",December 2012 - February 2014,Dihydroartemisinin-Piperaquine (40mg and 320mg per tablet) for 3 days; Dihydroartemisinin-Piperaquine (40mg and 320mg per tablet) for 3 days + Primaquine (45mg) single dose,"107 (101 completed randomization, with follow-up numbers: 101 at day 0, 100 at day 3, 96 at day 7, 90 at day 14)",18-65 years (adults),"98 males, 3 females (97% male, 3% female)","- Baseline: 14,962 parasites/?L (95% CI 10,185–21,978, microscopy); 17,218 parasites/?L (95% CI 6,389–43,451, microscopy)","- Baseline: 9% prevalence (microscopy), 46% prevalence (RT-PCR)
+- Day 7: 2.1% prevalence (DHP + PQ), 15% prevalence (DHP-only)",High-grade DHP failure; slow-clearing parasites; increased gametocyte prevalence post-treatment,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 9% (9/101, microscopy); 46% (46/101, RT-PCR)
+- Day 7: 2.1% (DHP + PQ), 15% (DHP-only)
+- Day 14: 0% (DHP + PQ)","42 days; Days 0, 3, 7, 14, 42",Microscopy; RT-PCR (Pfs25),"RCT, early termination due to poor DHP efficacy, low infectiousness rate, not powered for transmission-blocking efficacy, conducted in ACT-resistant area",Good,14.7,"1. Study Design & Methodology- Score: 3/3 (Excellent)
+Well-designed randomized controlled trial with proper methodology
+Open-label design appropriate for intervention study
+Clear primary endpoint (transmission-blocking efficacy)
+Strength: RCT design with randomization and mosquito infectivity endpoints
+2. Sample Size & Power- Score: 2/3 (Good)
+Sample size: 107 participants (moderate size)
+Important limitation: Study not powered for transmission-blocking efficacy
+Originally designed for DHP efficacy assessment (target 150 evaluable subjects)
+Early termination due to poor DHP efficacy reduced power
+3. Representativeness- Score: 2/3 (Good)
+Recruited from district hospital in malaria-endemic area
+Adults only (18-65 years) - excludes children
+Bias: 97% male participants (98/101) - severe gender imbalance
+Representative of local clinical population but limited generalizability
+4. Parasitological Methods- Score: 3/3 (Excellent)
+Resistance Context: High-grade DHP failure documented
+Gametocyte Detection: Dual methods (microscopy + RT-PCR Pfs25)
+Transmission Assessment: Direct membrane feeding assays with Anopheles dirus
+Quality Control: Multiple validation methods, molecular confirmation
+Innovation: First Asian study using mosquito infectivity endpoints
+5. Follow-up & Attrition- Score: 2/3 (Good)
+Follow-up rates: Variable (101 at day 0, 90 at day 14)
+Duration: 42 days (appropriate for gametocyte assessment)
+Early termination: Study halted due to poor DHP efficacy
+Clear documentation of withdrawals and reasons
+6. Confounding Control- Score: 2/3 (Good)
+Baseline characteristics balanced between arms
+G6PD screening and exclusion of severe deficiency
+Appropriate statistical methods
+Limitation: Unblinded design, though appropriate for intervention"
+"Therapeutic efficacy and safety of artemether-lumefantrine combination therapy for the treatment of uncomplicated Plasmodium falciparum malaria at Teda Health Centre, Northwest Ethiopia, 2022/23",Woldesenbet 2024,Ethiopia,"Amhara National Regional State, Teda Health Centre, Northwest Ethiopia (urban/semi-urban, high transmission)",September 2022 - February 2023,"Artemether-Lumefantrine (A/L 20 mg/120 mg), dosing based on weight: 6 tablets for 6-15 kg, 12 tablets for 16-24 kg, 18 tablets for 25-34 kg, 24 tablets for ?35 kg; Primaquine 0.25 mg/kg single dose",88 (67 completed follow-up),6 months to 70 years,"61.4% male, 38.6% female","Baseline: 7,402 parasites/?L geometric mean (microscopy); Day 0: 6,374 parasites/?L median (range 1,213-96,661, microscopy); Day 1: 508 parasites/?L; Day 2: 243 parasites/?L; Day 3: 124 parasites/?L; Day 3: 97% cleared (microscopy)","Prevalence: 6.8% Day 0, 4/6 on Day 1, 0% on Day 2 (microscopy)","- Molecular markers: K13 mutation R622I expanding in Ethiopia, but not linked with delayed clearance.
+- Phenotypic resistance: Recrudescence in 2 study participants.
+- Population resistance prevalence: Not specified.
+- Individual patient resistance status: Not detailed.","Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 6.8% (6/88, microscopy)
+- Day 1: 4/88 (microscopy)
+- Day 2: 0% (microscopy)","28 days; Days 0, 1, 2, 3, 7, 14, 21, 28",Microscopy; Microscopy,"Single-arm observational study, high loss to follow-up, single genotyping marker, potential errors in haemoglobin measurement, robust statistical analysis, detailed demographic and parasitological data, reinfection/recrudescence distinguished by molecular techniques",Poor,7.8,"1. Study Design & Methodology- Score: 1/3 (Fair)
+Single-arm observational study following WHO 2009 guidelines
+Clear methodology for therapeutic efficacy assessment
+Well-defined primary outcomes (ACPR, parasite/fever clearance)
+Major limitation: No control group, observational design limits causal inference
+2. Sample Size & Power- Score: 1/3 (Fair)
+Sample size: 88 participants (calculated for 5% failure rate)
+Sample size calculation provided with appropriate assumptions
+Significant limitation: High loss to follow-up (23.9%) affects power
+Adequate for basic efficacy assessment but limited for resistance analysis
+3. Representativeness- Score: 1/3 (Fair)
+Convenience sampling from single health centre
+Limited to Teda subcity (population 20,000)
+Clear inclusion/exclusion criteria following WHO guidelines
+Major limitation: Single-site study with restricted generalizability
+4. Parasitological Methods- Score: 2/3 (Good)
+Resistance Context: K13 R622I mutation documented but not linked to delayed clearance
+Gametocyte Assessment: Standard microscopy (6.8% baseline prevalence)
+Quality Control: Multiple microscopists, expert review for discordant results
+Molecular genotyping: msp2 analysis for recrudescence vs reinfection
+Limitation: Only single molecular marker used
+5. Follow-up & Attrition- Score: 1/3 (Fair)
+Follow-up rate: 76.1% (67/88) - below acceptable threshold
+Duration: 28 days (appropriate for efficacy assessment)
+High attrition: 21 participants lost to follow-up
+Clear documentation of withdrawals and reasons
+6. Confounding Control- Score: 2/3 (Good)
+Age, gender, parasitemia, clinical characteristics documented
+Appropriate statistical methods (Kaplan-Meier, per-protocol analysis)
+WHO Excel spreadsheet used for standardized analysis
+Limitation: Single-arm design inherently limits confounding control"
+"The transmission blocking activity of artemisinin-combination, non-artemisinin, and 8aminoquinoline antimalarial therapies: a pooled analysis of individual participant data",Vanheer 2024,Mali,"Ouélessébougou, Mali, transmission context not explicitly mentioned",January 2013 - January 2023,"- Dihydroartemisinin-piperaquine (DHA-PPQ)
+- Pyronaridine-artesunate (PY-AS)
+- Artemether-lumefantrine (AL)
+- Artesunate-amodiaquine (AS-AQ)
+- Sulfadoxine-pyrimethamine plus amodiaquine (SP-AQ)
+- ACTs plus single low-dose primaquine (ACT-PQ; 0.25 or 0.5 mg/kg)
+- Non-ACT (SP-AQ) plus single low-dose primaquine (Non-ACT-PQ)
+- ACT (DHA-PPQ) plus single low dose of tafenoquine (ACT-TQ; 0.83 or 1.66 mg/kg)",422 (no specific follow-up numbers mentioned),5-50 years,Not reported (the paper does not provide specific gender distribution or percentages for the study participants),Not mentioned (the paper does not provide specific data on asexual parasite density),"Baseline: Median 55 gametocytes/?L (IQR 32-112), microscopy
+Prevalence: 99.5% Day 0, microscopy","Not mentioned (the paper does not provide specific data on artemisinin resistance status, including molecular markers or phenotypic resistance)","Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 99.5% (420/422, microscopy); 100% (molecular methods)
+- Day 7: 51.12% reduction in AL group; 68.31% reduction in non-ACT-PQ group; 90.52% reduction in ACT-PQ group; 61.53% reduction in ACT-TQ group","Variable; Days 0, 2, 7, 14, 21, 28","Microscopy; RT-qPCR (Pfs25, CCP4, PfMGET)","Pooled analysis of six clinical trials, good follow-up, density data available, focused on highly infectious individuals, used direct membrane feeding assays, limitations include potential reduced infectivity due to assay method",,,
+"Artemether-Lumefantrine Efficacy for the Treatment of Uncomplicated Plasmodium falciparum Malaria in Choco, Colombia after 8 Years as First-Line Treatment",Olivera 2019,Colombia,"Choco, Quibdo, ongoing malaria transmission",July 2018 - February 2019,"Artemether-Lumefantrine (AL), 3-day course, dosing based on participant weight, administered twice daily for three consecutive days",88 (84 completed follow-up),27.5 years (5-65 years),"63.6% male, 36.4% female","Peak: Not explicitly mentioned; Baseline: 3,527 parasites/?L geometric mean (microscopy); Day 1: 118 parasites/?L (microscopy); Day 2: 30 parasites/?L (microscopy); Day 3: cleared (microscopy)","Prevalence: 12.5% Day 0, 19.3% Day 1, 20.9% Day 2, 18.6% Day 3, 14.3% Day 7, 6.0% Day 14, 2.4% Day 21, 1.2% Day 28 (microscopy)",0% K13 mutations; 0% delayed parasite clearance; fully sensitive population,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 12.5% (11/88, microscopy)
+- Peak: 20.9% (18/88, microscopy)
+- Day 3: 18.6% (16/88, microscopy)
+- Day 7: 14.3% (12/88, microscopy)
+- Day 14: 6.0% (5/88, microscopy)
+- Day 21: 2.4% (2/88, microscopy)
+- Day 28: 1.2% (1/88, microscopy)","28 days; Days 0, 1, 2, 3, 7, 14, 21, 28",Microscopy; Microscopy,"Single-arm TES, good follow-up (95.5%), high inter-microscopist agreement (100%), limitations include lack of generalizability and potential selection bias",,,
+Artesunate/Amodiaquine Versus Artemether/ Lumefantrine for the Treatment of Uncomplicated Malaria in Uganda: A Randomized Trial,Yeka 2016,Uganda,"- Northern Region, Apac District, Aduku Health Center (perennial transmission, previously very high but decreased)
+- Central Region, Mubende District, Mubende Health Center (perennial transmission, moderate)
+- Western Region, Kanungu District, Kihihi Health Center (perennial transmission, moderate)",May 2013 - June 2014,Artemether-Lumefantrine vs Artesunate-Amodiaquine,602 (594 completed 28-day follow-up),6-59 months (children only),"Not reported (the paper does not provide a direct gender distribution or ratio in the text, and while it references a table that likely contains this information, the table is not quoted here)","- Apac: 21,616 parasites/?L geometric mean (range 2,200–333,280, microscopy)
+- Mubende: 35,153 parasites/?L geometric mean (range 2,710–193,780, microscopy)
+- Kanungu: 14,264 parasites/?L geometric mean (range 2,020–189,500, microscopy)","- Baseline prevalence: 
+  - Apac: 18.0% (AL), 14.0% (AS/AQ)
+  - Mubende: 2.9% (AL), 11.0% (AS/AQ)
+  - Kanungu: 7.0% (AL), 5.0% (AS/AQ)
+- Detection method: Microscopy","Not mentioned (the paper does not provide specific data on artemisinin resistance status, including molecular markers or phenotypic resistance)","Not calculable (prevalence data only, no densities provided)",Yes,"- Baseline: Apac: 18.0%, Mubende: 2.9%, Kanungu: 7.0% (microscopy)","28 days; Days 0,1,2,3,7,14,21,28",Microscopy; Microscopy,"Multi-site RCT, good follow-up (98.7%), monoinfections, limited follow-up period (28 days), genotyping limitations",,,
+Therapeutic efficacy of artemetherlumefantrine against uncomplicated Plasmodium falciparum malaria in a hightransmission area in northwest Ethiopia,Teklemariam 2015,Ethiopia,"Northwest Ethiopia, Setit Humera, seasonal transmission (mesoendemic)",October 2014 - January 2015,"Artemether-Lumefantrine, 6 doses over 3 days, twice daily",92 (79 completed 28-day follow-up),15.13 years (2-28 years),"57 males, 35 females (61.9% male, 38.1% female)","Baseline: 27,798 parasites/?L (SD: 35,942, microscopy); 
+Day 1: 2,864 parasites/?L; 
+Day 2: 84 parasites/?L; 
+Day 3: 0 parasites/?L","- Baseline: 7.6% prevalence, range 48-2224 gametocytes/?L, Day 0, microscopy
+- Prevalence: 1% Day 3, complete clearance by Day 14, microscopy",0% K13 mutations; no phenotypic resistance (delayed parasite clearance or recrudescence) observed; fully sensitive population,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 7.6% (7/92, microscopy)
+- Day 3: 1%
+- Day 7: 1%
+- Day 14: 1%
+- Day 21: 0%","28 days; Days 3, 7, 14, 21, 28",Microscopy; Microscopy,"Single-arm prospective study, good follow-up (86.9%), monoinfections with P. falciparum, limitation: no PCR correction for recrudescence/reinfection",,,
+Significant Efficacy of a Single Low Dose of Primaquine Compared to Stand-Alone Artemisinin Combination Therapy in Reducing Gametocyte Carriage in Cambodian Patients with Uncomplicated Multidrug-Resistant Plasmodium falciparum Malaria,Vantaux 2020,Cambodia,"Rattanakiri Province, Banlung, high transmission with multidrug resistance",2015-2016,Dihydroartemisinin-Piperaquine (DP) 3 days vs Dihydroartemisinin-Piperaquine (DP) + Single Low Dose Primaquine (SLDPQ) 0.25 mg/kg on day 1,109 (102 completed follow-up),1+ years (no upper limit specified),"88 males, 21 females (80.7% male, 19.3% female)","Baseline: 16 asexual parasites/?L (Day 0, microscopy)","Baseline: 64 (250, 0–1,432) gametocytes/?L for DP; 40 (149, 0–787) gametocytes/?L for DP-SLDPQ; Prevalence: 43.1% Day 0 (TaqMan RT-PCR)",63% K13 mutations; 28% recrudescence rate,"Not calculable (prevalence data only, no densities provided)",Yes,"- Baseline: 43.1% (47/109, TaqMan RT-PCR)
+- Peak: Not explicitly mentioned, but likely on day 14
+- Post-treatment: Lowest on day 7, but specific percentages not provided
+- Resistance-stratified: Higher in recrudescent infections, but specific percentages not provided","28 days; Days 0, 1, 2, 3, 7, 14, 21, 28",PCR; TaqMan RT-PCR,"RCT, good follow-up (93.6%), density data available, limitations in assessing transmission-blocking efficacy due to low infectivity rates",,,
+"Triple artemisinin-based combination therapies versus artemisinin-based combination therapies for uncomplicated Plasmodium falciparum malaria: a multicentre, open-label, randomised clinical trial",Van Der Pluijm 2020,"Multi-country (Cambodia, Thailand, Vietnam, Myanmar, Laos, Bangladesh, India, Democratic Republic of the Congo)","- Cambodia: Four sites (rural/urban, high resistance)
+- Thailand: Three sites (rural/urban, high resistance)
+- Myanmar: Four sites (rural/urban, high resistance)
+- India: Three sites (rural/urban, variable resistance)
+- Laos: One site (rural/urban, variable resistance)
+- Vietnam: One site (rural/urban, high resistance)
+- Bangladesh: One site (rural/urban, variable resistance)
+- Democratic Republic of the Congo: One site (rural/urban, variable resistance)",Not mentioned (the paper does not provide specific enrollment or study conduct dates),"- Dihydroartemisinin-Piperaquine vs. Dihydroartemisinin-Piperaquine plus Mefloquine
+- Artemether-Lumefantrine vs. Artemether-Lumefantrine plus Amodiaquine
+- Dosing: Amodiaquine 10 mg base per kg per day (split dose), Mefloquine 8 mg/kg per day","1100 enrolled (completed follow-up not explicitly stated, but implied for efficacy analysis)",2-65 years,"77.6% male, 22.4% female","- Dihydroartemisinin–piperaquine group: 26,035 parasites/?L geometric mean (microscopy)
+- Dihydroartemisinin–piperaquine plus mefloquine group: 18,776 parasites/?L geometric mean (microscopy)
+- Artesunate–mefloquine group: 14,179 parasites/?L geometric mean (microscopy)
+- Artemether–lumefantrine group: 40,278 parasites/?L geometric mean (microscopy)
+- Artemether–lumefantrine plus amodiaquine group: 45,396 parasites/?L geometric mean (microscopy)",Not mentioned (gametocyte density data is not included in the paper and will be reported separately),"- Molecular markers: C580Y dominant in Cambodia, eastern Thailand, Vietnam, and Laos; 37% Pfkelch13 mutations in Pyin Oo Lwin, Myanmar; 11% Pfkelch13 mutations in Midnapur, India.
+- Phenotypic resistance: Extended parasite clearance half-lives (>5 hours) in Cambodia, Vietnam, and Thailand.
+- Population resistance prevalence: Multidrug-resistant parasites spread across Cambodia, northeast Thailand, southern Laos, and southern Vietnam.","Not calculable (prevalence data only, no densities provided)",Yes,"Not mentioned (the paper does not include data on gametocyte carriage rates, as these are to be reported separately)","42 days; Days 0, 1, 2, 3, 7, 14, 21, 28, 35, 42",Microscopy; Not mentioned,"Multi-site RCT, open-label, good follow-up, efficacy data available, limitations include potential underpowering and underrepresentation of children, unblinded design",,,
+Nonrandomized Controlled Trial of Artesunate plus Sulfadoxine-Pyrimethamine with or without Primaquine for Preventing Posttreatment Circulation of Plasmodium falciparum Gametocytes,Shah 2013,India,"Multiple sites across western India (Gujarat, Mumbai, Rajasthan), central India (Andhra Pradesh, Chhattisgarh, Gadchiroli, Jharkhand, Madhya Pradesh, Orissa), and northeast India (Assam, Meghalaya, West Bengal), varying transmission intensities",2009-2010,Artesunate-Sulfadoxine-Pyrimethamine (AS?SP) vs Artesunate-Sulfadoxine-Pyrimethamine (AS?SP) + Primaquine (0.75 mg/kg on day 3),"1,372 (1,335 completed follow-up)","1+ years (0-4 years, 5-9 years, 10-14 years, 15-49 years, ?50 years)","- No primaquine group: 63.7% male, 36.3% female
+- Primaquine group: 49.4% male, 50.6% female",Not mentioned (the paper does not provide specific values or timepoints for asexual parasite density),Not mentioned (the paper provides prevalence data but not specific gametocyte density values),Not mentioned (the paper does not discuss artemisinin resistance or related molecular markers),"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: Not explicitly mentioned
+- Peak: Not explicitly mentioned
+- Post-treatment: 5% at end of follow-up (microscopy)","28 days; Days 0,1,2,3,7,14,21,28",Microscopy; Microscopy,"Non-randomised controlled trial, good follow-up (less than 3% missing data), monoinfections of P. falciparum, microscopy used for gametocytemia measurement (less sensitive), retrospective analysis of primaquine use, potential confounding due to unmeasured causes, reliance on gametocyte presence as proxy for infectiousness",,,
+Preferential transmission of minority and drug-resistant clones in polyclonal infections in Mali,Vanheer 2025,Mali,"South-Western Mali, Ouélessébougou Clinical Research Unit of the Malaria Research and Training Centre of the University of Bamako (Bamako, Mali), intense malaria transmission with high SP resistance and persistent chloroquine resistance",2019,"Dihydroartemisinin-Piperaquine, Pyronaridine-Artesunate; 3 days, with re-treatment of Dihydroartemisinin-Piperaquine at day 21",50 (49 completed follow-up at day 2),Not mentioned (no information on age range is included in the paper),Not reported,"Baseline: 396.77 parasites/?L (IQR 54.15-1931.89), RT-qPCR; Day 2: declined 249-fold; Day 7: declined 1,240-fold","- Baseline: 77.33 gametocytes/?L (RT-qPCR)
+- Day 2: 1.2-fold lower than baseline
+- Day 7: 1.8-fold lower than baseline",0% K13 mutations; no artemisinin partial resistance reported in Mali,"Baseline: 0.195 (calculated from densities, Day 0)",Yes,"- Baseline: 100% (50/50, microscopy and RT-qPCR)
+- Post-treatment: Not explicitly quantified, but gametocyte densities showed a slow decline","49 days; Days 0, 2, 7, 14, 28",RT-qPCR (SBP1); RT-qPCR (PfCCP4 and PfMGET),"- Study design: Observational study with 50 asymptomatic participants.
+- Infections: Polyclonal with high genetic diversity.
+- Limitations: Failure to amplify parasite DNA in some midguts, use of insectary-reared mosquitoes, limited genomic analysis.",,,
+Effectiveness and safety of 3 and 5 day courses of artemether-lumefantrine for the treatment of uncomplicated falciparum malaria in an area of emerging artemisinin resistance in Myanmar,Kyaw Myo Tun 2015,Myanmar,"Kayin State, Kyainseikgyi Township (rural, emerging artemisinin resistance)",November 2013 - February 2015,Artemether-Lumefantrine (AL) 3 days vs Artemether-Lumefantrine (AL) 5 days; Primaquine 0.25 mg/kg single dose,154 (141 completed 42-day follow-up),6 months to 65 years,"96 males, 58 females (62.3% male, 37.7% female)",Baseline: 3084 (1752–5430) parasites/?L geometric mean (microscopy) for AL3; 2140 (1269–3610) parasites/?L geometric mean (microscopy) for AL5,"Baseline: 22% AL3, 21% AL5
+Day 3: 8% AL3, 13% AL5
+Day 7: 0% AL3, 1.4% AL5
+Detection method: Microscopy",46% K13 mutations; 2.9% recrudescence rate; 20% delayed parasite clearance on day 3,"Not calculable (prevalence data only, no densities provided)",Yes (but limited),"- Baseline: 21.8% (17/78, microscopy) for AL3; 21.1% (16/76, microscopy) for AL5
+- Day 3: 8% (6/75, microscopy) for AL3; 13% (9/72, microscopy) for AL5
+- Day 7: 1.4% (1/71, microscopy) for AL5","42 days; Days 3, 5, 6, 7, 14, 21, 28, 35, 42",Microscopy + uPCR; Microscopy,"RCT, good follow-up, density data available, multiple treatment arms, ultrasensitive PCR used for parasite quantitation, primarily monoinfections",,,
+Delayed Parasite Clearance after Treatment with Dihydroartemisinin-Piperaquine in Plasmodium falciparum Malaria Patients in Central Vietnam,Thriemer 2014,Vietnam,"Quang Nam Province, Tra Leng commune, North Tra My district, central Vietnam, emerging artemisinin resistance",September 2012 - February 2013,"Dihydroartemisinin-Piperaquine (DHA-PPQ), 4 mg/kg DHA + 32 mg/kg PPQ on day 0, 2 mg/kg/day DHA + 17 mg/kg/day PPQ on days 1 and 2",95 (88 completed 42-day follow-up),1-60 years,"55.8% male, 44.2% female","Baseline: 8,233 parasites/?L geometric mean (microscopy)","Baseline: 6.2 gametocytes/?L (geometric mean [95% CI: 3.2–11.9]), Day 0; Prevalence: 18% Day 0, 44.4% Day 7 (microscopy)",80.7% K13 543 mutations; median clearance half-life: 6.2 hours; 30% parasitemic on day 3 indicating suspected resistance; low recrudescence rate (2 cases),"Baseline: 0.00075 (calculated from densities, Day 0)",Yes,"- Baseline: 18.9% (microscopy, n=95)
+- Day 7: 44.4% (microscopy, n=18)","42 days; Days 0, 1, 2, 3, 7, 14, 21, 28, 35, 42",Microscopy; Microscopy + qPCR,"Observational study with 42-day follow-up, direct observation of treatment, comprehensive data collection (genotyping, qPCR, in vitro sensitivity testing), high follow-up rate (89/95), single treatment arm (limitation), ethical approval, external quality control for microscopy",,,
+"Therapeutic efficacy and safety of artemether-lumefantrine for uncomplicated Plasmodium falciparum malaria treatment in Metehara, Central-east Ethiopia",Tesfaye 2024,Ethiopia,"Oromia Region, Metehara Health Centre, high transmission",November 2020 - March 2021,"Artemether-Lumefantrine (20 mg + 120 mg), administered twice daily for 3 days, totaling 6 doses, with weight-based dosing: 1 tablet for 5 to < 15 kg, 2 tablets for 15 to < 25 kg, 3 tablets for 25 to < 35 kg, and 4 tablets for ? 35 kg",80 (73 completed follow-up),17.7 years (8 months - 65 years),"50 males, 30 females (62.5% male, 37.5% female)","Baseline: 10,627 ± 20,736.7 asexual parasites/?L (microscopy); Day 2: cleared (microscopy)",Baseline: 6.3% prevalence; Day 2: 2.5% prevalence; Day 3: 2.5% prevalence; Day 7: 2.5% prevalence; Day 28: 0% prevalence (microscopy),0% K13 mutations; 0% phenotypic resistance; fully sensitive population,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 6.3% (5/80, likely microscopy)
+- Day 2: 2.5%
+- Day 3: 2.5%
+- Day 7: 2.5%
+- Post-treatment: Complete clearance after Day 7","28 days; Days 0, 1, 7, 14, 21, 28",Microscopy; Microscopy,"Single-arm trial, 100% cure rate, nonrandom convenience sampling, minimal sample size, limited duration (28 days), no molecular analysis for resistance, no drug blood concentration measurement, no hemoglobin level measurement during follow-up",,,
+Pyronaridine-artesunate and artemether-lumefantrine for the treatment of uncomplicated Plasmodium falciparum malaria in Kenyan children: a randomized controlled non-inferiority trial,Roth 2018,Kenya,"Western Kenya, St. Jude's Clinic, Mbita (rural, malaria transmission)","October 2015 - June 2016, January 2017 - August 2017","Pyronaridine-artesunate vs Artemether-lumefantrine, both dosed according to body weight for 3 days",197 (177 completed follow-up),6 months to ? 12 years,"- Pyronaridine-artesunate group: 53 males, 48 females
+- Artemether-lumefantrine group: 48 males, 48 females","Baseline: 24,420.6 parasites/?L geometric mean (microscopy); 23,672.5 parasites/?L geometric mean (microscopy)","Baseline: 1.98% prevalence (PA), 4.17% prevalence (AL), microscopy
+Day 7: 3.00% prevalence (PA), 1.09% prevalence (AL), microscopy","Not mentioned (the paper does not provide specific data on artemisinin resistance status, molecular markers, or phenotypic resistance indicators)","Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 1.98% (microscopy, n=101) for pyronaridine-artesunate; 4.17% (microscopy, n=96) for artemether-lumefantrine
+- Day 7: 3.00% (microscopy, n=101) for pyronaridine-artesunate; 1.09% (microscopy, n=96) for artemether-lumefantrine","42 days; Days 0, 1, 2, 3, 7, 14, 28, 42",Microscopy; Microscopy,"RCT, good follow-up (89.8%), limited by reduced sample size and outpatient setting, monoinfections only",,,
+Extended malaria parasite clearance time in African children following artemisinincombination therapy enhances transmission to Anopheles mosquitoes,Beshir 2012,Kenya,"Western Kenya, Mbita (no specific transmission context mentioned)",Not mentioned (no information on study period or enrollment dates is included in the paper),Artemether-Lumefantrine vs Dihydroartemisinin-Piperaquine,298 (no specific completed follow-up number mentioned),children (no specific age range provided),Not reported (no information on gender distribution is included in the paper),Not mentioned (the paper does not provide specific asexual parasite density data),Not mentioned (no specific data on gametocyte density or prevalence is included in the paper),"Not mentioned (the paper does not provide specific data on artemisinin resistance status, molecular markers, or phenotypic resistance)","Not calculable (prevalence data only, no densities provided)",No,Not mentioned (the paper does not provide specific gametocyte carriage rates at any timepoints),Variable; Day 3 (specific timepoint mentioned),Microscopy + qPCR; Quantitative nucleic acid sequence-based amplification,"RCT, good follow-up, density data available, robust detection methods",,,
+"Therapeutic efficacy of fixed dose artesunatemefloquine for the treatment of acute, uncomplicated Plasmodium falciparum malaria in Kampong Speu, Cambodia",Leang 2010,Cambodia,"Kampong Speu Province, Oral district, southwest Cambodia (rural/community-based, ongoing transmission)",2010,ASMQ (Artesunate-Mefloquine) 3 days,45 (45 completed follow-up),22 years (7-56 years),"38 males, 7 females (84.44% male, 15.56% female)","Baseline: 15,778 parasites/?L (microscopy); Day 3: 11.1% positive (microscopy)",Prevalence: 0% Day 0 to 21 and 35 and 42; 9.1% Day 28 (microscopy),"- Phenotypic resistance: Day 3 positivity rate exceeded WHO cut-offs, indicating reduced artemisinin sensitivity.
+- Molecular markers: Not mentioned (K13 mutations not reported).
+- Population resistance prevalence: Not quantified due to small sample size.
+- Individual patient resistance status: Not available.","Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 0% (0/45, detection method not specified)
+- Peak carriage rate: 9.1% (4/44, detection method not specified) on Day 28","42 days; Days 0,1,2,3,7,14,21,28,35,42",Microscopy; Microscopy,"Single-arm trial, small sample size (45 patients), 42-day follow-up, PCR-corrected efficacy analysis, limited tolerability data collection, no Pfmdr-1 copy number data",,,
+Artemisinin-naphthoquine combination (ARCO™) therapy for uncomplicated falciparum malaria in adults of Papua New Guinea: A preliminary report on safety and efficacy,Hombhanje 2009,Papua New Guinea,"Papua New Guinea, Port Moresby and Madang, moderate to high transmission",June 2005 - July 2006,ANQ (Artemisinin-Naphthoquine) single dose; CQ+SP (Chloroquine plus Sulphadoxine-Pyrimethamine) 3 days,130 (94 completed follow-up),14-60 years,"- Male: 27
+- Female: 24
+in ANQ group;
+- Male: 25
+- Female: 24
+in CQ+SP group","Baseline: 22,228.1 ± 34,567.2 parasites/?L (ANQ), 19,761.9 ± 36,888.5 parasites/?L (CQ+SP), Day 0, microscopy","- Baseline: Prevalence 6% (3/51 in ANQ, 3/49 in CQ+SP), detection method: microscopy
+- Post-treatment: Prevalence 12% in ANQ, 41% in CQ+SP, detection method: microscopy
+- No specific gametocyte density data available","Not mentioned (the paper does not provide specific data on artemisinin resistance status, including molecular markers or phenotypic resistance indicators)","Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 6% (6/100, microscopy)
+- Peak: Not explicitly mentioned
+- Post-treatment: ANQ - 12% (6/51), CQ+SP - 41% (20/49)","28 days; Days 0, 1, 2, 3, 7, 14, 21, 28",Microscopy; Microscopy,"RCT, good follow-up (94%), monoinfections with P. falciparum, no serious adverse events reported",,,
+Therapeutic Efficacy of Artemether-Lumefantrine for Uncomplicated Falciparum Malaria in Northern Zambia,Ippolito 2020,Zambia,"Luapula Province, Nchelenge district, high transmission",December 2014 - July 2015,"Artemether-Lumefantrine (AL), standard 6-dose regimen: administered at 0, 8, 24, 36, 48, and 60 hours; dosing guidelines: 5 to < 15 kg: one tablet per occasion; 15 to < 25 kg: two tablets per occasion","100 (94 completed parasite clearance, 81 completed 5-week follow-up)",6-59 months (children only),"50% male, 50% female","Baseline: 13,000 parasites/?L geometric mean (microscopy); Day 72: 0 parasites/?L (microscopy)","Prevalence: 13% Day 0, 12% Day 1, 4% Day 2, 3% Day 3, 2% Day 7, 0% Days 14, 21, 28, and 35 (microscopy)",27% atp6 431K mutation; median clearance half-life: 2.7 hours; no K13 mutations; no phenotypic resistance,"Not calculable (prevalence data only, no densities provided)",Yes,"- Baseline: 13% (12/100, microscopy)
+- Peak: Not explicitly mentioned
+- Post-treatment: By 30 hours, most cleared; at 7 days, 1 participant remained gametocytemic; at 14 days, 3 participants still had gametocytemia","35 days; Days 0, 6 hours intervals up to 48 hours, 72 hours, 7 days, 14, 21, 28, 35",Microscopy; Microscopy,"Single-arm trial, high efficacy (98.8%), monoinfections only, high loss to follow-up (19%), limitations in evaluating mdr1 copy number variation",,,
+Efficacy of dihydroartemisinin/piperaquine and artesunate monotherapy for the treatment of uncomplicated Plasmodium falciparum malaria in Central Vietnam,Rovira-Vallbona 2020,Vietnam,"Gia Lai Province, Chu R'Cam commune, Krong Pa district (rural, suspected partial artemisinin resistance)",April 2015 - January 2017,"- Dihydroartemisinin-Piperaquine: 4 mg/kg/day for 3 days
+- Artesunate monotherapy: 4 mg/kg/day for 3 days, followed by Dihydroartemisinin-Piperaquine",60 (57 completed 42-day follow-up),8-45 years (eligibility criteria),"51:8 (86.4% male, 13.6% female)","- Baseline: 10,166 parasites/?L (5,311–19,459), microscopy (DHA/PPQ arm); 15,832 parasites/?L (8,454–29,650), microscopy (AS + DHA/PPQ arm)",Prevalence: 76.0% Day 0 (RT-qPCR),"- Molecular markers: 87% K13 mutations; 50% KEL1/C580Y mutations
+- Phenotypic resistance: Mean clearance half-life: 7.0 hours (dihydroartemisinin/piperaquine), 7.4 hours (artesunate monotherapy)
+- Population resistance prevalence: 60% confirmed artemisinin resistance by WHO criteria
+- Individual patient resistance status: Not specifically detailed for each patient","Not calculable (prevalence data only, no densities provided)",Yes,"Baseline: 76.0% (38/50, RT-qPCR)","42 days; Days 0, 1, 2, 3, 7, 14, 28, 35, 42",Microscopy; RT-qPCR (Pfs25),"Randomized open-label trial, good follow-up (94%), monoinfections, limitations due to sample size and ex vivo assay challenges",,,
+"Therapeutic efficacy of artemetherlumefantrine for the treatment of uncomplicated Plasmodium falciparum malaria in Enfranze, north-west Ethiopia",Getnet 2013,Ethiopia,"Amhara Region, Enfranze Health Centre, rural, high transmission",January 2013 - May 2013,"Artemether-Lumefantrine, 3 days, twice daily",80 (80 completed 28-day follow-up),Above 6 months of age (eligibility criteria),"46 males, 34 females (57.5% male, 42.5% female)","Baseline: 7,898 parasites/?L median (IQR 6,360–8,742, microscopy);
+Day 1: 73.75% cleared;
+Day 2: 91.25% cleared;
+Day 3: 94.9% cleared;
+Mean parasite clearance time: 33.6 ± 2.16 hours",Prevalence: 10% Day 0; 25% Day 1; 37.5% Day 2; 37.5% Day 3; 0% Day 7 (microscopy),0% K13 mutations; 5% still parasitaemic on day 3; mean clearance half-life: 33.6 hours; fully sensitive population,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 10% (8/80, microscopy)
+- Day 7: 0% (all cleared)","28 days; Days 0, 1, 2, 3, 7, 14, 21, 28",Microscopy; PCR,"Single-arm trial, good follow-up (100%), density data available, mono-infections with P. falciparum, ethical approval and informed consent obtained",,,
+Changes in the Treatment Responses to Artesunate-Mefloquine on the Northwestern Border of Thailand during 13 Years of Continuous Deployment,Carrara 2009,Thailand,"Northwestern border of Thailand, camps for displaced persons and clinics for migrant workers, seasonal transmission with low and unstable intensity",January 1995 - December 2007,"MAS 3 (Artesunate-Mefloquine) 3 days: Artesunate 4 mg/kg/day for 3 days, Mefloquine 25 mg base/kg","3,264 (2,639 completed 42-day follow-up)",Children under 15 years; Adults (no specific age range mentioned),"73% male, 27% female (among adults)","Baseline: 6,982 parasites/?L geometric mean (microscopy); Min: 6 parasites/?L; Max: 501,187 parasites/?L",Prevalence: 6.3% on admission; increased from 1.2% in 1995 to 7.2% in 2007 (microscopy),21.9% delayed parasite clearance; 53% pfmdr1 amplification; no K13 mutations mentioned; slight decline in artesunate susceptibility post-2002,"Not calculable (prevalence data only, no densities provided)",Yes,"- Baseline: 6.3% (196/3,109)
+- 1995: 1.2% (6/482)
+- 2007: 7.2% (10/139)","42 days; Days 0,1,2,3,7,14,21,28,35,42",Microscopy; Microscopy,"Prospective treatment trials with 3,264 patients, PCR genotyping for infection distinction, extended follow-up (42-63 days), low heterogeneity between studies, ethical review, but high dropout rate (19%).",,,
+Sustained efficacy of artesunatesulfadoxine-pyrimethamine against Plasmodium falciparum in Yemen and a renewed call for an adjunct single dose primaquine to clear gametocytes,Atroosh 2014,Yemen,"Tehama region, Hodeidah and Al-Mahwit provinces, rural, high transmission",March 2014 - May 2014,"Artesunate-Sulfadoxine-Pyrimethamine (AS + SP), Artesunate: 4 mg/kg/day for 3 days, Sulfadoxine-Pyrimethamine: single dose of 25/1.25 mg/kg on day 0",89 (86 completed follow-up),12.4 years (8 months - 65 years),"40 males, 46 females (46.5% male, 53.5% female)","Baseline: 8,199 parasites/?L mean (microscopy); Day 3: cleared (microscopy)","Prevalence: 40.7% Day 0, 14.5% Day 7, 42.5% Day 14, 86.0% Day 28 (microscopy)",0% K13 mutations; 0% phenotypic resistance; fully sensitive population,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 40.7% (35/86, microscopy)
+- Day 7: High carriage rate (microscopy)
+- End of follow-up: 14% (microscopy)","28 days; Days 0, 1, 2, 3, 7, 14, 21, 28",Microscopy; Microscopy,"In vivo trial, good follow-up (95.1%), density data available, PCR-corrected, uncomplicated P. falciparum mono-infections, gametocyte clearance evaluated",,,
+Assessment of artemisinin tolerance in Plasmodium falciparum clinical isolates in children with uncomplicated malaria in Ghana,Yao 2023,Ghana,"Greater Accra Region, Accra (Princess Marie Louise Children's Hospital), La Nkwantanang-Madina District (Danfa Health Centre), Dodowa (Shai Osudoku District Hospital), seasonal transmission",June 2018 - November 2018,"Artemether-Lumefantrine (AL), dosing according to body weight",115 (85 completed follow-up),6 months to 14 years (children only),"60 males, 55 females (52.2% male, 47.8% female)","Baseline: 39,014 parasites/?L (microscopy); Day 3: cleared (97.6% negative parasitaemia, microscopy)",Not mentioned (no information on gametocyte density or prevalence is included in the paper),7.8% of isolates had >10% ring survival rates against DHA; PfK13 K188* and Pfcoronin V424I mutations present in RSA-positive isolates; 2.4% recrudescence rate on day 3 post-treatment,Not mentioned (no information on gametocyte or asexual parasite densities is provided in the paper),No,Not mentioned (the paper does not provide information on gametocyte carriage rates),"3 days; Day 0, Day 3",Microscopy; Microscopy,"Single-arm trial, good follow-up (73.9%), limited geographical scope, no extended follow-up beyond day 3, limited sample size for some analyses",,,
+"Therapeutic efficacy of artemetherlumefantrine in the treatment of uncomplicated Plasmodium falciparum malaria in Arba Minch Zuria District, Gamo Zone, Southwest Ethiopia",Demeke 2024,Ethiopia,"Southwest Ethiopia, Sille Village, Arba Minch Zuria District, Gamo Zone (rural, high transmission)",July 2022 - October 2022,"Artemether-Lumefantrine (AL), 20/120 mg tablet, twice daily for three consecutive days",89 (67 completed 28-day follow-up),25.1 years (18–43 years),"57.3% male, 42.7% female","Baseline: 21,494 parasites/?L geometric mean (microscopy); Day 3: cleared","Baseline: 344 gametocytes/?L (microscopy); 
+Prevalence: 13.5% Day 0, 58.3% clearance by Day 7, 100% clearance by Day 14 (microscopy)",Not mentioned (the paper does not provide specific data on artemisinin resistance markers or phenotypic resistance indicators),"Baseline: 0.016 (calculated from densities, Day 0)",No,"- Baseline: 13.5% (12/89)
+- Day 7: 58.3% clearance
+- Day 14: 100% clearance","28 days; Days 0, 2, 3, 7, 14, 21, 28",Microscopy; Microscopy,"Single-arm prospective study, good follow-up (75.3%), monoinfections only, nPCR genotyping for recurrent cases, limitations include no glutamine-rich protein genotyping and no resistance testing for recrudescent cases, reliance on participant reports for pregnancy status",,,
+Spread of Artemisinin Resistance in Plasmodium falciparum Malaria,Ashley 2014,"Multi-country (Cambodia, Thailand, Laos, Vietnam, Myanmar, Bangladesh, India, Nigeria, Kenya, Democratic Republic of Congo)","Multiple sites across Southeast Asia (Cambodia, Thailand, Laos, Vietnam, Myanmar) and Africa (Bangladesh, India, Nigeria, Kenya, Democratic Republic of Congo), with high resistance in eastern Myanmar, western Cambodia, Thailand, and southern Vietnam.",May 2011 - April 2013,"- Artesunate (2 mg/kg/day or 4 mg/kg/day) for 3 days, followed by:
+  - Dihydroartemisinin-Piperaquine
+  - Artemether-Lumefantrine
+  - Artesunate-Sulfadoxinepyrimethamine
+  - Artesunate-Mefloquine
+- 6-day artesunate regimen plus artemisinin-based combination therapy","1,241 enrolled (no specific number for completed follow-up mentioned)",6 months to 65 years,"74% male, 26% female","Baseline: 10,000 to 200,000 parasites/mm³ (microscopy); No specific peak or timepoint densities provided",Not mentioned (the paper does not provide specific gametocyte density data or units),"- Molecular markers: Kelch13 mutations are associated with artemisinin resistance.
+- Phenotypic resistance: Delayed parasite clearance with half-life >5 hours is indicative of resistance.
+- Population resistance prevalence: Prevalent across mainland Southeast Asia, particularly in eastern Myanmar, western Cambodia, Thailand, and southern Vietnam.
+- Individual patient resistance status: Not provided in detail, but kelch13 mutations are highly predictive of slow clearance.","Not calculable (prevalence data only, no densities provided)",Yes,"- Baseline: 31% in Democratic Republic of Congo, 19% in Pailin, Cambodia, and 18% in Pursat, Cambodia (microscopy)
+- Peak carriage rate during follow-up: Additional gametocytemia developed in 48 patients within 24 hours and in another 47 patients between day 1 and day 7
+- Resistance-stratified carriage rates: Higher prevalence in sites with slow parasite clearance","- Total duration: 28 days or 42 days
+- Specific timepoints: Days 7, 14; additional weekly follow-ups up to 28 or 42 days",Microscopy; Microscopy,"Multi-site open-label trial, good data management and analysis, variable follow-up periods, recruitment targets not met at some sites, high treatment efficacy with PCR correction",,,
+Residual Plasmodium falciparum Parasitemia in Kenyan Children After Artemisinin-Combination Therapy Is Associated With Increased Transmission to Mosquitoes and Parasite Recurrence,Beshir 2013,Kenya,"Western Kenya, Mbita Point, coastal region with declining transmission intensity",April 2009 - June 2009,Artemether-Lumefantrine (AL) vs Dihydroartemisinin-Piperaquine (DP),"Not mentioned (the paper does not provide the total number of enrolled patients, only the number of individuals evaluated by qPCR)",6 months-10 years (children only),Not mentioned (no information on gender is included in the paper),"Baseline: Not explicitly mentioned
+Peak: Not mentioned
+Day 3: Median estimated density of residual parasites was 0.17% (interquartile range, 0.0001-1.54) of the enrollment parasite density (qPCR)",Not mentioned (the paper does not provide specific gametocyte density data),80.7% slow clearance (>3 days); delayed parasite clearance phenotype,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: Microscopic gametocyte carriage at enrollment was significantly more common for children with residual parasitemia on day 3 (P = .006).
+- Post-treatment: Children with residual parasitemia on day 3 had a longer duration of gametocyte carriage during the 42-day follow-up period (P = .0007).","42 days; Days 1, 2, 3, 7, 14, 28, 42",qPCR; Pfs25 QT-NASBA,"Randomized, open-label trial, good follow-up, density data available, monoinfections, limitations in distinguishing recrudescent vs. new infections",,,
+Therapeutic efficacy and artemisinin resistance in northern Myanmar: evidence from in vivo and molecular marker studies,Myint (after 2014),Myanmar,"Northern Myanmar, Tamu (Indian border), Muse (Chinese border), Tabeikkyin, border region with high resistance",September 2011 - November 2014,"- Artemether-Lumefantrine (AL): 1.3/8 mg/kg twice daily for 3 days
+- Artesunate-Mefloquine (AS + MQ): Artesunate 4 mg/kg once daily for 3 days, Mefloquine 15 mg/kg on day 1, 10 mg/kg on day 2
+- Dihydroartemisinin-Piperaquine (DP): 2-2.4/16-19.2 mg/kg once daily for 3 days",470 (446 completed follow-up),6 years and above (excluding females 12-17 years),66.7-91.1% male,"- Baseline (Day 0): 5962 parasites/?L geometric mean (range 1079-31,492, microscopy)
+- Day 3: 69 parasites/?L geometric mean (range 23-131, microscopy)",Not mentioned (no specific data on gametocyte density is included in the paper),33.7% K13 mutations; 3.1% day-3 positivity; F446I mutation most common (66.0% of mutations); P574L mutation associated with higher day-3 parasitaemia (33%); low impact on treatment efficacy,"Not calculable (prevalence data only, no densities provided)",Yes,Not mentioned (no information on gametocyte carriage rates is included in the paper),"- For AL: 28 days; Days 0, 1, 2, 3, 7, 14, 21, 28
+- For AS + MQ and DP: 42 days; Days 0, 1, 2, 3, 7, 14, 21, 28, 35, 42",Microscopy; Microscopy,"Open-label, one-arm, prospective study following WHO protocol for therapeutic efficacy monitoring.
+Multiple sentinel sites in northern Myanmar.
+Low dropout rate (20 patients out of 470).
+PCR-corrected ACPR as primary outcome measure.
+Detailed demographic and clinical characteristics provided.
+No serious adverse events reported.
+Molecular marker analysis for k13 mutations included.
+Limitations: inability to sequence k13 genes in all samples due to insufficient blood; once-daily blood collection limited parasite clearance half-life estimation.",,,
+Gametocyte clearance dynamics following oral artesunate treatment of uncomplicated falciparum malaria in Malian children,Djimde 2016,Mali,"Bougoula-Hameau, Mali (rural, seasonal transmission)",December 2010 - March 2011,"Artesunate, 4 mg/kg on day 1, 2 mg/kg/day for 6 days","100 (92 completed follow-up), 217 (217 completed follow-up)",1-10 years (children only),Not reported,"Baseline: 2000-200,000 parasites/?L (microscopy)","- Baseline: 29.3 gametocytes/lL (95% CI 18.5-46.6), Day 7: 23.9 gametocytes/lL (95% CI 13.4-42.5), microscopy
+- Baseline: 42.7 gametocytes/lL (95% CI 25.8-70.5), Day 7: 73.5 gametocytes/lL (95% CI 42.1-128.1), microscopy",0% K13 mutations; fully sensitive population,"Not calculable (prevalence data only, no densities provided)",No,"- Baseline: 22.8% (21/92, microscopy)
+- Peak: Day 7 - 23.9% (microscopy, n=92)
+- Post-treatment: Day 7 - 23.9%, Day 21 - 6.5% (microscopy, n=92)
+- Baseline (2002-2004): 6% (13/217, microscopy)
+- Peak (2002-2004): Day 1 - 12.4% (microscopy, n=217)
+- Post-treatment (2002-2004): Day 1 - 12.4%, Day 21 - 0.5% (microscopy, n=217)","28 days; Days 0, 1, 3, 7, 14, 21, 28",Microscopy; Microscopy,"Single-arm trial, small sample size, reliance on standard microscopy for gametocyte detection, mixed infections included",,,
+Population Pharmacokinetic and Pharmacodynamic Modeling of Artemisinin Resistance in Southeast Asia,Das 2017,"Multi-country (Cambodia, Thailand)","Pailin Province, Pailin Referral Hospital (border region, high resistance); Wang Pha, Tak Province, Shoklo Malaria Research Unit (northwestern Thailand, high resistance)",June 2007 - December 2009,Artesunate monotherapy: 2 mg/kg/day for 7 days; Artesunate-Mefloquine: 4 mg/kg/day of artesunate for 3 days followed by mefloquine 15 mg/kg on day 4 and 10 mg/kg on day 5,79 (79 completed follow-up),13.5-38.3 years,Not mentioned (the paper does not provide explicit numbers or percentages for females),"Baseline: 11.4 (0.82) log10 parasites/?L (microscopy) in Pailin, Cambodia; 11.0 (1.01) log10 parasites/?L (microscopy) in Wang Pha, Thailand",Not mentioned (no information on gametocyte density is included in the paper),"- Molecular markers: K13 mutations associated with artemisinin resistance
+- Phenotypic resistance: Slower parasite clearance rates
+- Population resistance prevalence: 84% in Cambodia, 16% in Thailand",Not mentioned (no specific data on sexual to asexual parasite ratios or densities provided),Yes,Not mentioned (the paper does not provide specific gametocyte carriage rates or percentages at any time point),Variable; Clearance kinetics only,Microscopy; Microscopy,"Open-label randomized clinical trials, moderate sample size (79 patients), detailed pharmacokinetic data collection, ethical approval from multiple committees, development of a nomogram for identifying artemisinin-resistant infections.",,,
+Spread of Artemisinin Resistance in Plasmodium falciparum Malaria,Ashley 2014,"Multi-country (Cambodia, Thailand, Laos, Vietnam, Myanmar, Bangladesh, India, Nigeria, Kenya, Democratic Republic of Congo)","Multiple sites across endemic regions in Asia and Africa, with a focus on mainland Southeast Asia where artemisinin resistance is prevalent.",May 2011 - April 2013,"- Artesunate (2 mg/kg/day or 4 mg/kg/day) for 3 days, followed by:
+  - Dihydroartemisinin-piperaquine
+  - Artemether-lumefantrine
+  - Artesunate-sulfadoxine-pyrimethamine
+  - Artesunate-mefloquine
+- Modified regimens:
+  - India: Artesunate (4 mg/kg/day) for 3 days
+  - Democratic Republic of Congo: Artemether-lumefantrine alone or Artesunate (4 mg/kg/day) for 3 days followed by Artemether-lumefantrine
+  - Kenya: Artesunate (2 mg/kg/day) for 7 days",1241 (no specific completed follow-up numbers provided),6 months to 65 years,"74% male, 26% female","Baseline: 10,000 to 200,000 parasites/mm³ (microscopy)",Not mentioned (the paper does not provide specific gametocyte density data),"- Molecular markers: Kelch13 mutations are prevalent across mainland Southeast Asia, with high sensitivity and specificity for identifying slow parasite clearance.
+- Phenotypic resistance: Delayed parasite clearance (half-life >5 hours) is strongly associated with kelch13 mutations.
+- Population resistance prevalence: Artemisinin resistance is established in eastern Myanmar, western Cambodia, Thailand, and southern Vietnam, and emerging in southern Laos and northeastern Cambodia.
+- Individual patient resistance status: Kelch13 propeller mutations are highly predictive of slow parasite clearance.","Not calculable (prevalence data only, no densities provided)",Yes,"- Baseline: 125 patients with patent gametocytemia at enrollment; highest rates in Democratic Republic of Congo (31%) and western Cambodia (19% in Pailin, 18% in Pursat)
+- Peak carriage rate during follow-up: Additional cases developed within 24 hours and between days 1 and 7
+- Post-treatment carriage rates: Not specifically mentioned
+- Resistance-stratified carriage rates: Higher prevalence in sites with slow parasite clearance","- Total duration: 28 days; Days 0, 7, 14, 28
+- Total duration: 42 days; Days 0, 7, 14, 21, 28, 35, 42",Microscopy; Microscopy,"Multi-site open-label randomized trial, good follow-up (28 or 42 days), PCR genotyping used for efficacy assessment, quality control measures for microscopy, large sample size (1241 patients), genetic markers identified for resistance, high efficacy rates reported. Limitations include failure of some sites to meet recruitment targets due to decreasing malaria incidence.",,,
+Different Plasmodium falciparum clearance times in two Malian villages following artesunate monotherapy,Kone 2020,Mali,"Faladje and Bougoula-Hameau villages (rural, seasonal transmission)",October 2015 - March 2016,"Artesunate monotherapy: 4 mg/kg on day 1, then 2 mg/kg daily for 6 days","220 (121 Faladje, 100 Bougoula-Hameau)","6 months and older (median age: Faladje 8.5 years (5.5-11.2), Bougoula-Hameau 9 years (6.8-11.7))",Not reported (the paper does not provide specific gender distribution or percentages),"Baseline: 25,680 [14,540-53,720] parasites/?L (microscopy) for Faladje; 29,140 [19,080-53,820] parasites/?L (microscopy) for Bougoula-Hameau","Baseline: 40 gametocytes/?L (SD: 24), Faladje; 71 gametocytes/?L (SD: 60.8), Bougoula-Hameau; detection method: microscopy","- Molecular markers: 1 non-synonymous PfK13 mutation (A578S) in Bougoula-Hameau; not associated with resistance.
+- Phenotypic resistance: Longer parasite clearance time in Faladje (slope half-life: 2.8 hours) compared to Bougoula-Hameau (2 hours).
+- Population resistance prevalence: No significant molecular markers; potential resistance indicated by longer clearance times and residual parasitemia.
+- Individual patient resistance status: Not specifically mentioned.","- Baseline: Faladje: 0.00156 (calculated from densities, Day 0); Bougoula-Hameau: 0.00244 (calculated from densities, Day 0)",Yes,"- Baseline: 2.5% (3/120, microscopy) in Faladje; 8% (8/100, microscopy) in Bougoula-Hameau","28 days; Days 0, 24, 48, 72 hours, Days 7, 14, 21, 28",Microscopy; Microscopy + qPCR,"Prospective monotherapy trial, good follow-up (only one exclusion), specific inclusion criteria, ethics committee approval, robust data analysis, significant sample size, detailed demographic and parasitological data available.",,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,

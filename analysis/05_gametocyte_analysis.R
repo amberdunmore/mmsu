@@ -8,8 +8,6 @@ library(tidyr)
 library(viridis)
 library(patchwork)
 
-
-
 # EXPERIMENTAL PARAMETER RANGES -------------------------------------------
 
 define_experimental_ranges <- function() {
@@ -103,7 +101,11 @@ classify_parameter_combination <- function(baseline_r, treated_r, estimates) {
 
 
 # Basic model demonstration data
-create_model_demonstration_data <- function() {
+create_model_demonstration_data <- function(  EIR = 50,
+                                              ft = 0.6,
+                                              simulation_years = 10,
+                                              treatment_failure_rate = 0.43,
+                                              day0_res = 0.01) {
   scenarios <- list(
     "Wild-type (no advantage)" = list(
       baseline_ratio = 1.0,
@@ -125,10 +127,6 @@ create_model_demonstration_data <- function() {
     )
   )
 
-  EIR <- 50
-  ft <- 0.6
-  simulation_years <- 3
-
   results_list <- list() # Initalise list to store results
   for (scenario_name in names(scenarios)) {
     params <- scenarios[[scenario_name]]
@@ -138,13 +136,13 @@ create_model_demonstration_data <- function() {
       ft = ft,
       ton = 365,
       toff = 365 + (simulation_years * 365),
-      day0_res = 0.01,
-      treatment_failure_rate = 0.43,
+      day0_res = day0_res,
+      treatment_failure_rate = treatment_failure_rate,
       rT_r_cleared = 0.1,
       rT_r_failed = 0.1,
-      resistance_baseline_ratio = params$baseline_ratio,
-      resistance_cleared_ratio = params$treated_ratio,
-      resistance_failed_ratio = params$treated_ratio
+      resistance_baseline_ratio = 1, # Amber can chat on Tuesday about this
+      resistance_cleared_ratio = params$baseline_ratio,
+      resistance_failed_ratio = params$baseline_ratio
     )
 
     times <- seq(0, 365 + (simulation_years * 365), by = 30)
@@ -495,7 +493,7 @@ plot_model_demonstration <- function(demo_data) {
     geom_vline(xintercept = 1, linetype = "dashed", alpha = 0.7, color = "black", size = 1) +
     scale_color_manual(values = setNames(unique(demo_data$color), unique(demo_data$scenario))) +
     scale_linetype_manual(values = c("solid", "longdash", "dotted")) +
-    scale_x_continuous(breaks = seq(0, 4, 0.5)) +
+    scale_x_continuous(breaks = seq(0, max(demo_data$time_years))) +
     scale_y_continuous(limits = c(0, max(demo_data$resistance_prevalence) * 1.1),
                        breaks = seq(0, 100, 20)) +
     labs(
