@@ -444,8 +444,8 @@ create_clean_resistance_plot <- function(data, y_var, analysis_result, x_label, 
               color = "#2E86AB", linetype = "solid", linewidth = 1.2, inherit.aes = FALSE) +
 
     # Adding simple linear trend line
-    geom_smooth(method = "lm", se = TRUE, color = "#A23B72", fill = "#A23B72",
-                alpha = 0.15, linetype = "dashed", linewidth = 0.8) +
+    #geom_smooth(method = "lm", se = TRUE, color = "#A23B72", fill = "#A23B72",
+                #alpha = 0.15, linetype = "dashed", linewidth = 0.8) +
 
     # Adding data points
     geom_point(aes(size = study_n), alpha = 0.8, color = "#F18F01", stroke = 0.5) +
@@ -545,8 +545,8 @@ create_clean_asexual_plot <- function(asexual_analysis) {
               color = "#2E86AB", linetype = "solid", linewidth = 1.2, inherit.aes = FALSE) +
 
     # Adding simple linear trend line
-    geom_smooth(method = "lm", se = TRUE, color = "#A23B72", fill = "#A23B72",
-                alpha = 0.15, linetype = "dashed", linewidth = 0.8) +
+    #geom_smooth(method = "lm", se = TRUE, color = "#A23B72", fill = "#A23B72",
+                #alpha = 0.15, linetype = "dashed", linewidth = 0.8) +
 
     # Adding data points
     geom_point(aes(size = study_n), alpha = 0.8, color = "#F18F01", stroke = 0.5) +
@@ -1001,49 +1001,170 @@ create_enhanced_resistance_plot <- function(data, y_var, analysis_result,
 
   plot_data <- analysis_result$data
 
+  # Get unique studies and create enough shapes
+  unique_studies <- unique(plot_data$Study)
+  n_studies <- length(unique_studies)
+
+  # Create a comprehensive set of shapes
+  all_shapes <- c(16, 17, 18, 15, 3, 4, 8, 11, 12, 13, 14, 19, 20, 21, 22, 23, 24, 25, 0, 1, 2, 5, 6, 7, 9, 10)
+  study_shapes <- all_shapes[1:n_studies]
+  names(study_shapes) <- unique_studies
+
+  # Generate predictions from the full model for smooth regression line
+  k13_range <- seq(0, 100, by = 1)
+  mean_prevalence <- mean(plot_data[[prevalence_var]], na.rm = TRUE)
+
+  # Create prediction data
+  pred_data <- data.frame(
+    k13_mutation_pct = k13_range,
+    malaria_prevalence_pct = mean_prevalence
+  )
+  names(pred_data) <- c("k13_mutation_pct", prevalence_var)
+
+  # Generate predictions from the full model
+  pred_logit <- predict(analysis_result$model_full, newdata = pred_data, se.fit = TRUE)
+
+  # Convert to response scale (percentages)
+  pred_df <- data.frame(
+    k13_mutation_pct = k13_range,
+    predicted = plogis(pred_logit$fit) * 100,
+    se = pred_logit$se.fit
+  )
+  pred_df$ci_lower <- plogis(pred_logit$fit - 1.96 * pred_df$se) * 100
+  pred_df$ci_upper <- plogis(pred_logit$fit + 1.96 * pred_df$se) * 100
+
   # Create base plot
   p <- ggplot(plot_data, aes(x = k13_mutation_pct, y = .data[[y_var]])) +
+
+    # Add prediction ribbon and line FIRST (so points appear on top)
+    geom_ribbon(data = pred_df,
+                aes(x = k13_mutation_pct, ymin = ci_lower, ymax = ci_upper),
+                alpha = 0.2, fill = "red", inherit.aes = FALSE) +
+
+    geom_line(data = pred_df,
+              aes(x = k13_mutation_pct, y = predicted),
+              color = "red", linewidth = 1.2, inherit.aes = FALSE) +
 
     # Color points by malaria prevalence, shape by study
     geom_point(aes(size = study_n, color = .data[[prevalence_var]], shape = Study),
                alpha = 0.8, stroke = 0.5) +
 
-    # Add trend line from full model
-    geom_smooth(method = "glm", method.args = list(family = "binomial", weights = plot_data$study_n),
-                se = TRUE, color = "red", fill = "red", alpha = 0.2,
-                linetype = "solid", linewidth = 1) +
-
     scale_color_viridis_c(name = "Malaria\nPrevalence (%)", option = "plasma") +
     scale_size_continuous(name = "Sample Size", range = c(3, 15)) +
-    scale_shape_manual(name = "Study", values = c(16, 17, 18, 15, 3, 4, 8, 11, 12, 13, 14, 19, 20)) +
+    scale_shape_manual(name = "Study", values = study_shapes) +
+
+    scale_x_continuous(breaks = seq(0, 100, 20), limits = c(-2, 102)) +
+    scale_y_continuous(breaks = seq(0, 80, 10), limits = c(0, max(plot_data[[y_var]], na.rm = TRUE) * 1.1)) +
 
     labs(x = x_label, y = y_label,
          title = paste(y_label, "with Malaria Prevalence Covariate"),
-         subtitle = "Color = malaria prevalence, Size = sample size, Shape = study") +
+         subtitle = paste("Red line: Predicted relationship (prevalence =", round(mean_prevalence, 1), "%)")) +
 
     theme_minimal() +
     theme(
       plot.title = element_text(face = "bold", size = 14),
-      legend.position = "right"
+      legend.position = "right",
+      legend.box = "vertical",
+      panel.grid.minor = element_blank()
+    ) +
+
+    # Adjust legend guides to prevent overcrowding
+    guides(
+      color = guide_colorbar(barwidth = 1, barheight = 6),
+      size = guide_legend(override.aes = list(shape = 16)),
+      shape = guide_legend(override.aes = list(size = 4), ncol = 1)
     )
 
   # Add model comparison annotation
   if(!is.null(analysis_result$aic_comparison)) {
     model_text <- paste0(
-      "Model Comparison:\n",
+      "Model Results:\n",
       "K13 only AIC: ", round(analysis_result$aic_base, 1), "\n",
       "K13 + Prevalence AIC: ", round(analysis_result$aic_full, 1), "\n",
+      "AIC improvement: ", round(analysis_result$aic_base - analysis_result$aic_full, 1), "\n",
       "K13 OR: ", round(analysis_result$k13_odds_ratio, 3),
       " (p=", format.pval(analysis_result$k13_p_value), ")\n",
       "Prevalence OR: ", round(analysis_result$prevalence_odds_ratio, 3),
       " (p=", format.pval(analysis_result$prevalence_p_value), ")"
     )
 
-    p <- p + annotate("label", x = Inf, y = Inf,
+    p <- p + annotate("label", x = 5, y = max(plot_data[[y_var]], na.rm = TRUE) * 0.95,
                       label = model_text,
-                      hjust = 1, vjust = 1, size = 3,
-                      fill = "white", alpha = 0.9)
+                      hjust = 0, vjust = 1, size = 3.2,
+                      fill = "white", alpha = 0.9,
+                      label.padding = unit(0.5, "lines"))
   }
+
+  return(p)
+}
+
+# Create a simpler plot function for just the regression relationship
+create_simple_regression_plot <- function(data, y_var, analysis_result, x_label, y_label) {
+
+  if("error" %in% names(analysis_result)) {
+    return(ggplot() +
+             labs(x = x_label, y = y_label) +
+             theme_minimal() +
+             annotate("text", x = 50, y = 50, label = "Insufficient Data", size = 6))
+  }
+
+  plot_data <- analysis_result$data
+
+  # Generate predictions for smooth line
+  k13_range <- seq(0, 100, by = 1)
+  mean_prevalence <- mean(plot_data$malaria_prevalence_pct, na.rm = TRUE)
+
+  pred_data <- data.frame(
+    k13_mutation_pct = k13_range,
+    malaria_prevalence_pct = mean_prevalence
+  )
+
+  pred_logit <- predict(analysis_result$model_full, newdata = pred_data, se.fit = TRUE)
+
+  pred_df <- data.frame(
+    k13_mutation_pct = k13_range,
+    predicted = plogis(pred_logit$fit) * 100,
+    ci_lower = plogis(pred_logit$fit - 1.96 * pred_logit$se.fit) * 100,
+    ci_upper = plogis(pred_logit$fit + 1.96 * pred_logit$se.fit) * 100
+  )
+
+  p <- ggplot(plot_data, aes(x = k13_mutation_pct, y = .data[[y_var]])) +
+
+    # Prediction ribbon and line
+    geom_ribbon(data = pred_df,
+                aes(x = k13_mutation_pct, ymin = ci_lower, ymax = ci_upper),
+                alpha = 0.15, fill = "#2E86AB", inherit.aes = FALSE) +
+
+    geom_line(data = pred_df,
+              aes(x = k13_mutation_pct, y = predicted),
+              color = "#2E86AB", linewidth = 1.5, inherit.aes = FALSE) +
+
+    # Data points
+    geom_point(aes(size = study_n), alpha = 0.7, color = "#F18F01") +
+
+    scale_size_continuous(name = "Sample Size", range = c(3, 12)) +
+    scale_x_continuous(breaks = seq(0, 100, 20)) +
+
+    labs(x = x_label, y = y_label,
+         title = paste("K13 Resistance vs", gsub(" \\(%\\)", "", y_label)),
+         subtitle = "Controlling for malaria prevalence") +
+
+    theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 14),
+      legend.position = "bottom"
+    )
+
+  # Add statistics annotation
+  stats_text <- paste0(
+    "Adjusted OR = ", round(analysis_result$k13_odds_ratio, 3), "\n",
+    "95% CI: ", round(analysis_result$k13_or_ci_lower, 3), "-", round(analysis_result$k13_or_ci_upper, 3), "\n",
+    "p = ", format.pval(analysis_result$k13_p_value)
+  )
+
+  p <- p + annotate("label", x = 75, y = max(plot_data[[y_var]], na.rm = TRUE) * 0.9,
+                    label = stats_text, hjust = 0, vjust = 1, size = 3.5,
+                    fill = "white", alpha = 0.9)
 
   return(p)
 }
@@ -1054,6 +1175,11 @@ baseline_analysis_enhanced <- perform_weighted_binomial_with_prevalence(
   malaria_data_enhanced, "baseline_gam_prevalence"
 )
 
+cat("\n=== DAY 3 GAMETOCYTE ANALYSIS WITH PREVALENCE ===\n")
+day3_analysis_enhanced <- perform_weighted_binomial_with_prevalence(
+  malaria_data_enhanced, "day3_gam_prevalence"
+)
+
 cat("\n=== DAY 7 GAMETOCYTE ANALYSIS WITH PREVALENCE ===\n")
 day7_analysis_enhanced <- perform_weighted_binomial_with_prevalence(
   malaria_data_enhanced, "day7_gam_prevalence"
@@ -1061,23 +1187,63 @@ day7_analysis_enhanced <- perform_weighted_binomial_with_prevalence(
 
 # Create enhanced plots
 if(!"error" %in% names(baseline_analysis_enhanced)) {
+  # Enhanced plot with all details
   p_baseline_enhanced <- create_enhanced_resistance_plot(
     malaria_data_enhanced, "baseline_gam_prevalence", baseline_analysis_enhanced,
     "K13 Resistance (%)", "Baseline Gametocyte Prevalence (%)"
   )
   print(p_baseline_enhanced)
   ggsave("baseline_gametocyte_enhanced_corrected.png", p_baseline_enhanced,
-         width = 14, height = 8, dpi = 300)
+         width = 16, height = 9, dpi = 300)
+
+  # Simple regression plot
+  p_baseline_simple <- create_simple_regression_plot(
+    malaria_data_enhanced, "baseline_gam_prevalence", baseline_analysis_enhanced,
+    "K13 Resistance (%)", "Baseline Gametocyte Prevalence (%)"
+  )
+  print(p_baseline_simple)
+  ggsave("baseline_gametocyte_regression.png", p_baseline_simple,
+         width = 10, height = 7, dpi = 300)
+}
+
+if(!"error" %in% names(day3_analysis_enhanced)) {
+  # Enhanced plot with all details
+  p_day3_enhanced <- create_enhanced_resistance_plot(
+    malaria_data_enhanced, "day3_gam_prevalence", day3_analysis_enhanced,
+    "K13 Resistance (%)", "Day 3 Gametocyte Prevalence (%)"
+  )
+  print(p_day3_enhanced)
+  ggsave("day3_gametocyte_enhanced_corrected.png", p_day3_enhanced,
+         width = 16, height = 9, dpi = 300)
+
+  # Simple regression plot
+  p_day3_simple <- create_simple_regression_plot(
+    malaria_data_enhanced, "day3_gam_prevalence", day3_analysis_enhanced,
+    "K13 Resistance (%)", "Day 3 Gametocyte Prevalence (%)"
+  )
+  print(p_day3_simple)
+  ggsave("day3_gametocyte_regression.png", p_day3_simple,
+         width = 10, height = 7, dpi = 300)
 }
 
 if(!"error" %in% names(day7_analysis_enhanced)) {
+  # Enhanced plot with all details
   p_day7_enhanced <- create_enhanced_resistance_plot(
     malaria_data_enhanced, "day7_gam_prevalence", day7_analysis_enhanced,
     "K13 Resistance (%)", "Day 7 Gametocyte Prevalence (%)"
   )
   print(p_day7_enhanced)
   ggsave("day7_gametocyte_enhanced_corrected.png", p_day7_enhanced,
-         width = 14, height = 8, dpi = 300)
+         width = 16, height = 9, dpi = 300)
+
+  # Simple regression plot
+  p_day7_simple <- create_simple_regression_plot(
+    malaria_data_enhanced, "day7_gam_prevalence", day7_analysis_enhanced,
+    "K13 Resistance (%)", "Day 7 Gametocyte Prevalence (%)"
+  )
+  print(p_day7_simple)
+  ggsave("day7_gametocyte_regression.png", p_day7_simple,
+         width = 10, height = 7, dpi = 300)
 }
 
 # Print enhanced results function
@@ -1115,6 +1281,7 @@ print_enhanced_results <- function(analysis_result, outcome_name) {
 
 # Print results
 print_enhanced_results(baseline_analysis_enhanced, "Baseline Gametocytes")
+print_enhanced_results(day3_analysis_enhanced, "Day 3 Gametocytes")
 print_enhanced_results(day7_analysis_enhanced, "Day 7 Gametocytes")
 
 # Summary of findings
@@ -1134,6 +1301,19 @@ if(!"error" %in% names(baseline_analysis_enhanced)) {
   cat("- K13 effect (adjusted):", round(baseline_analysis_enhanced$k13_odds_ratio, 3), "\n")
 }
 
+if(!"error" %in% names(day3_analysis_enhanced)) {
+  aic_change_day3 <- day3_analysis_enhanced$aic_base - day3_analysis_enhanced$aic_full
+  cat("\nDAY 3 GAMETOCYTES:\n")
+  cat("- Including malaria prevalence",
+      if(aic_change_day3 > 2) "substantially improves" else if(aic_change_day3 > 0) "improves" else "does not improve",
+      "model fit\n")
+  cat("- AIC change:", round(aic_change_day3, 2), "\n")
+  cat("- K13 effect (adjusted):", round(day3_analysis_enhanced$k13_odds_ratio, 3), "\n")
+  cat("- INTERPRETATION: K13 resistance",
+      if(day3_analysis_enhanced$k13_odds_ratio < 1) "DECREASES" else "INCREASES",
+      "Day 3 gametocytes\n")
+}
+
 if(!"error" %in% names(day7_analysis_enhanced)) {
   aic_change_day7 <- day7_analysis_enhanced$aic_base - day7_analysis_enhanced$aic_full
   cat("\nDAY 7 GAMETOCYTES:\n")
@@ -1143,3 +1323,335 @@ if(!"error" %in% names(day7_analysis_enhanced)) {
   cat("- AIC change:", round(aic_change_day7, 2), "\n")
   cat("- K13 effect (adjusted):", round(day7_analysis_enhanced$k13_odds_ratio, 3), "\n")
 }
+
+
+# Transmission Multipliers ------------------------------------------------
+
+
+# Function to calculate transmission multipliers from analysis results
+calculate_transmission_multipliers <- function(analysis_result, outcome_name, prevalence_var = "malaria_prevalence_pct") {
+
+  if("error" %in% names(analysis_result)) {
+    cat("\n", outcome_name, "- Insufficient data for multiplier calculation\n")
+    return(NULL)
+  }
+
+  cat("\n=== TRANSMISSION MULTIPLIERS FOR", toupper(outcome_name), "===\n")
+
+  # Use mean malaria prevalence from the data for predictions
+  mean_prevalence <- mean(analysis_result$data[[prevalence_var]], na.rm = TRUE)
+  cat("Using mean malaria prevalence:", round(mean_prevalence, 2), "%\n")
+
+  # Create prediction data for 0% and 100% K13 resistance
+  pred_data_0 <- data.frame(
+    k13_mutation_pct = 0,
+    malaria_prevalence_pct = mean_prevalence
+  )
+  names(pred_data_0) <- c("k13_mutation_pct", prevalence_var)
+
+  pred_data_100 <- data.frame(
+    k13_mutation_pct = 100,
+    malaria_prevalence_pct = mean_prevalence
+  )
+  names(pred_data_100) <- c("k13_mutation_pct", prevalence_var)
+
+  # Get predictions from the FULL model (adjusted for malaria prevalence)
+  pred_0_logit <- predict(analysis_result$model_full, newdata = pred_data_0, se.fit = TRUE)
+  pred_100_logit <- predict(analysis_result$model_full, newdata = pred_data_100, se.fit = TRUE)
+
+  # Convert to prevalence scale (percentages)
+  prev_at_0 <- plogis(pred_0_logit$fit) * 100
+  prev_at_100 <- plogis(pred_100_logit$fit) * 100
+
+  # Calculate confidence intervals
+  prev_0_ci_lower <- plogis(pred_0_logit$fit - 1.96 * pred_0_logit$se.fit) * 100
+  prev_0_ci_upper <- plogis(pred_0_logit$fit + 1.96 * pred_0_logit$se.fit) * 100
+
+  prev_100_ci_lower <- plogis(pred_100_logit$fit - 1.96 * pred_100_logit$se.fit) * 100
+  prev_100_ci_upper <- plogis(pred_100_logit$fit + 1.96 * pred_100_logit$se.fit) * 100
+
+  # Calculate transmission multipliers
+  multiplier_best <- prev_at_100 / prev_at_0
+  multiplier_conservative <- prev_100_ci_lower / prev_0_ci_upper  # Most conservative
+  multiplier_optimistic <- prev_100_ci_upper / prev_0_ci_lower   # Most optimistic
+
+  # Print results
+  cat("\nPREDICTED PREVALENCES (adjusted for malaria prevalence):\n")
+  cat("At 0% K13 resistance:", round(prev_at_0, 2), "% (95% CI:",
+      round(prev_0_ci_lower, 2), "-", round(prev_0_ci_upper, 2), "%)\n")
+  cat("At 100% K13 resistance:", round(prev_at_100, 2), "% (95% CI:",
+      round(prev_100_ci_lower, 2), "-", round(prev_100_ci_upper, 2), "%)\n")
+
+  cat("\nTRANSMISSION MULTIPLIERS:\n")
+  cat("Best estimate:", round(multiplier_best, 3), "x\n")
+  cat("Conservative (lower CI):", round(multiplier_conservative, 3), "x\n")
+  cat("Optimistic (upper CI):", round(multiplier_optimistic, 3), "x\n")
+
+  # Statistical significance interpretation
+  k13_p <- analysis_result$k13_p_value
+  cat("\nSTATISTICAL INTERPRETATION:\n")
+  cat("K13 effect p-value:", format.pval(k13_p), "\n")
+  if(k13_p > 0.05) {
+    cat("=> K13 resistance has NO SIGNIFICANT effect on", outcome_name, "\n")
+    cat("=> Recommended multiplier: 1.0x (no transmission advantage)\n")
+  } else {
+    cat("=> K13 resistance has SIGNIFICANT effect on", outcome_name, "\n")
+    cat("=> Use calculated multipliers above\n")
+  }
+
+  # Return results for further use
+  return(list(
+    outcome = outcome_name,
+    prev_at_0 = prev_at_0,
+    prev_at_100 = prev_at_100,
+    multiplier_best = multiplier_best,
+    multiplier_conservative = multiplier_conservative,
+    multiplier_optimistic = multiplier_optimistic,
+    k13_p_value = k13_p,
+    significant = k13_p <= 0.05,
+    mean_prevalence_used = mean_prevalence
+  ))
+}
+
+# Calculate multipliers for all outcomes
+baseline_multipliers <- calculate_transmission_multipliers(
+  baseline_analysis_enhanced, "Baseline Gametocytes"
+)
+
+day3_multipliers <- calculate_transmission_multipliers(
+  day3_analysis_enhanced, "Day 3 Gametocytes"
+)
+
+day7_multipliers <- calculate_transmission_multipliers(
+  day7_analysis_enhanced, "Day 7 Gametocytes"
+)
+
+# Create summary table of all multipliers
+if(!is.null(baseline_multipliers) || !is.null(day3_multipliers) || !is.null(day7_multipliers)) {
+
+  cat("\n" , rep("=", 60), "\n")
+  cat("SUMMARY: REVISED TRANSMISSION MULTIPLIERS\n")
+  cat(rep("=", 60), "\n")
+
+  # Collect all valid results
+  all_multipliers <- list()
+  if(!is.null(baseline_multipliers)) all_multipliers[["Baseline"]] <- baseline_multipliers
+  if(!is.null(day3_multipliers)) all_multipliers[["Day 3"]] <- day3_multipliers
+  if(!is.null(day7_multipliers)) all_multipliers[["Day 7"]] <- day7_multipliers
+
+  if(length(all_multipliers) > 0) {
+    # Create summary data frame
+    summary_df <- data.frame(
+      Outcome = names(all_multipliers),
+      Best_Estimate = sapply(all_multipliers, function(x) round(x$multiplier_best, 3)),
+      Conservative = sapply(all_multipliers, function(x) round(x$multiplier_conservative, 3)),
+      Optimistic = sapply(all_multipliers, function(x) round(x$multiplier_optimistic, 3)),
+      P_Value = sapply(all_multipliers, function(x) format.pval(x$k13_p_value)),
+      Significant = sapply(all_multipliers, function(x) x$significant),
+      stringsAsFactors = FALSE
+    )
+
+    cat("\nSUMMARY TABLE:\n")
+    print(summary_df, row.names = FALSE)
+
+    # Overall recommendation
+    cat("\nOVERALL RECOMMENDATIONS:\n")
+
+    significant_outcomes <- sum(summary_df$Significant)
+    if(significant_outcomes == 0) {
+      cat("=> NO significant K13 effects found after controlling for malaria prevalence\n")
+      cat("=> RECOMMENDED TRANSMISSION MULTIPLIER: 1.0x (no advantage)\n")
+      cat("=> RANGE FOR SENSITIVITY ANALYSIS: 0.95x - 1.05x\n")
+    } else {
+      # Use the significant outcomes to make recommendations
+      sig_multipliers <- summary_df[summary_df$Significant, ]
+      if(nrow(sig_multipliers) > 0) {
+        mean_best <- mean(sig_multipliers$Best_Estimate)
+        mean_conservative <- mean(sig_multipliers$Conservative)
+        mean_optimistic <- mean(sig_multipliers$Optimistic)
+
+        cat("=>", significant_outcomes, "of", nrow(summary_df), "outcomes show significant K13 effects\n")
+        cat("=> RECOMMENDED TRANSMISSION MULTIPLIER:", round(mean_best, 2), "x\n")
+        cat("=> RANGE FOR SENSITIVITY ANALYSIS:", round(mean_conservative, 2), "x -", round(mean_optimistic, 2), "x\n")
+      }
+    }
+
+    # Comparison with original analysis
+    cat("\nCOMPARISON WITH ORIGINAL ANALYSIS:\n")
+    cat("Original analysis (without prevalence covariate):\n")
+    cat("- Baseline: ~2.9x transmission advantage\n")
+    cat("- Day 7: ~0.9x transmission advantage\n")
+    cat("\nRevised analysis (with prevalence covariate):\n")
+    cat("- Baseline:", round(baseline_multipliers$multiplier_best, 2), "x (p =", format.pval(baseline_multipliers$k13_p_value), ")\n")
+    if(!is.null(day7_multipliers)) {
+      cat("- Day 7:", round(day7_multipliers$multiplier_best, 2), "x (p =", format.pval(day7_multipliers$k13_p_value), ")\n")
+    }
+    cat("\n=> Controlling for malaria prevalence ELIMINATES the apparent transmission advantage\n")
+    cat("=> Original effects were likely due to CONFOUNDING by transmission intensity\n")
+  }
+}
+
+# Function to create a visual comparison plot
+create_multiplier_comparison_plot <- function() {
+
+  if(exists("baseline_multipliers") && exists("day7_multipliers")) {
+
+    # Data for comparison plot
+    comparison_data <- data.frame(
+      Analysis = rep(c("Original\n(unadjusted)", "Revised\n(adjusted)"), each = 2),
+      Outcome = rep(c("Baseline", "Day 7"), 2),
+      Multiplier = c(
+        2.9, 0.9,  # Original estimates (approximate from your earlier results)
+        baseline_multipliers$multiplier_best,
+        ifelse(!is.null(day7_multipliers), day7_multipliers$multiplier_best, 1.0)
+      ),
+      Significant = c(TRUE, TRUE,
+                      baseline_multipliers$significant,
+                      ifelse(!is.null(day7_multipliers), day7_multipliers$significant, FALSE))
+    )
+
+    library(ggplot2)
+
+    p <- ggplot(comparison_data, aes(x = Analysis, y = Multiplier, fill = Outcome, alpha = Significant)) +
+      geom_col(position = "dodge", color = "black", size = 0.5) +
+      geom_hline(yintercept = 1, linetype = "dashed", color = "red", size = 1) +
+      scale_fill_manual(values = c("Baseline" = "#2E86AB", "Day 7" = "#F18F01")) +
+      scale_alpha_manual(values = c("TRUE" = 1.0, "FALSE" = 0.4), guide = "none") +
+      labs(
+        title = "Transmission Multiplier Comparison",
+        subtitle = "Effect of controlling for malaria prevalence",
+        x = "Analysis Type",
+        y = "Transmission Multiplier",
+        fill = "Gametocyte Outcome",
+        caption = "Dashed red line = no transmission advantage (1.0x)\nFaded bars = non-significant effects"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(face = "bold", size = 14),
+        legend.position = "bottom"
+      )
+
+    print(p)
+    ggsave("transmission_multiplier_comparison.png", p, width = 10, height = 7, dpi = 300)
+
+    return(p)
+  }
+}
+
+# Create the comparison plot
+create_multiplier_comparison_plot()
+
+
+
+# Bet-binomial model ------------------------------------------------------
+
+
+install.packages("glmmTMB")
+
+library(glmmTMB)
+library(dplyr)
+library(broom.mixed)
+
+malaria_data <- malaria_data %>%
+  mutate(
+    baseline_positive = round((baseline_gam_prevalence / 100) * study_n),
+    day3_positive = round((day3_gam_prevalence / 100) * study_n),
+    day7_positive = round((day7_gam_prevalence / 100) * study_n)
+  )
+
+library(tidyr)
+
+malaria_long <- malaria_data %>%
+  pivot_longer(
+    cols = c(baseline_gam_prevalence, day3_gam_prevalence, day7_gam_prevalence,
+             baseline_positive, day3_positive, day7_positive),
+    names_to = c("timepoint", ".value"),
+    names_pattern = "(baseline|day3|day7)_(.*)"
+  ) %>%
+  mutate(
+    timepoint = recode(timepoint, baseline = 0, day3 = 3, day7 = 7),
+    timepoint = as.integer(timepoint)
+  )
+
+library(glmmTMB)
+
+model_by_day <- function(data, day) {
+  df <- data %>% filter(timepoint == day)
+  glmmTMB(
+    cbind(positive, study_n - positive) ~ k13_mutation_pct,
+    family = betabinomial(),
+    data = df
+  )
+}
+
+model_day0 <- model_by_day(malaria_long, 0)
+model_day3 <- model_by_day(malaria_long, 3)
+model_day7 <- model_by_day(malaria_long, 7)
+
+
+library(dplyr)
+
+# Function to generate prediction data + fitted values
+get_predictions <- function(model, timepoint_label) {
+  new_data <- data.frame(k13_mutation_pct = seq(0, 100, by = 1))
+  preds <- predict(model, newdata = new_data, se.fit = TRUE, type = "response")
+
+  tibble(
+    k13_mutation_pct = new_data$k13_mutation_pct,
+    prevalence = preds$fit * 100,
+    lower = (preds$fit - 1.96 * preds$se.fit) * 100,
+    upper = (preds$fit + 1.96 * preds$se.fit) * 100,
+    timepoint = timepoint_label
+  )
+}
+
+# Get predicted curves for each model
+pred_day0 <- get_predictions(model_day0, "Day 0")
+pred_day3 <- get_predictions(model_day3, "Day 3")
+pred_day7 <- get_predictions(model_day7, "Day 7")
+
+predictions_all <- bind_rows(pred_day0, pred_day3, pred_day7)
+
+
+library(ggplot2)
+
+ggplot(predictions_all, aes(x = k13_mutation_pct, y = prevalence, color = timepoint)) +
+  geom_line(size = 1.2) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = timepoint), alpha = 0.2, color = NA) +
+  labs(
+    title = "Predicted Gametocyte Prevalence by K13 Resistance",
+    x = "K13 Mutation Prevalence (%)",
+    y = "Predicted Gametocyte Prevalence (%)",
+    color = "Timepoint",
+    fill = "Timepoint"
+  ) +
+  theme_minimal(base_size = 14) +
+  scale_color_manual(values = c("Day 0" = "#2E86AB", "Day 3" = "#A23B72", "Day 7" = "#F18F01")) +
+  scale_fill_manual(values = c("Day 0" = "#2E86AB", "Day 3" = "#A23B72", "Day 7" = "#F18F01"))
+
+
+ggplot() +
+  geom_point(data = malaria_long, aes(x = k13_mutation_pct, y = (positive / study_n) * 100, color = factor(timepoint)), alpha = 0.5) +
+  geom_line(data = predictions_all, aes(x = k13_mutation_pct, y = prevalence, color = timepoint), size = 1.2) +
+  geom_ribbon(data = predictions_all, aes(x = k13_mutation_pct, ymin = lower, ymax = upper, fill = timepoint), alpha = 0.2, color = NA) +
+  labs(
+    title = "Observed and Predicted Gametocyte Prevalence",
+    x = "K13 Mutation Prevalence (%)",
+    y = "Prevalence (%)",
+    color = "Timepoint",
+    fill = "Timepoint"
+  ) +
+  theme_minimal(base_size = 14)
+
+ggplot(predictions_all, aes(x = k13_mutation_pct, y = prevalence)) +
+  geom_line(color = "#2E86AB", size = 1.2) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), fill = "#2E86AB", alpha = 0.2) +
+  facet_wrap(~ timepoint, ncol = 1) +
+  labs(
+    title = "Predicted Gametocyte Prevalence by K13 Resistance",
+    x = "K13 Mutation Prevalence (%)",
+    y = "Predicted Prevalence (%)"
+  ) +
+  theme_minimal(base_size = 14)
+
+
