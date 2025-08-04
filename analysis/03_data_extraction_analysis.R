@@ -701,3 +701,445 @@ if(!"error" %in% names(baseline_analysis) && !"error" %in% names(day7_analysis))
   }
 }
 
+
+# Introducing malaria prevalence as covariate  ----------------------------
+
+# ========================
+# K13 RESISTANCE ANALYSIS WITH PREVALENCE COVARIATE - CORRECTED VERSION
+# ========================
+
+# Required libraries
+library(ggplot2)
+library(dplyr)
+library(broom)
+library(weights)
+library(patchwork)
+library(readxl)
+library(scales)
+library(readr)
+
+# Read in your malaria data from Excel file (or use data frame below)
+malaria_data <- data.frame(
+  Study = c(
+    "Ladeia-Andrade 2016", "Olivera 2019", "Teklemariam 2015", "Tesfaye 2024",
+    "Ippolito 2020", "Getnet 2013", "Atroosh 2014", "Chang 2016", "Chang 2016",
+    "Djimde 2016", "Kyaw Myo Tun 2015", "Kyaw Myo Tun 2015", "Vantaux 2020",
+    "Vantaux 2020", "Thriemer 2014", "Rovira-Vallbona 2020", "Rovira-Vallbona 2020",
+    "Ashley 2014", "Ashley 2014", "Ashley 2014", "Ashley 2014", "Ashley 2014",
+    "Ashley 2014", "Ashley 2014", "Carrara 2009", "Lek 2022"
+  ),
+  # Add country/location identifier for Ashley 2014 and other multi-location studies
+  Location = c(
+    "Brazil", "Colombia", "Ethiopia", "Ethiopia", "Zambia", "Ethiopia", "Yemen",
+    "Uganda", "Uganda", "Mali", "Myanmar", "Myanmar", "Cambodia", "Cambodia",
+    "Indonesia", "Cambodia", "Cambodia",
+    # Ashley 2014 - 7 countries
+    "Cambodia", "Thailand", "Vietnam", "Myanmar", "Bangladesh", "DRC", "Nigeria",
+    "Thailand", "Cambodia"
+  ),
+  k13_mutation_pct = c(
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 46, 63, 63, 80.7, 87, 87, 44.7, 73.6,
+    27.5, 26, 0, 1.7, 0, 21.9, 57.9
+  ),
+  baseline_gam_prevalence = c(
+    32.5, 12.5, 7.6, 6.3, 13, 10, 40.7, 37, 50, 22.8, 22, 21, 49, 37.5, 18.9,
+    NA, 76, 11.8, 6.7, 5.9, 11.3, 0, 30.8, 2.9, 6.3, 46.9
+  ),
+  baseline_asexual_density = c(
+    4700.1, 3527, 27798, 10627, 13000, NA, 8199, NA, NA, NA, 3084, 2140, NA, NA,
+    8233, 10166, 15832, 55623, 36529, 49738, 66066, 27130, 60037, 52250, 6982, 11873
+  ),
+  baseline_gam_density = c(
+    NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+    NA, NA, NA, NA, NA, NA, NA
+  ),
+  day3_gam_prevalence = c(
+    23.6, 18.6, 1, 2.5, 3, 37.5, NA, NA, NA, 17.4, 8, 13, NA, NA, NA, NA, NA,
+    NA, NA, NA, NA, NA, NA, NA, NA, NA
+  ),
+  day7_gam_prevalence = c(
+    NA, 14.3, NA, 2.5, 2, 0, 34.9, 7.84, 0, 23.9, 0, 1.4, NA, NA, 20.5, NA,
+    NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+  ),
+  sample_size = c(
+    162, 84, 92, 73, 94, 80, 89, 61, 9, 92, 78, 76, 53, 56, 95, 33, 27, 460,
+    185, 120, 80, 56, 120, 40, 3264, 211
+  ),
+  stringsAsFactors = FALSE
+)
+
+# Clean column names
+colnames(malaria_data) <- trimws(colnames(malaria_data))
+malaria_data <- malaria_data %>%
+  rename(study_n = sample_size)
+
+# Convert "NA" strings to actual NA values and ensure numeric columns
+malaria_data[malaria_data == "NA"] <- NA
+numeric_cols <- c("k13_mutation_pct", "baseline_gam_prevalence", "baseline_asexual_density",
+                  "baseline_gam_density", "day3_gam_prevalence", "day7_gam_prevalence", "study_n")
+
+for(col in numeric_cols) {
+  if(col %in% colnames(malaria_data)) {
+    malaria_data[[col]] <- as.numeric(malaria_data[[col]])
+  }
+}
+
+# Read the study locations data
+study_locations <- read_csv("analysis/data-derived/study_locations_processed_complete.csv")
+
+# Check the structure of study locations
+cat("Study locations structure:\n")
+print(study_locations %>%
+        group_by(study) %>%
+        summarise(n_locations = n(), .groups = 'drop') %>%
+        arrange(desc(n_locations)))
+
+# Create the proper mapping based on your extraction description
+# Ashley 2014 should have 7 country entries (Cambodia and Thailand averaged from multiple sites)
+# Chang 2016 should be excluded (no study dates)
+
+# Create study-location mapping for prevalence
+study_location_mapping <- study_locations %>%
+  # Create a study-location key that matches your malaria data structure
+  mutate(
+    study_location_key = case_when(
+      # For Ashley 2014, we need to map to countries
+      study == "Ashley 2014" & grepl("Cambodia", location) ~ "Ashley 2014_Cambodia",
+      study == "Ashley 2014" & grepl("Thailand", location) ~ "Ashley 2014_Thailand",
+      study == "Ashley 2014" & grepl("Vietnam", location) ~ "Ashley 2014_Vietnam",
+      study == "Ashley 2014" & grepl("Myanmar", location) ~ "Ashley 2014_Myanmar",
+      study == "Ashley 2014" & grepl("Bangladesh", location) ~ "Ashley 2014_Bangladesh",
+      study == "Ashley 2014" & grepl("DRC", location) ~ "Ashley 2014_DRC",
+      study == "Ashley 2014" & grepl("Nigeria", location) ~ "Ashley 2014_Nigeria",
+      # For other multi-location studies, take first entry or average
+      TRUE ~ paste0(study, "_", "main")
+    )
+  ) %>%
+  # Average prevalence by study-location key (this handles Cambodia/Thailand averaging)
+  group_by(study_location_key) %>%
+  summarise(
+    study = first(study),
+    malaria_prevalence = mean(prev, na.rm = TRUE),
+    n_sites = n(),
+    .groups = 'drop'
+  ) %>%
+  # Extract location from key for matching
+  mutate(
+    location_match = case_when(
+      grepl("_Cambodia$", study_location_key) ~ "Cambodia",
+      grepl("_Thailand$", study_location_key) ~ "Thailand",
+      grepl("_Vietnam$", study_location_key) ~ "Vietnam",
+      grepl("_Myanmar$", study_location_key) ~ "Myanmar",
+      grepl("_Bangladesh$", study_location_key) ~ "Bangladesh",
+      grepl("_DRC$", study_location_key) ~ "DRC",
+      grepl("_Nigeria$", study_location_key) ~ "Nigeria",
+      TRUE ~ "main"
+    )
+  )
+
+cat("\nProcessed study-location mapping:\n")
+print(study_location_mapping)
+
+# Now merge with malaria data
+# Create matching key in malaria data
+malaria_data_with_key <- malaria_data %>%
+  mutate(
+    location_match = case_when(
+      Study == "Ashley 2014" ~ Location,  # Use the Location column for Ashley
+      TRUE ~ "main"  # For other studies, use main
+    ),
+    study_location_key = paste0(Study, "_", location_match)
+  )
+
+# Merge with prevalence data
+malaria_data_enhanced <- malaria_data_with_key %>%
+  left_join(
+    study_location_mapping %>% select(study_location_key, malaria_prevalence, n_sites),
+    by = "study_location_key"
+  ) %>%
+  # Convert prevalence from proportion to percentage
+  mutate(malaria_prevalence_pct = malaria_prevalence * 100) %>%
+  # Exclude Chang 2016 from prevalence analysis (mark as excluded)
+  mutate(
+    exclude_from_prevalence = Study == "Chang 2016",
+    malaria_prevalence_pct = ifelse(exclude_from_prevalence, NA, malaria_prevalence_pct)
+  )
+
+# Check which studies have prevalence data
+cat("\nStudies with prevalence data:\n")
+prevalence_studies <- malaria_data_enhanced %>%
+  filter(!is.na(malaria_prevalence_pct)) %>%
+  select(Study, Location, malaria_prevalence_pct, n_sites) %>%
+  distinct()
+print(prevalence_studies)
+
+cat("\nStudies WITHOUT prevalence data (excluded from prevalence analysis):\n")
+excluded_studies <- malaria_data_enhanced %>%
+  filter(is.na(malaria_prevalence_pct)) %>%
+  select(Study, Location) %>%
+  distinct()
+print(excluded_studies)
+
+cat("\nSample size check - Ashley 2014 countries:\n")
+ashley_check <- malaria_data_enhanced %>%
+  filter(Study == "Ashley 2014") %>%
+  select(Study, Location, k13_mutation_pct, malaria_prevalence_pct, n_sites)
+print(ashley_check)
+
+# Enhanced weighted binomial regression with prevalence covariate
+perform_weighted_binomial_with_prevalence <- function(data, outcome_var,
+                                                      predictor_var = "k13_mutation_pct",
+                                                      prevalence_var = "malaria_prevalence_pct",
+                                                      weight_var = "study_n") {
+
+  # Filter complete cases including prevalence (excludes Chang 2016 automatically)
+  complete_data <- data[!is.na(data[[outcome_var]]) &
+                          !is.na(data[[predictor_var]]) &
+                          !is.na(data[[prevalence_var]]) &
+                          !is.na(data[[weight_var]]), ]
+
+  if(nrow(complete_data) < 4) {  # Need more data for multiple predictors
+    return(list(error = "Insufficient data"))
+  }
+
+  cat("\nStudies included in", outcome_var, "analysis with prevalence covariate:\n")
+  for(i in 1:nrow(complete_data)) {
+    cat(sprintf("  %s (%s): K13=%.1f%%, %s=%.1f%%, Malaria prev=%.1f%%, n=%d\n",
+                complete_data$Study[i],
+                complete_data$Location[i],
+                complete_data[[predictor_var]][i],
+                outcome_var,
+                complete_data[[outcome_var]][i],
+                complete_data[[prevalence_var]][i],
+                complete_data[[weight_var]][i]))
+  }
+
+  # Create binomial response
+  complete_data$successes <- round((complete_data[[outcome_var]]/100) * complete_data[[weight_var]])
+  complete_data$failures <- complete_data[[weight_var]] - complete_data$successes
+
+  # Ensure valid counts
+  complete_data$successes <- pmax(0, pmin(complete_data$successes, complete_data[[weight_var]]))
+  complete_data$failures <- complete_data[[weight_var]] - complete_data$successes
+
+  # Fit models with and without prevalence
+  formula_base <- paste("cbind(successes, failures) ~", predictor_var)
+  formula_full <- paste("cbind(successes, failures) ~", predictor_var, "+", prevalence_var)
+
+  model_base <- glm(as.formula(formula_base), family = binomial, data = complete_data)
+  model_full <- glm(as.formula(formula_full), family = binomial, data = complete_data)
+
+  # Compare models using AIC and likelihood ratio test
+  aic_comparison <- data.frame(
+    Model = c("K13 only", "K13 + Prevalence"),
+    AIC = c(AIC(model_base), AIC(model_full)),
+    df = c(model_base$df.residual, model_full$df.residual)
+  )
+
+  # Likelihood ratio test
+  lrt <- anova(model_base, model_full, test = "Chisq")
+
+  # Extract coefficients from full model
+  summary_full <- summary(model_full)
+  coefficients <- summary_full$coefficients
+
+  # K13 effects
+  k13_beta <- coefficients[predictor_var, "Estimate"]
+  k13_se <- coefficients[predictor_var, "Std. Error"]
+  k13_or <- exp(k13_beta)
+  k13_or_ci_lower <- exp(k13_beta - 1.96 * k13_se)
+  k13_or_ci_upper <- exp(k13_beta + 1.96 * k13_se)
+  k13_p_value <- coefficients[predictor_var, "Pr(>|z|)"]
+
+  # Prevalence effects
+  prev_beta <- coefficients[prevalence_var, "Estimate"]
+  prev_se <- coefficients[prevalence_var, "Std. Error"]
+  prev_or <- exp(prev_beta)
+  prev_or_ci_lower <- exp(prev_beta - 1.96 * prev_se)
+  prev_or_ci_upper <- exp(prev_beta + 1.96 * prev_se)
+  prev_p_value <- coefficients[prevalence_var, "Pr(>|z|)"]
+
+  return(list(
+    model_base = model_base,
+    model_full = model_full,
+    data = complete_data,
+    n_studies = nrow(complete_data),
+    total_participants = sum(complete_data[[weight_var]]),
+
+    # K13 results
+    k13_odds_ratio = k13_or,
+    k13_or_ci_lower = k13_or_ci_lower,
+    k13_or_ci_upper = k13_or_ci_upper,
+    k13_p_value = k13_p_value,
+
+    # Prevalence results
+    prevalence_odds_ratio = prev_or,
+    prevalence_or_ci_lower = prev_or_ci_lower,
+    prevalence_or_ci_upper = prev_or_ci_upper,
+    prevalence_p_value = prev_p_value,
+
+    # Model comparison
+    aic_comparison = aic_comparison,
+    lrt_p_value = if(length(lrt$`Pr(>Chi)`) >= 2) lrt$`Pr(>Chi)`[2] else NA,
+
+    aic_base = AIC(model_base),
+    aic_full = AIC(model_full)
+  ))
+}
+
+# Enhanced plotting function
+create_enhanced_resistance_plot <- function(data, y_var, analysis_result,
+                                            x_label, y_label, prevalence_var = "malaria_prevalence_pct") {
+
+  if("error" %in% names(analysis_result)) {
+    return(ggplot() +
+             labs(x = x_label, y = y_label) +
+             theme_minimal() +
+             annotate("text", x = 50, y = 50, label = "Insufficient Data",
+                      size = 6, color = "grey50"))
+  }
+
+  plot_data <- analysis_result$data
+
+  # Create base plot
+  p <- ggplot(plot_data, aes(x = k13_mutation_pct, y = .data[[y_var]])) +
+
+    # Color points by malaria prevalence, shape by study
+    geom_point(aes(size = study_n, color = .data[[prevalence_var]], shape = Study),
+               alpha = 0.8, stroke = 0.5) +
+
+    # Add trend line from full model
+    geom_smooth(method = "glm", method.args = list(family = "binomial", weights = plot_data$study_n),
+                se = TRUE, color = "red", fill = "red", alpha = 0.2,
+                linetype = "solid", linewidth = 1) +
+
+    scale_color_viridis_c(name = "Malaria\nPrevalence (%)", option = "plasma") +
+    scale_size_continuous(name = "Sample Size", range = c(3, 15)) +
+    scale_shape_manual(name = "Study", values = c(16, 17, 18, 15, 3, 4, 8, 11, 12, 13, 14, 19, 20)) +
+
+    labs(x = x_label, y = y_label,
+         title = paste(y_label, "with Malaria Prevalence Covariate"),
+         subtitle = "Color = malaria prevalence, Size = sample size, Shape = study") +
+
+    theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 14),
+      legend.position = "right"
+    )
+
+  # Add model comparison annotation
+  if(!is.null(analysis_result$aic_comparison)) {
+    model_text <- paste0(
+      "Model Comparison:\n",
+      "K13 only AIC: ", round(analysis_result$aic_base, 1), "\n",
+      "K13 + Prevalence AIC: ", round(analysis_result$aic_full, 1), "\n",
+      "K13 OR: ", round(analysis_result$k13_odds_ratio, 3),
+      " (p=", format.pval(analysis_result$k13_p_value), ")\n",
+      "Prevalence OR: ", round(analysis_result$prevalence_odds_ratio, 3),
+      " (p=", format.pval(analysis_result$prevalence_p_value), ")"
+    )
+
+    p <- p + annotate("label", x = Inf, y = Inf,
+                      label = model_text,
+                      hjust = 1, vjust = 1, size = 3,
+                      fill = "white", alpha = 0.9)
+  }
+
+  return(p)
+}
+
+# Run enhanced analyses
+cat("\n=== BASELINE GAMETOCYTE ANALYSIS WITH PREVALENCE ===\n")
+baseline_analysis_enhanced <- perform_weighted_binomial_with_prevalence(
+  malaria_data_enhanced, "baseline_gam_prevalence"
+)
+
+cat("\n=== DAY 7 GAMETOCYTE ANALYSIS WITH PREVALENCE ===\n")
+day7_analysis_enhanced <- perform_weighted_binomial_with_prevalence(
+  malaria_data_enhanced, "day7_gam_prevalence"
+)
+
+# Create enhanced plots
+if(!"error" %in% names(baseline_analysis_enhanced)) {
+  p_baseline_enhanced <- create_enhanced_resistance_plot(
+    malaria_data_enhanced, "baseline_gam_prevalence", baseline_analysis_enhanced,
+    "K13 Resistance (%)", "Baseline Gametocyte Prevalence (%)"
+  )
+  print(p_baseline_enhanced)
+  ggsave("baseline_gametocyte_enhanced_corrected.png", p_baseline_enhanced,
+         width = 14, height = 8, dpi = 300)
+}
+
+if(!"error" %in% names(day7_analysis_enhanced)) {
+  p_day7_enhanced <- create_enhanced_resistance_plot(
+    malaria_data_enhanced, "day7_gam_prevalence", day7_analysis_enhanced,
+    "K13 Resistance (%)", "Day 7 Gametocyte Prevalence (%)"
+  )
+  print(p_day7_enhanced)
+  ggsave("day7_gametocyte_enhanced_corrected.png", p_day7_enhanced,
+         width = 14, height = 8, dpi = 300)
+}
+
+# Print enhanced results function
+print_enhanced_results <- function(analysis_result, outcome_name) {
+  if("error" %in% names(analysis_result)) {
+    cat("\n", outcome_name, "- Insufficient data\n")
+    return()
+  }
+
+  cat("\n=== ENHANCED RESULTS FOR", toupper(outcome_name), "===\n")
+  cat("Studies included:", analysis_result$n_studies, "\n")
+  cat("Total participants:", format(analysis_result$total_participants, big.mark = ","), "\n\n")
+
+  cat("K13 RESISTANCE EFFECTS (adjusted for malaria prevalence):\n")
+  cat("Odds ratio:", round(analysis_result$k13_odds_ratio, 4), "\n")
+  cat("95% CI:", round(analysis_result$k13_or_ci_lower, 4), "to",
+      round(analysis_result$k13_or_ci_upper, 4), "\n")
+  cat("P-value:", format.pval(analysis_result$k13_p_value), "\n\n")
+
+  cat("MALARIA PREVALENCE EFFECTS:\n")
+  cat("Odds ratio per 1% increase in prevalence:", round(analysis_result$prevalence_odds_ratio, 4), "\n")
+  cat("95% CI:", round(analysis_result$prevalence_or_ci_lower, 4), "to",
+      round(analysis_result$prevalence_or_ci_upper, 4), "\n")
+  cat("P-value:", format.pval(analysis_result$prevalence_p_value), "\n\n")
+
+  cat("MODEL COMPARISON:\n")
+  print(analysis_result$aic_comparison)
+  if(!is.na(analysis_result$lrt_p_value)) {
+    cat("Likelihood ratio test p-value:", format.pval(analysis_result$lrt_p_value), "\n")
+  }
+  aic_improvement <- analysis_result$aic_base - analysis_result$aic_full
+  cat("AIC improvement:", round(aic_improvement, 2),
+      if(aic_improvement > 0) "(better fit)" else "(worse fit)", "\n")
+}
+
+# Print results
+print_enhanced_results(baseline_analysis_enhanced, "Baseline Gametocytes")
+print_enhanced_results(day7_analysis_enhanced, "Day 7 Gametocytes")
+
+# Summary of findings
+cat("\n=== SUMMARY OF FINDINGS ===\n")
+cat("This analysis properly handles:\n")
+cat("- Ashley 2014: 7 countries with Cambodia/Thailand averaged from multiple sites\n")
+cat("- Chang 2016: Excluded from prevalence analysis (no study dates)\n")
+cat("- Other studies: Single locations or appropriately handled\n\n")
+
+if(!"error" %in% names(baseline_analysis_enhanced)) {
+  aic_change_baseline <- baseline_analysis_enhanced$aic_base - baseline_analysis_enhanced$aic_full
+  cat("BASELINE GAMETOCYTES:\n")
+  cat("- Including malaria prevalence",
+      if(aic_change_baseline > 2) "substantially improves" else if(aic_change_baseline > 0) "improves" else "does not improve",
+      "model fit\n")
+  cat("- AIC change:", round(aic_change_baseline, 2), "\n")
+  cat("- K13 effect (adjusted):", round(baseline_analysis_enhanced$k13_odds_ratio, 3), "\n")
+}
+
+if(!"error" %in% names(day7_analysis_enhanced)) {
+  aic_change_day7 <- day7_analysis_enhanced$aic_base - day7_analysis_enhanced$aic_full
+  cat("\nDAY 7 GAMETOCYTES:\n")
+  cat("- Including malaria prevalence",
+      if(aic_change_day7 > 2) "substantially improves" else if(aic_change_day7 > 0) "improves" else "does not improve",
+      "model fit\n")
+  cat("- AIC change:", round(aic_change_day7, 2), "\n")
+  cat("- K13 effect (adjusted):", round(day7_analysis_enhanced$k13_odds_ratio, 3), "\n")
+}
