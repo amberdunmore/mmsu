@@ -1655,3 +1655,174 @@ ggplot(predictions_all, aes(x = k13_mutation_pct, y = prevalence)) +
   theme_minimal(base_size = 14)
 
 
+
+# Figures for write-up ----------------------------------------------------
+
+# Create horizontal point scale legend
+improved_size_scale_horizontal <- scale_size_continuous(
+  name = "Sample Size",
+  range = c(2.5, 11),
+  breaks = c(50, 75, 100, 150, 200, 300, 500, 1000, 2000, 3000),
+  labels = c("50", "75", "100", "150", "200", "300", "500", "1K", "2K", "3K"),
+  trans = "sqrt",
+  guide = guide_legend(
+    override.aes = list(alpha = 0.8, color = "#F18F01"),
+    nrow = 1,  # Single horizontal row
+    title.position = "left",  # Title on the left
+    label.position = "bottom",  # Numbers below the points
+    direction = "horizontal",
+    title.hjust = 0.5
+  )
+)
+
+# Apply to your plots with horizontal legend at bottom
+p_baseline_horizontal <- p_baseline_simple +
+  improved_size_scale_horizontal +
+  theme(
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.margin = margin(t = 10),
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+p_day3_horizontal <- p_day3_simple +
+  improved_size_scale_horizontal +
+  theme(
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.margin = margin(t = 10),
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+p_day7_horizontal <- p_day7_simple +
+  improved_size_scale_horizontal +
+  theme(
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.margin = margin(t = 10)
+  )
+
+# Alternative: Custom breaks that focus more on your smaller studies
+focused_size_scale <- scale_size_continuous(
+  name = "Sample Size",
+  range = c(3, 10),
+  breaks = c(50, 75, 100, 150, 200, 300, 500, 1000, 3000),  # Removed 2000 to save space
+  labels = c("50", "75", "100", "150", "200", "300", "500", "1K", "3K"),
+  trans = "sqrt",
+  guide = guide_legend(
+    override.aes = list(alpha = 0.8, color = "#F18F01"),
+    nrow = 1,
+    title.position = "left",
+    label.position = "bottom",
+    direction = "horizontal"
+  )
+)
+
+# Apply focused version
+p_baseline_focused <- p_baseline_simple +
+  focused_size_scale +
+  theme(
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+p_day3_focused <- p_day3_simple +
+  focused_size_scale +
+  theme(
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+p_day7_focused <- p_day7_simple +
+  focused_size_scale +
+  theme(
+    legend.position = "bottom",
+    legend.box = "horizontal"
+  )
+
+# Create patchwork with individual horizontal legends
+combined_horizontal <- p_baseline_horizontal / p_day3_horizontal / p_day7_horizontal +
+  plot_layout(ncol = 1, guides = "keep")
+
+# Or with focused legends (fewer points, cleaner)
+combined_focused <- p_baseline_focused / p_day3_focused / p_day7_focused +
+  plot_layout(ncol = 1, guides = "keep")
+
+# View the results
+print("Horizontal legend version:")
+print(combined_horizontal)
+
+print("Focused horizontal legend version:")
+print(combined_focused)
+
+# Save both versions
+ggsave("combined_horizontal_legends.png", combined_horizontal,
+       width = 12, height = 18, dpi = 300)
+ggsave("combined_focused_legends.png", combined_focused,
+       width = 12, height = 16, dpi = 300)
+
+# If you want even more control, create a minimal version with just key sizes:
+minimal_size_scale <- scale_size_continuous(
+  name = "n = ",
+  range = c(3, 9),
+  breaks = c(60, 100, 200, 500, 1000, 3000),
+  labels = c("60", "100", "200", "500", "1K", "3K"),
+  trans = "sqrt",
+  guide = guide_legend(
+    override.aes = list(alpha = 0.8, color = "#F18F01"),
+    nrow = 1,
+    title.position = "left",
+    label.position = "bottom",
+    direction = "horizontal"
+  )
+)
+
+# Quick test of minimal version
+p_baseline_minimal <- p_baseline_simple +
+  minimal_size_scale +
+  theme(legend.position = "bottom", legend.box = "horizontal")
+
+print("Minimal version:")
+print(p_baseline_minimal)
+
+
+# REMOVE ALL TITLES FROM PLOTS
+
+# Clean versions without any titles or subtitles
+p_baseline_no_titles <- p_baseline_focused +
+  labs(title = NULL, subtitle = NULL) +
+  theme(
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+p_day3_no_titles <- p_day3_focused +
+  labs(title = NULL, subtitle = NULL) +
+  theme(
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+p_day7_no_titles <- p_day7_focused +
+  labs(title = NULL, subtitle = NULL)
+
+# Combined plot without titles
+combined_no_titles <- p_baseline_no_titles / p_day3_no_titles / p_day7_no_titles +
+  plot_layout(ncol = 1, guides = "keep")
+
+# View and save
+print(combined_no_titles)
+ggsave("combined_no_titles.png", combined_no_titles,
+       width = 12, height = 16, dpi = 300)
