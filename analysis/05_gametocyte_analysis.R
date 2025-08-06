@@ -42,7 +42,7 @@ define_experimental_ranges <- function() {
 
 # Data generation functions -----------------------------------------------
 
-create_model_demonstration_data <- function(EIR = 50, ft = 0.6, simulation_years = 10,
+create_model_demonstration_data <- function(EIR = 40, ft = 0.34, simulation_years = 10,
                                             treatment_failure_rate = 0.43, day0_res = 0.01) {
   scenarios <- list(
     "No advantage" = list(
@@ -114,7 +114,7 @@ create_simple_timeseries_data <- function() {
   for (i in 1:nrow(scenarios)) {
     scenario <- scenarios[i, ]
     model <- malaria_model(
-      EIR = 50, ft = 0.6,
+      EIR = 40, ft = 0.34,
       ton = 365, toff = 365 + (4*365),
       day0_res = 0.01,
       treatment_failure_rate = 0.43,
@@ -289,7 +289,7 @@ comprehensive_parameter_analysis <- function() {
 
 create_transmission_mechanism_data <- function() {
   model <- malaria_model(
-    EIR = 50, ft = 0.6,
+    EIR = 40, ft = 0.34,
     ton = 365, toff = 365 + (2*365),
     day0_res = 0.05,
     treatment_failure_rate = 0.43,
@@ -322,7 +322,7 @@ create_parameter_sweep_data <- function() {
 
   for (ratio in infectiousness_ratios) {
     model <- malaria_model(
-      EIR = 50, ft = 0.6,
+      EIR = 40, ft = 0.34,
       ton = 365, toff = 365 + (2*365),
       day0_res = 0.01,
       treatment_failure_rate = 0.43,
@@ -352,7 +352,7 @@ create_duration_analysis_data <- function() {
 
   for (duration in infectiousness_durations) {
     model <- malaria_model(
-      EIR = 50, ft = 0.6,
+      EIR = 40, ft = 0.34,
       ton = 365,
       toff = 365 + duration,
       day0_res = 0.01,
@@ -485,7 +485,7 @@ plot_infection_prevalence <- function(mechanism_data) {
     scale_fill_manual(values = c("Resistant infections" = "#E74C3C", "Sensitive infections" = "#3498DB")) +
     labs(
       title = "Infection Prevalence Over Time: Sensitive vs Resistant Strains",
-      subtitle = "EIR = 50 | Treatment coverage = 60% | Resistance advantage active after year 1",
+      subtitle = "EIR = 40 | Treatment coverage = 34% | Resistance advantage active after year 1",
       x = "Time (years)",
       y = "Prevalence (%)",
       color = "Infection type",
@@ -874,7 +874,7 @@ plot_model_demonstration <- function(demo_data) {
     scale_linetype_manual(values = c("solid", "longdash", "dotted")) +
     labs(
       title = "Model Demonstration: Impact of Transmission Advantages on Resistance Spread",
-      subtitle = "EIR = 50 | Treatment coverage = 60% | Resistance advantages active after year 1",
+      subtitle = "EIR = 40 | Treatment coverage = 34% | Resistance advantages active after year 1",
       x = "Time (years)",
       y = "Resistant infection prevalence (%)",
       color = "Infectiousness advantage",
