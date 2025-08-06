@@ -1042,3 +1042,231 @@ run_integrated_gametocyte_analysis <- function() {
 
 results <- run_integrated_gametocyte_analysis()
 
+
+
+# Kb Comparison Plots (CHECK AS DOESN'T SEEM RIGHT) ---------------------------------------------
+
+generate_single_kb_scenario <- function(scenario_name = "current_model") {
+  cat(sprintf("=== GENERATING %s SCENARIO ===\n", toupper(scenario_name)))
+
+  # Parameters for analysis
+  EIR_values <- c(10, 25, 50, 100)
+  ft_values <- c(0.3, 0.5, 0.7)
+
+  # In vivo experimental estimates only
+  estimates <- data.frame(
+    scenario = c("In vivo conservative", "In vivo central", "In vivo optimistic"),
+    baseline_ratio = c(0.903, 1.265, 1.759),
+    treated_ratio = c(0.903, 1.265, 1.759)
+  )
+
+  results_list <- list()
+
+  # Running analysis for each combination
+  for (eir in EIR_values) {
+    for (ft in ft_values) {
+      for (i in 1:nrow(estimates)) {
+        est <- estimates[i, ]
+
+
+        # Creating model with current parameters
+        model <- malaria_model(
+          EIR = eir, ft = ft,
+          ton = 365, toff = 365 + (5*365),
+          day0_res = 0.01,
+          treatment_failure_rate = 0.43,
+          rT_r_cleared = 0.1, rT_r_failed = 0.1,
+          resistance_baseline_ratio = est$baseline_ratio,
+          resistance_cleared_ratio = est$treated_ratio,
+          resistance_failed_ratio = est$treated_ratio
+        )
+
+        # Run model
+        times <- seq(0, 365 + (5*365), by = 60)
+        output <- model$run(times)
+
+        # Calculating selection coefficient
+        p0_idx <- which.min(abs(output[, "t"] - 395))  # ~1 year
+        p1_idx <- which.min(abs(output[, "t"] - 730))  # ~2 years
+
+        p0 <- max(min(output[p0_idx, "prevalence_res"], 0.999), 0.001)
+        p1 <- max(min(output[p1_idx, "prevalence_res"], 0.999), 0.001)
+
+        sel_coeff <- log(p1*(1-p0)/(p0*(1-p1)))
+        final_res <- output[nrow(output), "prevalence_res"]
+
+        # Store results
+        results_list[[length(results_list) + 1]] <- data.frame(
+          EIR = eir,
+          ft = ft,
+          scenario = est$scenario,
+          baseline_ratio = est$baseline_ratio,
+          treated_ratio = est$treated_ratio,
+          selection_coefficient = sel_coeff,
+          final_resistance = final_res,
+          model_version = scenario_name
+        )
+      }
+    }
+  }
+
+  results_df <- do.call(rbind, results_list)
+
+  # Print summary statistics
+  summary_stats <- results_df %>%
+    summarise(
+      mean_selection = mean(selection_coefficient),
+      sd_selection = sd(selection_coefficient),
+      min_selection = min(selection_coefficient),
+      max_selection = max(selection_coefficient),
+      mean_final_resistance = mean(final_resistance),
+      .groups = 'drop'
+    )
+  print(summary_stats)
+
+  return(results_df)
+}
+
+
+# PLOTTING FUNCTIONS
+
+create_histogram_plot <- function(results_df, scenario_name) {
+  p <- ggplot(results_df, aes(x = selection_coefficient)) +
+    geom_histogram(fill = "#2E86AB", alpha = 0.7, bins = 15, color = "white", size = 0.5) +
+    labs(
+      title = paste("Selection Coefficient Distribution:", scenario_name),
+      subtitle = "In vivo estimates across all EIR/treatment combinations",
+      x = "Selection coefficient (per year)",
+      y = "Frequency"
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(size = 12)
+    )
+
+  return(p)
+}
+
+create_boxplot_plot <- function(results_df, scenario_name) {
+  p <- ggplot(results_df, aes(x = scenario, y = selection_coefficient)) +
+    geom_boxplot(fill = "#2E86AB", alpha = 0.7, color = "black") +
+    geom_jitter(width = 0.2, alpha = 0.6, size = 2) +
+    labs(
+      title = paste("Selection Coefficients by Estimate:", scenario_name),
+      subtitle = "Distribution across all EIR/treatment combinations",
+      x = "In vivo estimate",
+      y = "Selection coefficient (per year)"
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(size = 12),
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+  return(p)
+}
+
+create_scatter_plot <- function(results_df, scenario_name) {
+  summary_data <- results_df %>%
+    group_by(scenario) %>%
+    summarise(
+      mean_selection = mean(selection_coefficient),
+      mean_final_resistance = mean(final_resistance),
+      .groups = 'drop'
+    )
+
+  p <- ggplot(summary_data, aes(x = mean_selection, y = mean_final_resistance)) +
+    geom_point(size = 4, alpha = 0.8, color = "#2E86AB") +
+    geom_text(aes(label = gsub("In vivo ", "", scenario)),
+              vjust = -0.7, hjust = 0.5, size = 3.5, fontface = "bold") +
+    scale_y_continuous(labels = scales::percent) +
+    labs(
+      title = paste("Selection vs Final Resistance:", scenario_name),
+      subtitle = "Average across all EIR/treatment combinations",
+      x = "Selection coefficient (per year)",
+      y = "Final resistance prevalence"
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(size = 12)
+    )
+
+  return(p)
+}
+
+
+# MAIN EXECUTION FUNCTIONS
+
+# Run this BEFORE modifying model.R, so file should still say cA_r <- cA * if (t > ton && t < toff) 1 else 1
+# This means κB only applies to clinical resistant states (Dr, Tr_cleared, Tr_failed)
+
+run_clinical_only_analysis <- function() {
+
+  # Generate results
+  results <- generate_single_kb_scenario("Clinical_States_Only")
+
+  # Create plots
+  p1 <- create_histogram_plot(results, "Clinical States Only")
+  p2 <- create_boxplot_plot(results, "Clinical States Only")
+  p3 <- create_scatter_plot(results, "Clinical States Only")
+
+  # Save plots
+  ggsave("kb_clinical_only_histogram.png", p1, width = 10, height = 6, dpi = 300)
+  ggsave("kb_clinical_only_boxplot.png", p2, width = 10, height = 6, dpi = 300)
+  ggsave("kb_clinical_only_scatter.png", p3, width = 10, height = 6, dpi = 300)
+
+  # Save results
+  write.csv(results, "kb_clinical_only_results.csv", row.names = FALSE)
+
+  return(results)
+}
+
+# Run clinical analysis
+run_clinical_only_analysis()
+
+
+# Now modify code, should be cA_r <- cA * if (t > ton && t < toff) resistance_baseline_ratio else 1
+# Save file and recompile
+# This means κB applies to ALL resistant states (Ar, Dr, Tr_cleared, Tr_failed)
+
+devtools::load_all()
+
+run_all_resistant_analysis <- function() {
+
+  # Generate results
+  results <- generate_single_kb_scenario("All_Resistant_States")
+
+  # Create plots
+  p1 <- create_histogram_plot(results, "All Resistant States")
+  p2 <- create_boxplot_plot(results, "All Resistant States")
+  p3 <- create_scatter_plot(results, "All Resistant States")
+
+  # Save plots
+  ggsave("kb_all_resistant_histogram.png", p1, width = 10, height = 6, dpi = 300)
+  ggsave("kb_all_resistant_boxplot.png", p2, width = 10, height = 6, dpi = 300)
+  ggsave("kb_all_resistant_scatter.png", p3, width = 10, height = 6, dpi = 300)
+
+  # Save results
+  write.csv(results, "kb_all_resistant_results.csv", row.names = FALSE)
+
+  # Compare with clinical only results
+  if (file.exists("kb_clinical_only_results.csv")) {
+    clinical_results <- read.csv("kb_clinical_only_results.csv")
+
+    cat("=== COMPARISON SUMMARY ===\n")
+    cat("Clinical states only - mean selection coefficient:", round(mean(clinical_results$selection_coefficient), 3), "\n")
+    cat("All resistant states - mean selection coefficient:", round(mean(results$selection_coefficient), 3), "\n")
+
+    difference <- mean(results$selection_coefficient) - mean(clinical_results$selection_coefficient)
+    cat("Difference:", round(difference, 3), "\n")
+
+  }
+
+  return(results)
+}
+
+# Run all resistant analysis
+run_all_resistant_analysis()
