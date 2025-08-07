@@ -170,9 +170,10 @@ cT_s <- cT  # baseline treated infectiousness (sensitive)
 
 # Resistant infectiousness parameters (time-dependent activation)
 cA_r <- cA * if (t > ton && t < toff) 1 else 1
+# cA_r <- cA * if (t > ton && t < toff) resistance_baseline_ratio else 1
 cD_r <- cD * if (t > ton && t < toff) resistance_baseline_ratio else 1 # resistance_baseline_ratio only applies to those symptomatic
-cT_r_cleared <- cT * if (t > ton && t < toff) resistance_baseline_ratio else 1 # Minimal difference observed day 3/7 & very low power
-cT_r_failed <- cT * if (t > ton && t < toff) resistance_baseline_ratio else 1 # Therefore, keep the same as baseline
+cT_r_cleared <- cT * if (t > ton && t < toff) resistance_cleared_ratio else 1 # Keep the same as baseline for in vivo
+cT_r_failed <- cT * if (t > ton && t < toff) resistance_failed_ratio else 1 # Keep the same as baseline for in vivo
 
 
 # FIXED: Actually use resistance_dur_mult in the resistant recovery rates
