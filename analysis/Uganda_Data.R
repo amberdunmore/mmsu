@@ -1,3 +1,5 @@
+library(mmsu)
+devtools::load_all(".")
 
 library(tidyverse)
 
@@ -8,8 +10,8 @@ library(tidyverse)
 install.packages("RCurl")
 
 library(RCurl)
-
 url <- "https://raw.githubusercontent.com/OJWatson/hrpup/main/analysis/data_derived/chaokun_uganda.csv"
+uganda_dat <- read.csv(text = getURL(url, ssl.verifypeer = FALSE))
 
 # simple plots to show what this is:
 uganda_dat %>% filter(year>2015) %>% ggplot(aes(year, pfpr210, color = name_1)) + geom_line() +
@@ -79,6 +81,7 @@ uga_ranges <- uganda_dat %>%
             ft_high = max(ft))
 
 install.packages("truncnorm")
+library(truncnorm)
 
 # now work out what the eir should be
 uga_eir_ranges <- uga_ranges %>%
@@ -97,6 +100,7 @@ uga_eir_ranges <- uga_ranges %>%
 
 # Downloading the Uganda allele frequency data using RCurl
 url2 <- "https://raw.githubusercontent.com/bailey-lab/selmar/main/analysis/data/data-derived/Uganda_allele_frequency.txt"
+
 uga_data <- read.csv(text = getURL(url2, ssl.verifypeer = FALSE), sep = " ")
 
 # Then continuing with filtering
@@ -127,4 +131,7 @@ uga_eir_ranges <- uga_eir_ranges %>%
 
 # and merge this data together
 uga_param_data <- left_join(uga_eir_ranges %>% mutate(district = replace(district, district == "Amolatar", "Amoleta")), uga_start_res)
-
+print(uga_param_data) # Each Ugandan district has a range for ft and EIR, and what the starting freq of resistance is
+# and how many years there were from the Meier-Scherling paper
+# Run model for comparison between those upper and lower values for each one, use that to generate your selection coefficients
+# with Ar on vs off
