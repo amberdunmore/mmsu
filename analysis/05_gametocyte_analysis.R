@@ -190,6 +190,7 @@ classify_parameter_combination <- function(baseline_r, treated_r, estimates) {
 comprehensive_parameter_analysis <- function() {
   estimates <- define_experimental_ranges()
 
+  # Use the consistent parameter values
   baseline_ratios <- c(
     0.8, 1.0,
     estimates$in_vivo_baseline$conservative,   # 0.903
@@ -210,8 +211,9 @@ comprehensive_parameter_analysis <- function() {
     9.0, 10.0
   )
 
-  EIR_values <- c(10, 25, 50, 100)
-  ft_values <- c(0.3, 0.5, 0.7)
+  # Updated broader ranges
+  EIR_values <- c(1, 10, 25, 50, 100, 200, 400, 600)  # 0-600 range
+  ft_values <- c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)  # 20-90% range
 
   param_grid <- expand.grid(
     EIR = EIR_values,
@@ -220,17 +222,62 @@ comprehensive_parameter_analysis <- function() {
     treated_ratio = treated_ratios
   )
 
-  # Sample
-  sample_size <- min(500, nrow(param_grid))
-  sampled_indices <- sample(1:nrow(param_grid), sample_size)
-  param_grid_sample <- param_grid[sampled_indices, ]
+  # ENSURE experimental estimates are included for ALL EIR/ft combinations
+  experimental_combos <- data.frame(
+    baseline_ratio = c(1.265, 1.0, 0.903, 1.759, 0.8, 1.0),  # All experimental baselines
+    treated_ratio = c(1.265, 7.5, 0.903, 1.759, 7.0, 8.0)    # All experimental treated
+  )
+
+  # Create explicit experimental combinations for each EIR/ft
+  exp_grid <- expand.grid(
+    EIR = EIR_values,
+    ft = ft_values,
+    baseline_ratio = experimental_combos$baseline_ratio,
+    treated_ratio = experimental_combos$treated_ratio
+  )
+
+  # Filter to only valid experimental combinations
+  exp_grid <- exp_grid %>%
+    filter(
+      (baseline_ratio == 1.265 & treated_ratio == 1.265) |  # In vivo central
+        (baseline_ratio == 0.903 & treated_ratio == 0.903) |  # In vivo conservative
+        (baseline_ratio == 1.759 & treated_ratio == 1.759) |  # In vivo optimistic
+        (baseline_ratio == 1.0 & treated_ratio == 7.5) |      # In vitro central
+        (baseline_ratio == 0.8 & treated_ratio == 7.0) |      # In vitro conservative
+        (baseline_ratio == 1.0 & treated_ratio == 8.0)        # In vitro optimistic
+    )
+
+  # Combine with regular grid and remove duplicates
+  param_grid <- rbind(param_grid, exp_grid)
+  param_grid <- unique(param_grid)
+
+  # Don't sample - use more points to ensure experimental estimates appear
+  sample_size <- min(1000, nrow(param_grid))  # Increased sample size further
+  if (nrow(param_grid) > sample_size) {
+    # Always include ALL experimental estimates
+    exp_indices <- which(
+      (param_grid$baseline_ratio == 1.265 & param_grid$treated_ratio == 1.265) |  # In vivo central
+        (param_grid$baseline_ratio == 0.903 & param_grid$treated_ratio == 0.903) |  # In vivo conservative
+        (param_grid$baseline_ratio == 1.759 & param_grid$treated_ratio == 1.759) |  # In vivo optimistic
+        (param_grid$baseline_ratio == 1.0 & param_grid$treated_ratio == 7.5) |      # In vitro central
+        (param_grid$baseline_ratio == 0.8 & param_grid$treated_ratio == 7.0) |      # In vitro conservative
+        (param_grid$baseline_ratio == 1.0 & param_grid$treated_ratio == 8.0)        # In vitro optimistic
+    )
+
+    other_indices <- setdiff(1:nrow(param_grid), exp_indices)
+    sampled_other <- sample(other_indices, sample_size - length(exp_indices))
+
+    param_grid_sample <- param_grid[c(exp_indices, sampled_other), ]
+  } else {
+    param_grid_sample <- param_grid
+  }
 
   results_list <- list()
 
   for (i in 1:nrow(param_grid_sample)) {
     combo <- param_grid_sample[i, ]
 
-    if (i %% 50 == 0) cat(paste("Analysis progress:", i, "/", nrow(param_grid_sample), "\n"))
+    if (i %% 50 == 0) cat(paste("Comprehensive progress:", i, "/", nrow(param_grid_sample), "\n"))
 
     tryCatch({
       model <- malaria_model(
@@ -252,7 +299,7 @@ comprehensive_parameter_analysis <- function() {
 
       final_resistance <- output[nrow(output), "prevalence_res"]
 
-      # Calculating selection coefficient
+      # Calculate selection coefficient
       p0_idx <- which.min(abs(output[, "t"] - 395))
       p1_idx <- which.min(abs(output[, "t"] - 730))
 
@@ -281,9 +328,15 @@ comprehensive_parameter_analysis <- function() {
   results_df <- do.call(rbind, results_list)
   results_df <- results_df[!is.na(results_df$final_resistance), ]
 
+  # Verify experimental estimates are present
+  exp_summary <- results_df %>%
+    filter(is_experimental_estimate == TRUE) %>%
+    group_by(parameter_type, EIR, ft) %>%
+    summarise(count = n(), .groups = 'drop')
+  print(exp_summary)
+
   return(results_df)
 }
-
 
 # Additional  -------------------------------------------------------------
 
@@ -724,7 +777,6 @@ plot_selection_landscape_clean <- function(results_df) {
       point_size = ifelse(is_experimental_estimate, 3.5, 2.5)
     )
 
-
   p <- ggplot(central_data, aes(x = baseline_ratio, y = treated_ratio)) +
     geom_point(aes(fill = selection_category,
                    shape = parameter_category,
@@ -762,7 +814,8 @@ plot_selection_landscape_clean <- function(results_df) {
       title = "Selection Coefficient Landscape",
       subtitle = "Discrete categories with experimental estimates highlighted",
       x = "Baseline infectiousness ratio (κB)",
-      y = "Post-treatment infectiousness ratio") +
+      y = "Post-treatment infectiousness ratio"
+    ) +
     theme_minimal() +
     theme(
       plot.title = element_text(face = "bold", size = 14),
@@ -784,6 +837,7 @@ plot_selection_landscape_clean <- function(results_df) {
 }
 
 plot_experimental_summary_clean <- function(results_df) {
+  # Get all experimental estimates (not just central ones)
   exp_data <- results_df %>%
     filter(is_experimental_estimate == TRUE) %>%
     mutate(
@@ -828,6 +882,7 @@ plot_experimental_summary_clean <- function(results_df) {
         metric == "final_resistance" ~ "Final Resistance (%)",
         metric == "selection_coefficient" ~ "Selection Coefficient"
       ),
+      # Format values appropriately
       formatted_value = case_when(
         metric == "Final Resistance (%)" ~ paste0(round(value * 100, 1), "%"),
         metric == "Selection Coefficient" ~ as.character(round(value, 2))
@@ -850,7 +905,7 @@ plot_experimental_summary_clean <- function(results_df) {
       axis.text.x = element_text(angle = 45, hjust = 1),
       axis.title.x = element_blank(),
       panel.grid = element_blank(),
-      legend.position = "none"  # Remove legend since values are shown in cells
+      legend.position = "none"
     )
 
   return(p)
@@ -1042,6 +1097,76 @@ run_integrated_gametocyte_analysis <- function() {
 
 results <- run_integrated_gametocyte_analysis()
 
+
+
+# Getting selection coefficients for baseline  ----------------------------
+
+
+get_baseline_experimental_results <- function() {
+  estimates <- define_experimental_ranges()
+
+  scenarios <- list(
+    "In vivo conservative" = list(baseline = 0.903, treated = 0.903),
+    "In vivo central" = list(baseline = 1.265, treated = 1.265),
+    "In vivo optimistic" = list(baseline = 1.759, treated = 1.759),
+    "In vitro conservative" = list(baseline = 0.8, treated = 7.0),
+    "In vitro central" = list(baseline = 1.0, treated = 7.5),
+    "In vitro optimistic" = list(baseline = 1.0, treated = 8.0)
+  )
+
+  results_list <- list()
+
+  for (scenario_name in names(scenarios)) {
+    params <- scenarios[[scenario_name]]
+
+    model <- malaria_model(
+      EIR = 40, ft = 0.34,
+      ton = 365, toff = 365 + (5*365),
+      day0_res = 0.01,
+      treatment_failure_rate = 0.43,
+      rT_r_cleared = 0.1, rT_r_failed = 0.1,
+      resistance_baseline_ratio = params$baseline,
+      resistance_cleared_ratio = params$treated,
+      resistance_failed_ratio = params$treated
+    )
+
+    times <- seq(0, 365 + (5*365), by = 60)
+    output <- model$run(times)
+
+    final_resistance <- output[nrow(output), "prevalence_res"]
+
+    # Calculate selection coefficient
+    p0_idx <- which.min(abs(output[, "t"] - 395))
+    p1_idx <- which.min(abs(output[, "t"] - 730))
+
+    p0 <- max(min(output[p0_idx, "prevalence_res"], 0.999), 0.001)
+    p1 <- max(min(output[p1_idx, "prevalence_res"], 0.999), 0.001)
+    sel_coeff <- log(p1*(1-p0)/(p0*(1-p1)))
+
+    results_list[[scenario_name]] <- data.frame(
+      scenario = scenario_name,
+      selection_coefficient = sel_coeff,
+      final_resistance = final_resistance
+    )
+  }
+
+  return(do.call(rbind, results_list))
+}
+
+baseline_results <- get_baseline_experimental_results()
+print(baseline_results)
+
+
+
+# Broader ranges ----------------------------------------------------------
+
+
+comprehensive_data_broad <- comprehensive_parameter_analysis()
+
+# Updated summary plot
+p10_broad <- plot_experimental_summary_clean(comprehensive_data_broad)
+ggsave("10_experimental_summary_broad_ranges.png", p10_broad,
+       width = 12, height = 8, dpi = 300, bg = "white")
 
 
 # Kb Comparison Plots (CHECK AS DOESN'T SEEM RIGHT) ---------------------------------------------
