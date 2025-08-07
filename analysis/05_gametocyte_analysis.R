@@ -1,3 +1,7 @@
+# Set base font sizes
+BASE_TITLE_SIZE <- 16
+BASE_TEXT_SIZE <- 16
+
 
 devtools::load_all()
 
@@ -43,7 +47,7 @@ define_experimental_ranges <- function() {
 # Data generation functions -----------------------------------------------
 
 create_model_demonstration_data <- function(EIR = 40, ft = 0.34, simulation_years = 10,
-                                            treatment_failure_rate = 0.43, day0_res = 0.01) {
+                                            treatment_failure_rate = 0.43, day0_res = 0.10) {
   scenarios <- list(
     "No advantage" = list(
       baseline_ratio = 1.0,
@@ -87,7 +91,7 @@ create_model_demonstration_data <- function(EIR = 40, ft = 0.34, simulation_year
     output <- model$run(times)
 
     results_list[[scenario_name]] <- data.frame(
-      time_years = output[, "t"] / 365,
+      time_years = (output[, "t"] - 365) / 365,  # Adjusted to start from resistance introduction
       resistance_prevalence = output[, "prevalence_res"] * 100,
       total_prevalence = output[, "prevalence"] * 100,
       scenario = scenario_name,
@@ -101,7 +105,6 @@ create_model_demonstration_data <- function(EIR = 40, ft = 0.34, simulation_year
 }
 
 create_simple_timeseries_data <- function() {
-  # Updated with consistent parameter values
   scenarios <- data.frame(
     study_type = c("In vitro", "In vitro", "In vitro", "In vivo", "In vivo", "In vivo"),
     confidence = c("Conservative", "Central", "Optimistic", "Conservative", "Central", "Optimistic"),
@@ -115,7 +118,7 @@ create_simple_timeseries_data <- function() {
     scenario <- scenarios[i, ]
     model <- malaria_model(
       EIR = 40, ft = 0.34,
-      ton = 365, toff = 365 + (4*365),
+      ton = 365, toff = 365 + (5*365),
       day0_res = 0.01,
       treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
@@ -124,11 +127,11 @@ create_simple_timeseries_data <- function() {
       resistance_failed_ratio = scenario$treated_ratio
     )
 
-    times <- seq(0, 365 + (4*365), by = 30)
+    times <- seq(0, 365 + (5*365), by = 30)
     output <- model$run(times)
 
     results_list[[i]] <- data.frame(
-      time_years = output[, "t"] / 365,
+      time_years = (output[, "t"] - 365) / 365,  # Adjusted to start from resistance introduction
       resistance_prevalence = output[, "prevalence_res"] * 100,
       study_type = scenario$study_type,
       confidence = scenario$confidence,
@@ -190,7 +193,6 @@ classify_parameter_combination <- function(baseline_r, treated_r, estimates) {
 comprehensive_parameter_analysis <- function() {
   estimates <- define_experimental_ranges()
 
-  # Use the consistent parameter values
   baseline_ratios <- c(
     0.8, 1.0,
     estimates$in_vivo_baseline$conservative,   # 0.903
@@ -211,9 +213,8 @@ comprehensive_parameter_analysis <- function() {
     9.0, 10.0
   )
 
-  # Updated broader ranges
-  EIR_values <- c(1, 10, 25, 50, 100, 200, 400, 600)  # 0-600 range
-  ft_values <- c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)  # 20-90% range
+  EIR_values <- c(1, 10, 25, 50, 100, 200, 400, 600)
+  ft_values <- c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 
   param_grid <- expand.grid(
     EIR = EIR_values,
@@ -222,13 +223,11 @@ comprehensive_parameter_analysis <- function() {
     treated_ratio = treated_ratios
   )
 
-  # ENSURE experimental estimates are included for ALL EIR/ft combinations
   experimental_combos <- data.frame(
-    baseline_ratio = c(1.265, 1.0, 0.903, 1.759, 0.8, 1.0),  # All experimental baselines
-    treated_ratio = c(1.265, 7.5, 0.903, 1.759, 7.0, 8.0)    # All experimental treated
+    baseline_ratio = c(1.265, 1.0, 0.903, 1.759, 0.8, 1.0),
+    treated_ratio = c(1.265, 7.5, 0.903, 1.759, 7.0, 8.0)
   )
 
-  # Create explicit experimental combinations for each EIR/ft
   exp_grid <- expand.grid(
     EIR = EIR_values,
     ft = ft_values,
@@ -236,32 +235,28 @@ comprehensive_parameter_analysis <- function() {
     treated_ratio = experimental_combos$treated_ratio
   )
 
-  # Filter to only valid experimental combinations
   exp_grid <- exp_grid %>%
     filter(
-      (baseline_ratio == 1.265 & treated_ratio == 1.265) |  # In vivo central
-        (baseline_ratio == 0.903 & treated_ratio == 0.903) |  # In vivo conservative
-        (baseline_ratio == 1.759 & treated_ratio == 1.759) |  # In vivo optimistic
-        (baseline_ratio == 1.0 & treated_ratio == 7.5) |      # In vitro central
-        (baseline_ratio == 0.8 & treated_ratio == 7.0) |      # In vitro conservative
-        (baseline_ratio == 1.0 & treated_ratio == 8.0)        # In vitro optimistic
+      (baseline_ratio == 1.265 & treated_ratio == 1.265) |
+        (baseline_ratio == 0.903 & treated_ratio == 0.903) |
+        (baseline_ratio == 1.759 & treated_ratio == 1.759) |
+        (baseline_ratio == 1.0 & treated_ratio == 7.5) |
+        (baseline_ratio == 0.8 & treated_ratio == 7.0) |
+        (baseline_ratio == 1.0 & treated_ratio == 8.0)
     )
 
-  # Combine with regular grid and remove duplicates
   param_grid <- rbind(param_grid, exp_grid)
   param_grid <- unique(param_grid)
 
-  # Don't sample - use more points to ensure experimental estimates appear
-  sample_size <- min(1000, nrow(param_grid))  # Increased sample size further
+  sample_size <- min(1000, nrow(param_grid))
   if (nrow(param_grid) > sample_size) {
-    # Always include ALL experimental estimates
     exp_indices <- which(
-      (param_grid$baseline_ratio == 1.265 & param_grid$treated_ratio == 1.265) |  # In vivo central
-        (param_grid$baseline_ratio == 0.903 & param_grid$treated_ratio == 0.903) |  # In vivo conservative
-        (param_grid$baseline_ratio == 1.759 & param_grid$treated_ratio == 1.759) |  # In vivo optimistic
-        (param_grid$baseline_ratio == 1.0 & param_grid$treated_ratio == 7.5) |      # In vitro central
-        (param_grid$baseline_ratio == 0.8 & param_grid$treated_ratio == 7.0) |      # In vitro conservative
-        (param_grid$baseline_ratio == 1.0 & param_grid$treated_ratio == 8.0)        # In vitro optimistic
+      (param_grid$baseline_ratio == 1.265 & param_grid$treated_ratio == 1.265) |
+        (param_grid$baseline_ratio == 0.903 & param_grid$treated_ratio == 0.903) |
+        (param_grid$baseline_ratio == 1.759 & param_grid$treated_ratio == 1.759) |
+        (param_grid$baseline_ratio == 1.0 & param_grid$treated_ratio == 7.5) |
+        (param_grid$baseline_ratio == 0.8 & param_grid$treated_ratio == 7.0) |
+        (param_grid$baseline_ratio == 1.0 & param_grid$treated_ratio == 8.0)
     )
 
     other_indices <- setdiff(1:nrow(param_grid), exp_indices)
@@ -299,9 +294,10 @@ comprehensive_parameter_analysis <- function() {
 
       final_resistance <- output[nrow(output), "prevalence_res"]
 
-      # Calculate selection coefficient
-      p0_idx <- which.min(abs(output[, "t"] - 395))
-      p1_idx <- which.min(abs(output[, "t"] - 730))
+      # Calculate selection coefficient - adjusted for time starting from resistance introduction
+      # Look at year 1 and year 2 after resistance introduction (times 395 and 730 in original model time)
+      p0_idx <- which.min(abs(output[, "t"] - 395))  # Still ~30 days after resistance introduction
+      p1_idx <- which.min(abs(output[, "t"] - 730))  # Still ~1 year after resistance introduction
 
       p0 <- max(min(output[p0_idx, "prevalence_res"], 0.999), 0.001)
       p1 <- max(min(output[p1_idx, "prevalence_res"], 0.999), 0.001)
@@ -328,7 +324,6 @@ comprehensive_parameter_analysis <- function() {
   results_df <- do.call(rbind, results_list)
   results_df <- results_df[!is.na(results_df$final_resistance), ]
 
-  # Verify experimental estimates are present
   exp_summary <- results_df %>%
     filter(is_experimental_estimate == TRUE) %>%
     group_by(parameter_type, EIR, ft) %>%
@@ -343,20 +338,20 @@ comprehensive_parameter_analysis <- function() {
 create_transmission_mechanism_data <- function() {
   model <- malaria_model(
     EIR = 40, ft = 0.34,
-    ton = 365, toff = 365 + (2*365),
+    ton = 365, toff = 365 + (20*365),
     day0_res = 0.05,
     treatment_failure_rate = 0.43,
     rT_r_cleared = 0.1, rT_r_failed = 0.1,
-    resistance_baseline_ratio = 1.265,  # Central value
+    resistance_baseline_ratio = 1.265,
     resistance_cleared_ratio = 1.265,
     resistance_failed_ratio = 1.265
   )
 
-  times <- seq(0, 365 + (2*365), by = 14)
+  times <- seq(0, 365 + (20*365), by = 14)
   output <- model$run(times)
 
   mechanism_data <- data.frame(
-    time_years = output[, "t"] / 365,
+    time_years = (output[, "t"] - 365) / 365,  # Adjusted to start from resistance introduction
     total_prevalence = output[, "prevalence"] * 100,
     resistant_prevalence = output[, "prevalence_res"] * 100,
     sensitive_prevalence = output[, "prevalence_sensitive"] * 100,
@@ -376,7 +371,7 @@ create_parameter_sweep_data <- function() {
   for (ratio in infectiousness_ratios) {
     model <- malaria_model(
       EIR = 40, ft = 0.34,
-      ton = 365, toff = 365 + (2*365),
+      ton = 365, toff = 365 + (5*365),
       day0_res = 0.01,
       treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
@@ -385,11 +380,11 @@ create_parameter_sweep_data <- function() {
       resistance_failed_ratio = ratio
     )
 
-    times <- seq(0, 365 + (2*365), by = 30)
+    times <- seq(0, 365 + (5*365), by = 30)
     output <- model$run(times)
 
     results_list[[paste0("ratio_", ratio)]] <- data.frame(
-      time_years = output[, "t"] / 365,
+      time_years = (output[, "t"] - 365) / 365,  # Adjusted to start from resistance introduction
       resistance_prevalence = output[, "prevalence_res"] * 100,
       infectiousness_ratio = ratio
     )
@@ -411,7 +406,7 @@ create_duration_analysis_data <- function() {
       day0_res = 0.01,
       treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1, rT_r_failed = 0.1,
-      resistance_baseline_ratio = 1.265,  # Central value
+      resistance_baseline_ratio = 1.265,
       resistance_cleared_ratio = 1.265,
       resistance_failed_ratio = 1.265
     )
@@ -420,7 +415,7 @@ create_duration_analysis_data <- function() {
     output <- model$run(times)
 
     results_list[[paste0("duration_", duration)]] <- data.frame(
-      time_years = output[, "t"] / 365,
+      time_years = (output[, "t"] - 365) / 365,  # Adjusted to start from resistance introduction
       prevalence_res = output[, "prevalence_res"] * 100,
       duration = duration,
       duration_label = paste(duration, "days")
@@ -430,8 +425,6 @@ create_duration_analysis_data <- function() {
   combined_results <- do.call(rbind, results_list)
   return(combined_results)
 }
-
-
 
 # Heatmap data ------------------------------------------------------------
 
@@ -533,21 +526,24 @@ plot_infection_prevalence <- function(mechanism_data) {
   p <- ggplot(prevalence_data, aes(x = time_years, y = prevalence, color = type, fill = type)) +
     geom_area(alpha = 0.6, position = "identity") +
     geom_line(size = 1.2) +
-    geom_vline(xintercept = 1, linetype = "dashed", alpha = 0.7, color = "black") +
     scale_color_manual(values = c("Resistant infections" = "#E74C3C", "Sensitive infections" = "#3498DB")) +
     scale_fill_manual(values = c("Resistant infections" = "#E74C3C", "Sensitive infections" = "#3498DB")) +
     labs(
       title = "Infection Prevalence Over Time: Sensitive vs Resistant Strains",
-      subtitle = "EIR = 40 | Treatment coverage = 34% | Resistance advantage active after year 1",
-      x = "Time (years)",
+      subtitle = "EIR = 40 | Treatment coverage = 34% | Time starts from resistance introduction",
+      x = "Time since resistance introduction (years)",
       y = "Prevalence (%)",
       color = "Infection type",
-      fill = "Infection type",
-      caption = "Dashed line shows when transmission advantages become active"
+      fill = "Infection type"
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
       legend.position = "bottom"
     )
 
@@ -567,20 +563,23 @@ plot_transmission_intensity <- function(mechanism_data) {
 
   p <- ggplot(EIR_data, aes(x = time_years, y = EIR, color = strain)) +
     geom_line(size = 1.5) +
-    geom_vline(xintercept = 1, linetype = "dashed", alpha = 0.7, color = "black") +
     scale_color_manual(values = c("Sensitive strain transmission" = "#3498DB",
                                   "Resistant strain transmission" = "#E74C3C")) +
     labs(
       title = "Transmission Intensity by Strain Over Time",
       subtitle = "Annual EIR contribution from each parasite strain",
-      x = "Time (years)",
+      x = "Time since resistance introduction (years)",
       y = "Annual EIR",
-      color = "Transmission type",
-      caption = "Dashed line shows when resistance advantages become active"
+      color = "Transmission type"
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
       legend.position = "bottom"
     )
 
@@ -591,18 +590,21 @@ plot_parameter_sweep <- function(sweep_data) {
   p <- ggplot(sweep_data, aes(x = time_years, y = resistance_prevalence,
                               color = factor(infectiousness_ratio))) +
     geom_line(size = 1.5) +
-    geom_vline(xintercept = 1, linetype = "dashed", alpha = 0.7, color = "black") +
     scale_color_viridis_d(name = "Infectiousness\nratio", option = "plasma") +
     labs(
       title = "Impact of Infectiousness Ratio on Resistance Spread",
       subtitle = "Parameter sweep showing effect of different transmission advantages",
-      x = "Time (years)",
-      y = "Resistant infection prevalence (%)",
-      caption = "Dashed line shows when resistance advantages become active"
+      x = "Time since resistance introduction (years)",
+      y = "Resistant infection prevalence (%)"
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
       legend.position = "right"
     )
 
@@ -612,18 +614,21 @@ plot_parameter_sweep <- function(sweep_data) {
 plot_duration_analysis <- function(duration_data) {
   p <- ggplot(duration_data, aes(x = time_years, y = prevalence_res, color = factor(duration))) +
     geom_line(size = 1.2) +
-    geom_vline(xintercept = 1, linetype = "dashed", alpha = 0.7, color = "black") +
     scale_color_viridis_d(name = "Advantage\nduration\n(days)", option = "plasma") +
     labs(
       title = "Impact of Infectiousness Advantage Duration",
       subtitle = "How long the transmission advantage lasts affects resistance spread",
-      x = "Time (years)",
-      y = "Resistant infection prevalence (%)",
-      caption = "Dashed line shows when resistance advantages start (duration varies by scenario)"
+      x = "Time since resistance introduction (years)",
+      y = "Resistant infection prevalence (%)"
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
       legend.position = "right"
     )
 
@@ -637,7 +642,7 @@ plot_comprehensive_heatmap_grid <- function(heatmap_data) {
   p <- ggplot(heatmap_data, aes(x = factor(ft), y = factor(EIR))) +
     geom_tile(aes(fill = final_resistance), color = "white", size = 0.5) +
     geom_text(aes(label = sprintf("%.2f", final_resistance)),
-              color = "white", fontface = "bold", size = 3) +
+              color = "white", fontface = "bold", size = BASE_TEXT_SIZE/4) +
 
     facet_wrap(~scenario, ncol = 2, scales = "fixed") +
 
@@ -666,11 +671,13 @@ plot_comprehensive_heatmap_grid <- function(heatmap_data) {
 
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 16),
-      plot.subtitle = element_text(size = 12),
-      strip.text = element_text(face = "bold", size = 12),
-      axis.title = element_text(face = "bold", size = 11),
-      axis.text = element_text(size = 10),
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      strip.text = element_text(face = "bold", size = BASE_TEXT_SIZE),
+      axis.title = element_text(face = "bold", size = BASE_TEXT_SIZE - 1),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
       legend.position = "right",
       panel.spacing = unit(1, "lines"),
       strip.background = element_rect(fill = "grey90", color = "white")
@@ -688,8 +695,8 @@ plot_comprehensive_heatmap_grid <- function(heatmap_data) {
   return(p)
 }
 
+
 plot_detailed_heatmap_clean <- function(results_df) {
-  # Filter to only central estimates and "Other" to reduce overcrowding
   central_data <- results_df %>%
     filter(parameter_type %in% c("In vivo (central)", "In vitro (central)", "Other")) %>%
     mutate(
@@ -714,9 +721,9 @@ plot_detailed_heatmap_clean <- function(results_df) {
 
     scale_shape_manual(
       name = "Parameter type",
-      values = c("In vivo central" = 18,      # Diamond
-                 "In vitro central" = 15,     # Square
-                 "Other combinations" = 16)   # Circle
+      values = c("In vivo central" = 18,
+                 "In vitro central" = 15,
+                 "Other combinations" = 16)
     ) +
 
     scale_size_identity() +
@@ -736,10 +743,14 @@ plot_detailed_heatmap_clean <- function(results_df) {
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
-      plot.subtitle = element_text(size = 12),
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE - 1),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 3),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
+      strip.text = element_text(size = BASE_TEXT_SIZE - 2, face = "bold"),
       legend.position = "right",
-      strip.text = element_text(size = 10, face = "bold"),
       panel.grid.minor = element_blank(),
       panel.border = element_rect(color = "grey80", fill = NA, size = 0.5)
     ) +
@@ -803,9 +814,9 @@ plot_selection_landscape_clean <- function(results_df) {
 
     scale_shape_manual(
       name = "Parameter type",
-      values = c("In vivo central" = 23,      # Diamond with fill
-                 "In vitro central" = 22,     # Square with fill
-                 "Other combinations" = 21)   # Circle with fill
+      values = c("In vivo central" = 23,
+                 "In vitro central" = 22,
+                 "Other combinations" = 21)
     ) +
 
     scale_size_identity() +
@@ -818,10 +829,14 @@ plot_selection_landscape_clean <- function(results_df) {
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
-      plot.subtitle = element_text(size = 12),
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE - 1),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 3),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
+      strip.text = element_text(size = BASE_TEXT_SIZE - 2, face = "bold"),
       legend.position = "right",
-      strip.text = element_text(size = 10, face = "bold"),
       panel.grid.minor = element_blank(),
       panel.border = element_rect(color = "grey80", fill = NA, size = 0.5)
     ) +
@@ -837,11 +852,9 @@ plot_selection_landscape_clean <- function(results_df) {
 }
 
 plot_experimental_summary_clean <- function(results_df) {
-  # Get all experimental estimates (not just central ones)
   exp_data <- results_df %>%
     filter(is_experimental_estimate == TRUE) %>%
     mutate(
-      # Create cleaner labels
       study_label = case_when(
         parameter_type == "In vivo (conservative)" ~ "In vivo conservative",
         parameter_type == "In vivo (central)" ~ "In vivo central",
@@ -851,14 +864,12 @@ plot_experimental_summary_clean <- function(results_df) {
         parameter_type == "In vitro (optimistic)" ~ "In vitro optimistic",
         TRUE ~ parameter_type
       ),
-      # Group by study type for coloring
       study_type = case_when(
         grepl("In vivo", parameter_type) ~ "In vivo",
         grepl("In vitro", parameter_type) ~ "In vitro",
         TRUE ~ "Other"
       )
     ) %>%
-    # Get average values across EIR/ft combinations for each parameter set
     group_by(study_label, study_type, baseline_ratio, treated_ratio) %>%
     summarise(
       final_resistance = mean(final_resistance, na.rm = TRUE),
@@ -872,7 +883,6 @@ plot_experimental_summary_clean <- function(results_df) {
              theme_void())
   }
 
-  # Create a simple table-style summary plot
   p <- exp_data %>%
     select(study_label, final_resistance, selection_coefficient) %>%
     pivot_longer(cols = c(final_resistance, selection_coefficient),
@@ -882,7 +892,6 @@ plot_experimental_summary_clean <- function(results_df) {
         metric == "final_resistance" ~ "Final Resistance (%)",
         metric == "selection_coefficient" ~ "Selection Coefficient"
       ),
-      # Format values appropriately
       formatted_value = case_when(
         metric == "Final Resistance (%)" ~ paste0(round(value * 100, 1), "%"),
         metric == "Selection Coefficient" ~ as.character(round(value, 2))
@@ -890,8 +899,10 @@ plot_experimental_summary_clean <- function(results_df) {
     ) %>%
     ggplot(aes(x = study_label, y = metric)) +
     geom_tile(aes(fill = value), color = "white", size = 1) +
-    geom_text(aes(label = formatted_value), color = "white", fontface = "bold", size = 4) +
-    scale_fill_viridis_c(option = "plasma", name = "Value") +
+    geom_text(aes(label = formatted_value), color = "white", fontface = "bold", size = BASE_TEXT_SIZE/3.5) +
+    scale_fill_gradient2(low = "darkblue", mid = "white", high = "darkred",
+                         midpoint = median(c(exp_data$final_resistance, exp_data$selection_coefficient), na.rm = TRUE),
+                         name = "Value") +
     labs(
       title = "Experimental Estimates Summary",
       subtitle = "Average outcomes across transmission settings",
@@ -900,8 +911,10 @@ plot_experimental_summary_clean <- function(results_df) {
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
-      plot.subtitle = element_text(size = 12),
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE - 1),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 2),
       axis.text.x = element_text(angle = 45, hjust = 1),
       axis.title.x = element_blank(),
       panel.grid = element_blank(),
@@ -924,21 +937,25 @@ plot_model_demonstration <- function(demo_data) {
   ggplot(demo_data, aes(x = time_years, y = resistance_prevalence,
                         color = scenario, linetype = scenario)) +
     geom_line(size = 2) +
-    geom_vline(xintercept = 1, linetype = "dashed", alpha = 0.7, color = "black", size = 1) +
     scale_color_manual(values = setNames(unique(demo_data$color), unique(demo_data$scenario))) +
     scale_linetype_manual(values = c("solid", "longdash", "dotted")) +
     labs(
       title = "Model Demonstration: Impact of Transmission Advantages on Resistance Spread",
-      subtitle = "EIR = 40 | Treatment coverage = 34% | Resistance advantages active after year 1",
-      x = "Time (years)",
+      subtitle = "EIR = 40 | Treatment coverage = 34% | Time starts from resistance introduction",
+      x = "Time since resistance introduction (years)",
       y = "Resistant infection prevalence (%)",
       color = "Infectiousness advantage",
       linetype = "Infectiousness advantage"
     ) +
     theme_minimal() +
     theme(
-      legend.position = "bottom",
-      plot.title = element_text(face = "bold", size = 14)
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      plot.subtitle = element_text(size = BASE_TEXT_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
+      legend.position = "bottom"
     )
 }
 
@@ -946,24 +963,26 @@ plot_simple_timeseries <- function(timeseries_data) {
   ggplot(timeseries_data, aes(x = time_years, y = resistance_prevalence,
                               color = scenario, linetype = study_type)) +
     geom_line(size = 1.5) +
-    geom_vline(xintercept = 1, linetype = "dashed", alpha = 0.7, color = "black") +
     scale_color_manual(values = setNames(unique(timeseries_data$color), unique(timeseries_data$scenario))) +
     scale_linetype_manual(values = c("In vitro" = "solid", "In vivo" = "longdash")) +
     labs(
       title = "Resistance Prevalence: In Vivo vs In Vitro Estimates",
-      x = "Time (years)",
+      x = "Time since resistance introduction (years)",
       y = "Resistant infection prevalence (%)",
       color = "Experimental scenario",
       linetype = "Study type"
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
-      legend.position = "bottom"
+      plot.title = element_text(face = "bold", size = BASE_TITLE_SIZE),
+      axis.title = element_text(size = BASE_TEXT_SIZE),
+      axis.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.text = element_text(size = BASE_TEXT_SIZE - 2),
+      legend.title = element_text(size = BASE_TEXT_SIZE - 1),
+      legend.position = "bottom",
+      plot.margin = margin(t = 20, r = 30, b = 20, l = 20, unit = "pt")  # Add this line
     )
 }
-
-
 
 run_integrated_gametocyte_analysis <- function() {
 
@@ -1098,9 +1117,7 @@ run_integrated_gametocyte_analysis <- function() {
 results <- run_integrated_gametocyte_analysis()
 
 
-
 # Getting selection coefficients for baseline  ----------------------------
-
 
 get_baseline_experimental_results <- function() {
   estimates <- define_experimental_ranges()
@@ -1135,7 +1152,7 @@ get_baseline_experimental_results <- function() {
 
     final_resistance <- output[nrow(output), "prevalence_res"]
 
-    # Calculate selection coefficient
+    # Calculate selection coefficient - same approach as comprehensive analysis
     p0_idx <- which.min(abs(output[, "t"] - 395))
     p1_idx <- which.min(abs(output[, "t"] - 730))
 
@@ -1153,6 +1170,7 @@ get_baseline_experimental_results <- function() {
   return(do.call(rbind, results_list))
 }
 
+
 baseline_results <- get_baseline_experimental_results()
 print(baseline_results)
 
@@ -1167,4 +1185,163 @@ comprehensive_data_broad <- comprehensive_parameter_analysis()
 p10_broad <- plot_experimental_summary_clean(comprehensive_data_broad)
 ggsave("10_experimental_summary_broad_ranges.png", p10_broad,
        width = 12, height = 8, dpi = 300, bg = "white")
+
+
+
+# Another heatmap ---------------------------------------------------------
+
+create_parameter_landscape_plot <- function() {
+  # Fine grid for the heatmap background
+  baseline_range <- seq(0.5, 3, by = 0.1)
+  treated_range <- seq(0.5, 10, by = 0.2)
+
+  heatmap_grid <- expand.grid(
+    baseline_ratio = baseline_range,
+    treated_ratio = treated_range
+  )
+
+  # Running models for heatmap background (using baseline conditions)
+  baseline_EIR <- 40
+  baseline_ft <- 0.34
+
+  heatmap_results <- list()
+
+  cat("Generating heatmap background...\n")
+  for (i in 1:nrow(heatmap_grid)) {
+    if (i %% 100 == 0) cat(paste("Progress:", i, "/", nrow(heatmap_grid), "\n"))
+
+    tryCatch({
+      combo <- heatmap_grid[i, ]
+
+      model <- malaria_model(
+        EIR = baseline_EIR,
+        ft = baseline_ft,
+        ton = 365,
+        toff = 365 + (3*365),  # 3 years for speed
+        day0_res = 0.01,
+        treatment_failure_rate = 0.43,
+        rT_r_cleared = 0.1,
+        rT_r_failed = 0.1,
+        resistance_baseline_ratio = combo$baseline_ratio,
+        resistance_cleared_ratio = combo$treated_ratio,
+        resistance_failed_ratio = combo$treated_ratio
+      )
+
+      times <- seq(0, 365 + (3*365), by = 90)
+      output <- model$run(times)
+
+      # Calculate selection coefficient
+      p0_idx <- which.min(abs(output[, "t"] - 395))
+      p1_idx <- which.min(abs(output[, "t"] - 730))
+
+      p0 <- max(min(output[p0_idx, "prevalence_res"], 0.999), 0.001)
+      p1 <- max(min(output[p1_idx, "prevalence_res"], 0.999), 0.001)
+      sel_coeff <- log(p1*(1-p0)/(p0*(1-p1)))
+
+      heatmap_results[[i]] <- data.frame(
+        baseline_ratio = combo$baseline_ratio,
+        treated_ratio = combo$treated_ratio,
+        selection_coefficient = sel_coeff
+      )
+
+    }, error = function(e) {
+      # Skip failed runs
+    })
+  }
+
+  heatmap_df <- do.call(rbind, heatmap_results)
+  heatmap_df <- heatmap_df[!is.na(heatmap_df$selection_coefficient), ]
+
+  # Define experimental estimates with uncertainty bounds
+  experimental_points <- data.frame(
+    study_type = c("In vivo", "In vitro"),
+    baseline_central = c(1.265, 1.0),
+    baseline_conservative = c(0.903, 0.8),
+    baseline_optimistic = c(1.759, 1.0),
+    treated_central = c(1.265, 7.5),
+    treated_conservative = c(0.903, 7.0),
+    treated_optimistic = c(1.759, 8.0),
+    color = c("#E74C3C", "#3498DB")  # Red for in vivo, Blue for in vitro
+  )
+
+  # Create the plot
+  p <- ggplot() +
+    # Heatmap background
+    geom_tile(data = heatmap_df,
+              aes(x = baseline_ratio, y = treated_ratio, fill = selection_coefficient),
+              alpha = 0.8) +
+
+    # Selection coefficient color scale
+    scale_fill_viridis_c(
+      name = "Selection\nCoefficient\n(per year)",
+      option = "plasma",
+      breaks = scales::pretty_breaks(n = 8),
+      labels = function(x) sprintf("%.2f", x)
+    ) +
+
+    # Add experimental point diamonds with uncertainty arms
+    geom_segment(data = experimental_points,
+                 aes(x = baseline_conservative, xend = baseline_optimistic,
+                     y = treated_central, yend = treated_central, color = study_type),
+                 size = 1.5, alpha = 0.8) +  # Horizontal uncertainty arms
+
+    geom_segment(data = experimental_points,
+                 aes(x = baseline_central, xend = baseline_central,
+                     y = treated_conservative, yend = treated_optimistic, color = study_type),
+                 size = 1.5, alpha = 0.8) +  # Vertical uncertainty arms
+
+    geom_point(data = experimental_points,
+               aes(x = baseline_central, y = treated_central, color = study_type),
+               shape = 18, size = 8, stroke = 2) +  # Diamond points
+
+    # Color scale for experimental points
+    scale_color_manual(
+      name = "Experimental\nEstimates",
+      values = setNames(experimental_points$color, experimental_points$study_type)
+    ) +
+
+    # Scales and labels
+    scale_x_continuous(
+      name = "Baseline ratio (κB)",
+      expand = c(0.02, 0.02),
+      breaks = seq(0.5, 3, by = 0.5)
+    ) +
+
+    scale_y_continuous(
+      name = "Post-treatment ratio",
+      expand = c(0.02, 0.02),
+      breaks = seq(0, 10, by = 2)
+    ) +
+
+    labs(
+      title = "Selection Coefficient Landscape with Experimental Estimates",
+      subtitle = "Background: Selection coefficients at baseline conditions (EIR=40, ft=34%)",
+      caption = "Diamonds show central estimates; error bars show conservative-optimistic ranges"
+    ) +
+
+    theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 16),
+      plot.subtitle = element_text(size = 14),
+      axis.title = element_text(size = 14),
+      axis.text = element_text(size = 12),
+      legend.text = element_text(size = 12),
+      legend.title = element_text(size = 13),
+      legend.position = "right",
+      panel.grid.major = element_line(color = "white", size = 0.5),
+      panel.grid.minor = element_blank()
+    ) +
+
+    guides(
+      fill = guide_colorbar(barwidth = 1.5, barheight = 10, title.position = "top"),
+      color = guide_legend(override.aes = list(shape = 18, size = 6), title.position = "top")
+    )
+
+  return(p)
+}
+
+# Generate and save the plot
+p_landscape <- create_parameter_landscape_plot()
+ggsave("parameter_landscape_with_estimates.png", p_landscape,
+       width = 14, height = 10, dpi = 300, bg = "white")
 
