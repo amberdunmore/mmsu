@@ -1,16 +1,34 @@
+# =============================================================================
+# UPDATED SCRIPT WITH NEW PARAMETERS
+# =============================================================================
+
+theme_kb_16 <- function() {
+  theme_minimal() +
+    theme(
+      plot.title = element_text(face = "bold", size = 16),
+      plot.subtitle = element_text(size = 16),
+      axis.title = element_text(size = 16, face = "bold"),
+      axis.text = element_text(size = 16),
+      axis.text.x = element_text(size = 16),
+      axis.text.y = element_text(size = 16),
+      legend.title = element_text(size = 16, face = "bold"),
+      legend.text = element_text(size = 16),
+      strip.text = element_text(size = 16, face = "bold"),
+      panel.grid.minor = element_blank()
+    )
+}
+
+# Recompile model with new parameters
 devtools::clean_dll()
 devtools::document()
 odin::odin_package(".")
 devtools::load_all(".")
 
-
-# kB comparison plot generation -------------------------------------------
-
 library(tidyverse)
 library(ggplot2)
 library(patchwork)
 
-# Creating analysis function for Uganda district data
+# Updated analysis function with new parameters
 run_uganda_district_analysis <- function(kb_scenario = "clinical_only") {
 
   cat(sprintf("=== RUNNING %s SCENARIO FOR UGANDA DISTRICTS ===\n", toupper(kb_scenario)))
@@ -31,7 +49,7 @@ run_uganda_district_analysis <- function(kb_scenario = "clinical_only") {
     )
 
     for(scenario in scenarios) {
-      # In vivo experimental estimates (from your original code)
+      # In vivo experimental estimates
       estimates <- data.frame(
         scenario = c("In vivo conservative", "In vivo central", "In vivo optimistic"),
         baseline_ratio = c(0.903, 1.265, 1.759),
@@ -41,17 +59,29 @@ run_uganda_district_analysis <- function(kb_scenario = "clinical_only") {
       for(j in 1:nrow(estimates)) {
         est <- estimates[j, ]
 
+        # Set κB parameters based on scenario
+        if(kb_scenario == "clinical_only") {
+          # κB only affects clinical states (Dr, Tr_cleared, Tr_failed)
+          asymptomatic_ratio <- 1.0  # No effect on Ar
+          clinical_ratio <- est$baseline_ratio  # Effect on Dr
+        } else {
+          # κB affects all resistant states (Ar, Dr, Tr_cleared, Tr_failed)
+          asymptomatic_ratio <- est$baseline_ratio  # Effect on Ar
+          clinical_ratio <- est$baseline_ratio  # Effect on Dr
+        }
+
         # Create model with district-specific parameters
         model <- malaria_model(
           EIR = scenario$eir,
           ft = scenario$ft,
           ton = 365,
           toff = 365 + (district_data$years * 365),
-          day0_res = district_data$f1,  # Use district-specific starting resistance
+          day0_res = district_data$f1,
           treatment_failure_rate = 0.43,
           rT_r_cleared = 0.1,
           rT_r_failed = 0.1,
-          resistance_baseline_ratio = est$baseline_ratio,
+          resistance_asymptomatic_ratio = asymptomatic_ratio,  # NEW
+          resistance_clinical_ratio = clinical_ratio,          # NEW
           resistance_cleared_ratio = est$treated_ratio,
           resistance_failed_ratio = est$treated_ratio
         )
@@ -62,7 +92,6 @@ run_uganda_district_analysis <- function(kb_scenario = "clinical_only") {
         output <- model$run(times)
 
         # Calculate selection coefficient using the actual years of observation
-        # Use 1 year after start and 2 years after start for consistency
         p0_idx <- which.min(abs(output[, "t"] - (365 + 365)))  # ~2 years from start
         p1_idx <- which.min(abs(output[, "t"] - (365 + (2*365))))  # ~3 years from start
 
@@ -81,6 +110,8 @@ run_uganda_district_analysis <- function(kb_scenario = "clinical_only") {
           vivo_scenario = est$scenario,
           baseline_ratio = est$baseline_ratio,
           treated_ratio = est$treated_ratio,
+          asymptomatic_ratio = asymptomatic_ratio,  # NEW
+          clinical_ratio = clinical_ratio,          # NEW
           selection_coefficient = sel_coeff,
           final_resistance = final_res,
           years_observed = district_data$years,
@@ -110,12 +141,11 @@ run_uganda_district_analysis <- function(kb_scenario = "clinical_only") {
   return(results_df)
 }
 
-# Function to test which district shows greatest difference
+# Updated function to test district differences with new parameters
 test_district_differences <- function() {
 
   cat("=== TESTING DISTRICTS FOR GREATEST κB DIFFERENCE ===\n")
 
-  # Test top 5 districts with highest EIR
   test_districts <- c("Agago", "Katakwi", "Kole", "Lamwo", "Kaabong")
 
   differences <- data.frame(
@@ -139,38 +169,40 @@ test_district_differences <- function() {
                 district_name, district_data$eir_high, district_data$ft_high, district_data$f1))
 
     tryCatch({
-      # Clinical only scenario
+      # Clinical only scenario - κB doesn't affect Ar
       model_clinical <- malaria_model(
         EIR = district_data$eir_high,
         ft = district_data$ft_high,
         ton = 365,
-        toff = 365 + (30 * 365),  # Extended to 30 years
+        toff = 365 + (30 * 365),
         day0_res = district_data$f1,
         treatment_failure_rate = 0.43,
         rT_r_cleared = 0.1,
         rT_r_failed = 0.1,
-        resistance_baseline_ratio = 1.0,  # No effect on Ar
+        resistance_asymptomatic_ratio = 1.0,          # No effect on Ar
+        resistance_clinical_ratio = baseline_ratio,   # Effect on Dr
         resistance_cleared_ratio = treated_ratio,
         resistance_failed_ratio = treated_ratio
       )
 
-      # All resistant scenario
+      # All resistant scenario - κB affects Ar + clinical
       model_all <- malaria_model(
         EIR = district_data$eir_high,
         ft = district_data$ft_high,
         ton = 365,
-        toff = 365 + (30 * 365),  # Extended to 30 years
+        toff = 365 + (30 * 365),
         day0_res = district_data$f1,
         treatment_failure_rate = 0.43,
         rT_r_cleared = 0.1,
         rT_r_failed = 0.1,
-        resistance_baseline_ratio = baseline_ratio,  # Effect on Ar too
+        resistance_asymptomatic_ratio = baseline_ratio,  # Effect on Ar too
+        resistance_clinical_ratio = baseline_ratio,      # Effect on Dr
         resistance_cleared_ratio = treated_ratio,
         resistance_failed_ratio = treated_ratio
       )
 
       # Extended time horizon - test up to 200 years
-      times <- seq(0, 365 * 200, by = 365 * 2)  # Every 2 years to speed up
+      times <- seq(0, 365 * 200, by = 365 * 2)
 
       # Run models
       output_clinical <- model_clinical$run(times)
@@ -195,7 +227,7 @@ test_district_differences <- function() {
         diff_years <- clinical_years - all_years
       } else {
         # Use final resistance levels as proxy for speed
-        diff_years <- all_final - clinical_final  # Higher = faster resistance growth
+        diff_years <- all_final - clinical_final
       }
 
       differences <- rbind(differences, data.frame(
@@ -217,7 +249,6 @@ test_district_differences <- function() {
     return("Agago")
   }
 
-  # Sort by greatest difference (positive = clinical slower, negative = difference in final resistance)
   differences <- differences[order(-differences$difference_years), ]
 
   cat("\n=== DISTRICT COMPARISON RESULTS ===\n")
@@ -229,23 +260,20 @@ test_district_differences <- function() {
   return(best_district)
 }
 
-# Function to create individual fixation plots (updated to use best district)
+# Updated fixation plots function with new parameters
 create_individual_fixation_plots <- function(district_name = NULL) {
 
   cat("=== CREATING INDIVIDUAL FIXATION PLOTS ===\n")
 
-  # Use provided district or find the best one
   if(is.null(district_name)) {
     district_name <- test_district_differences()
   }
 
-  # Handle case where no district was found
   if(is.na(district_name) || length(district_name) == 0) {
     cat("No suitable district found. Using Agago as default.\n")
     district_name <- "Agago"
   }
 
-  # Select the specified district
   district_data <- uga_param_data %>% filter(district == district_name)
 
   if(nrow(district_data) == 0) {
@@ -256,28 +284,26 @@ create_individual_fixation_plots <- function(district_name = NULL) {
 
   cat(sprintf("Using district: %s\n", district_name))
 
-  # Use central estimate
   baseline_ratio <- 1.265
   treated_ratio <- 1.265
 
   # PLOT 1: Clinical States Only (κB doesn't affect Ar)
-
   tryCatch({
     model_clinical <- malaria_model(
       EIR = district_data$eir_high,
       ft = district_data$ft_high,
       ton = 365,
-      toff = 365 + (50 * 365),  # 50 years of intervention
+      toff = 365 + (50 * 365),
       day0_res = district_data$f1,
       treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1,
       rT_r_failed = 0.1,
-      resistance_baseline_ratio = 1.0,  # No effect on asymptomatic (Ar)
-      resistance_cleared_ratio = treated_ratio,  # Only clinical get boost
+      resistance_asymptomatic_ratio = 1.0,          # No effect on Ar
+      resistance_clinical_ratio = baseline_ratio,   # Effect on Dr
+      resistance_cleared_ratio = treated_ratio,
       resistance_failed_ratio = treated_ratio
     )
 
-    # Run for 200 years but plot first 100
     times <- seq(0, 365 * 200, by = 365)
     output_clinical <- model_clinical$run(times)
 
@@ -286,10 +312,8 @@ create_individual_fixation_plots <- function(district_name = NULL) {
       resistance_prevalence = output_clinical[, "prevalence_res"]
     )
 
-    # Limit to first 100 years for plotting
     df_clinical <- df_clinical[df_clinical$time_years <= 100, ]
 
-    # Find fixation time for clinical only
     fixation_clinical <- df_clinical %>%
       filter(resistance_prevalence >= 0.95) %>%
       slice(1) %>%
@@ -310,11 +334,8 @@ create_individual_fixation_plots <- function(district_name = NULL) {
         x = "Time (years)",
         y = "Resistance Prevalence"
       ) +
-      theme_minimal() +
-      theme(
-        plot.title = element_text(face = "bold", size = 14, color = "#E31A1C"),
-        plot.subtitle = element_text(size = 12)
-      )
+      theme_kb_16() +
+      theme(plot.title = element_text(face = "bold", size = 16, color = "#E31A1C"))
 
   }, error = function(e) {
     cat("Error creating clinical plot:", e$message, "\n")
@@ -322,7 +343,6 @@ create_individual_fixation_plots <- function(district_name = NULL) {
   })
 
   # PLOT 2: All Resistant States (κB affects Ar + clinical)
-
   tryCatch({
     model_all <- malaria_model(
       EIR = district_data$eir_high,
@@ -333,7 +353,8 @@ create_individual_fixation_plots <- function(district_name = NULL) {
       treatment_failure_rate = 0.43,
       rT_r_cleared = 0.1,
       rT_r_failed = 0.1,
-      resistance_baseline_ratio = baseline_ratio,  # Effect on asymptomatic (Ar) too
+      resistance_asymptomatic_ratio = baseline_ratio,  # Effect on Ar too
+      resistance_clinical_ratio = baseline_ratio,      # Effect on Dr
       resistance_cleared_ratio = treated_ratio,
       resistance_failed_ratio = treated_ratio
     )
@@ -346,10 +367,8 @@ create_individual_fixation_plots <- function(district_name = NULL) {
       resistance_prevalence = output_all[, "prevalence_res"]
     )
 
-    # Limit to first 100 years for plotting
     df_all <- df_all[df_all$time_years <= 100, ]
 
-    # Find fixation time for all resistant
     fixation_all <- df_all %>%
       filter(resistance_prevalence >= 0.95) %>%
       slice(1) %>%
@@ -370,28 +389,23 @@ create_individual_fixation_plots <- function(district_name = NULL) {
         x = "Time (years)",
         y = "Resistance Prevalence"
       ) +
-      theme_minimal() +
-      theme(
-        plot.title = element_text(face = "bold", size = 14, color = "#1F78B4"),
-        plot.subtitle = element_text(size = 12)
-      )
+      theme_kb_16() +
+      theme(plot.title = element_text(face = "bold", size = 16, color = "#1F78B4"))
 
   }, error = function(e) {
     cat("Error creating all resistant plot:", e$message, "\n")
     plot_all <- ggplot() + labs(title = "Error in all resistant model")
   })
 
-  # Print comparison
   cat("District:", district_name, "\n")
   cat("EIR:", district_data$eir_high, "ft:", district_data$ft_high, "Starting freq:", district_data$f1, "\n")
 
   return(list(clinical_plot = plot_clinical, all_resistant_plot = plot_all))
 }
 
-# Function to create comparison plots
+# Keep the comparison plots function exactly the same
 create_uganda_comparison_plots <- function(clinical_results, all_resistant_results) {
 
-  # Combine results for comparison
   combined_results <- rbind(clinical_results, all_resistant_results)
 
   # 1. Selection coefficient comparison by district
@@ -404,10 +418,9 @@ create_uganda_comparison_plots <- function(clinical_results, all_resistant_resul
       y = "Selection coefficient (per year)",
       fill = "κB Scenario"
     ) +
-    theme_minimal() +
+    theme_kb_16() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
-      axis.text.x = element_text(angle = 45, hjust = 1),
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
       legend.position = "bottom"
     ) +
     scale_fill_manual(values = c("clinical_only" = "#E31A1C", "all_resistant" = "#1F78B4"),
@@ -424,16 +437,12 @@ create_uganda_comparison_plots <- function(clinical_results, all_resistant_resul
       x = "κB Scenario",
       y = "Selection coefficient (per year)"
     ) +
-    theme_minimal() +
-    theme(
-      plot.title = element_text(face = "bold", size = 14),
-      legend.position = "none"
-    ) +
+    theme_kb_16() +
+    theme(legend.position = "none") +
     scale_x_discrete(labels = c("Clinical States\nOnly", "All Resistant\nStates")) +
     scale_fill_manual(values = c("clinical_only" = "#E31A1C", "all_resistant" = "#1F78B4"))
 
   # 3. Comparison with Meier-Scherling estimates
-  # Individual mutation estimates
   individual_estimates <- data.frame(
     mutation = c("Pro441Leu", "Cys469Phe", "Cys469Tyr", "Ala675Val"),
     estimate = c(0.494, 0.324, 0.383, 0.237),
@@ -443,7 +452,6 @@ create_uganda_comparison_plots <- function(clinical_results, all_resistant_resul
     order = 4:7
   )
 
-  # Uganda Combined estimate
   uganda_combined <- data.frame(
     mutation = "Uganda Combined",
     estimate = 0.381,
@@ -453,7 +461,6 @@ create_uganda_comparison_plots <- function(clinical_results, all_resistant_resul
     order = 3
   )
 
-  # Summary statistics for our model results
   model_summary <- combined_results %>%
     group_by(kb_scenario) %>%
     summarise(
@@ -469,18 +476,15 @@ create_uganda_comparison_plots <- function(clinical_results, all_resistant_resul
       order = ifelse(kb_scenario == "clinical_only", 1, 2)
     )
 
-  # Combine Meier-Scherling data
   meier_data <- rbind(individual_estimates, uganda_combined)
 
   p3 <- ggplot() +
-    # Model estimates (colored by scenario)
     geom_errorbar(data = model_summary,
                   aes(x = reorder(mutation, order), ymin = lower_ci, ymax = upper_ci, color = kb_scenario),
                   width = 0.2, size = 1) +
     geom_point(data = model_summary,
                aes(x = reorder(mutation, order), y = mean_sel, color = kb_scenario),
                size = 3) +
-    # Meier-Scherling estimates
     geom_errorbar(data = meier_data,
                   aes(x = reorder(mutation, order), ymin = lower, ymax = upper,
                       color = type),
@@ -495,18 +499,17 @@ create_uganda_comparison_plots <- function(clinical_results, all_resistant_resul
       y = "Selection coefficient (per year)",
       color = "Estimate Source"
     ) +
-    theme_minimal() +
+    theme_kb_16() +
     theme(
-      plot.title = element_text(face = "bold", size = 14),
-      axis.text.x = element_text(angle = 45, hjust = 1),
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
       legend.position = "bottom"
     ) +
     scale_color_manual(
       values = c(
         "clinical_only" = "#E31A1C",
         "all_resistant" = "#1F78B4",
-        "Uganda Combined" = "#FF7F00",  # Orange for Uganda combined
-        "Individual" = "#228B22"       # Dark green for individual mutations
+        "Uganda Combined" = "#FF7F00",
+        "Individual" = "#228B22"
       ),
       labels = c(
         "clinical_only" = "Model: Clinical States Only",
@@ -520,62 +523,54 @@ create_uganda_comparison_plots <- function(clinical_results, all_resistant_resul
   return(list(district_plot = p1, overall_plot = p2, comparison_plot = p3))
 }
 
-# MAIN EXECUTION
+# MAIN EXECUTION WITH NEW PARAMETERS
+cat("=== STARTING ANALYSIS WITH SEPARATE κB PARAMETERS ===\n")
 
 # STEP 1: Run analysis for clinical states only scenario
-# Make sure model.R file has: cA_r <- cA * if (t > ton && t < toff) 1 else 1
 clinical_results <- run_uganda_district_analysis("clinical_only")
 
-# STEP 2: Modify your model and recompile
-# Change: cA_r <- cA * if (t > ton && t < toff) 1 else 1
-# To: cA_r <- cA * if (t > ton && t < toff) resistance_baseline_ratio else 1
-
-devtools::clean_dll()
-devtools::document()
-odin::odin_package(".")
-devtools::load_all(".")
-
-# STEP 3: Run analysis for all resistant states scenario
+# STEP 2: Run analysis for all resistant states scenario
 all_resistant_results <- run_uganda_district_analysis("all_resistant")
 
-# STEP 4: Create comparison plots
+# STEP 3: Create comparison plots
 plots <- create_uganda_comparison_plots(clinical_results, all_resistant_results)
 
-# STEP 5: Create fixation comparison plots (individual)
+# STEP 4: Create fixation comparison plots
 fixation_plots <- create_individual_fixation_plots()
 
-# Save individual fixation plots
+# Save all plots
 ggsave("uganda_fixation_clinical_only.png", fixation_plots$clinical_plot, width = 10, height = 8, dpi = 300)
 ggsave("uganda_fixation_all_resistant.png", fixation_plots$all_resistant_plot, width = 10, height = 8, dpi = 300)
 
-# Side-by-side comparison using patchwork
 if(require(patchwork, quietly = TRUE)) {
   combined_fixation <- fixation_plots$clinical_plot + fixation_plots$all_resistant_plot +
     plot_annotation(
       title = "Resistance Fixation Comparison: κB Scenarios",
-      subtitle = "Representative district (Tororo) - Shows impact of κB on asymptomatic infections"
+      subtitle = "Representative district - Shows impact of κB on asymptomatic infections",
+      theme = theme(
+        plot.title = element_text(face = "bold", size = 16),
+        plot.subtitle = element_text(size = 16)
+      )
     )
-
   ggsave("uganda_fixation_side_by_side.png", combined_fixation, width = 16, height = 8, dpi = 300)
 }
 
-# Save all plots
 ggsave("uganda_selection_by_district.png", plots$district_plot, width = 14, height = 8, dpi = 300)
 ggsave("uganda_overall_selection_comparison.png", plots$overall_plot, width = 10, height = 8, dpi = 300)
-ggsave("uganda_meier_scherling_comparison.png", plots$comparison_plot, width = 12, height = 8, dpi = 300)
+ggsave("uganda_meier_scherling_comparison.png", plots$comparison_plot, width = 16, height = 8, dpi = 300)
 
 # Save results
 write.csv(clinical_results, "uganda_clinical_only_results.csv", row.names = FALSE)
 write.csv(all_resistant_results, "uganda_all_resistant_results.csv", row.names = FALSE)
 
 # Print final comparison summary
+cat("=== FINAL COMPARISON SUMMARY ===\n")
 cat("Clinical states only - mean selection coefficient:", round(mean(clinical_results$selection_coefficient, na.rm = TRUE), 3), "\n")
 cat("All resistant states - mean selection coefficient:", round(mean(all_resistant_results$selection_coefficient, na.rm = TRUE), 3), "\n")
 
 difference <- mean(all_resistant_results$selection_coefficient, na.rm = TRUE) - mean(clinical_results$selection_coefficient, na.rm = TRUE)
 cat("Difference (All resistant - Clinical only):", round(difference, 3), "\n")
 
-# Compare with Meier-Scherling combined estimate (0.381)
 meier_combined <- 0.381
 cat("Meier-Scherling combined estimate:", meier_combined, "\n")
 cat("Clinical only vs Meier-Scherling difference:", round(mean(clinical_results$selection_coefficient, na.rm = TRUE) - meier_combined, 3), "\n")
