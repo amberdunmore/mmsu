@@ -29,9 +29,25 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           resistance_failed_ratio = 1, c_mult = c_multiplier,
                           verbose = FALSE) {
 
+  # UPDATE the function definition to include new parameters:
+  #malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
+                            #ton = 365, toff = 4015, day0_res = 0.01,
+                            #init_res = 0.0, res_time = 0, treatment_failure_rate = 0.3,
+                            #rT_r_cleared = 0.2, rT_r_failed = 0.2,
+                            #resistance_trans_mult = 1, resistance_dur_mult = 1,
+                            #resistance_asymptomatic_ratio = 1, resistance_clinical_ratio = 1,  # NEW
+                            #resistance_cleared_ratio = 1, resistance_failed_ratio = 1,
+                            #c_mult = c_multiplier, verbose = FALSE) {
+
   resistance_baseline_ratio <- c_mult(resistance_baseline_ratio)
   resistance_cleared_ratio <- c_mult(resistance_cleared_ratio)
   resistance_failed_ratio <- c_mult(resistance_failed_ratio)
+
+  # UPDATE the parameter processing:
+  #resistance_asymptomatic_ratio <- c_mult(resistance_asymptomatic_ratio)  # NEW
+  #resistance_clinical_ratio <- c_mult(resistance_clinical_ratio)          # NEW
+  #resistance_cleared_ratio <- c_mult(resistance_cleared_ratio)
+  #resistance_failed_ratio <- c_mult(resistance_failed_ratio)
 
   if (is.null(params)) {
     if (is.null(EIR) || is.null(ft)) {
@@ -43,7 +59,7 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           rT_r_failed = rT_r_failed,
                           resistance_trans_mult = resistance_trans_mult,
                           resistance_dur_mult = resistance_dur_mult,
-                          resistance_baseline_ratio = resistance_baseline_ratio,
+                          resistance_baseline_ratio = resistance_baseline_ratio, # = resistance_clinical_ratio instead
                           resistance_cleared_ratio = resistance_cleared_ratio,
                           resistance_failed_ratio = resistance_failed_ratio)
   }
@@ -61,6 +77,9 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
   params$resistance_baseline_ratio <- resistance_baseline_ratio
   params$resistance_cleared_ratio <- resistance_cleared_ratio
   params$resistance_failed_ratio <- resistance_failed_ratio
+  #params$resistance_asymptomatic_ratio <- resistance_asymptomatic_ratio  # NEW
+  #params$resistance_clinical_ratio <- resistance_clinical_ratio          # NEW
+
 
   # Generate initial parameters if not already present
   if (!"S0" %in% names(params)) {
@@ -97,6 +116,7 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                        "resistance_baseline_ratio",
                        "resistance_cleared_ratio",
                        "resistance_failed_ratio")
+  # UPDATE required_params list: add "resistance_asymptomatic_ratio", "resistance_clinical_raatio"
 
   missing_params <- setdiff(required_params, names(params))
   if (length(missing_params) > 0) {
