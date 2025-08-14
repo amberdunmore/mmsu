@@ -140,7 +140,7 @@ p3 <- ggplot() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
     legend.position = "bottom",
-    axis.line = element_line()
+    axis.line = element_line(), plot.background = element_rect(fill = "white", color = "white")
   ) +
   scale_color_manual(
     values = c(
@@ -183,9 +183,9 @@ p4 <- rbind(dat1 %>% mutate(scen = "kB Clinical Only"),
   ) +
   theme_kb_16() +
   theme(plot.title = element_text(face = "bold", size = 16, color = "#E31A1C"),
-        axis.line = element_line()) +
+        axis.line = element_line(), plot.background = element_rect(fill = "white", color = "white")) +
   scale_color_discrete(name = "kB Infetious States")
-ggsave("kb_comparison_fixed.png", p4, width = 8, height = 4, dpi = 300)
+ggsave("kb_comparison_fixed.png", p4, width = 10, height = 6, dpi = 300)
 
 
 # 36.5 years
