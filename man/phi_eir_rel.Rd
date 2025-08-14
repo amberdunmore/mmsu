@@ -12,8 +12,8 @@ phi_eir_rel(
   init_res = 0.01,
   res_time = 3000,
   treatment_failure_rate = 0.3,
-  rT_r_cleared = 0.1,
-  rT_r_failed = 0.1,
+  rT_r_cleared = 0.2,
+  rT_r_failed = 0.2,
   day0_res = 0.01,
   resistance_trans_mult = 1,
   resistance_dur_mult = 1,
@@ -37,9 +37,9 @@ phi_eir_rel(
 
 \item{treatment_failure_rate}{Proportion of treatments that fail completely (default = 0.3)}
 
-\item{rT_r_cleared}{Recovery rate for delayed clearance treatment (default = 0.1)}
+\item{rT_r_cleared}{Recovery rate for delayed clearance treatment (default = 0.2)}
 
-\item{rT_r_failed}{Rate of transition from failed treatment to asymptomatic (default = 0.1)}
+\item{rT_r_failed}{Rate of transition from failed treatment to asymptomatic (default = 0.2)}
 
 \item{day0_res}{Resistant at Day 0. Default = 0}
 
