@@ -129,7 +129,7 @@ uga_eir_ranges <- uga_eir_ranges %>%
 # and merge this data together
 uga_param_data <- left_join(uga_eir_ranges %>% mutate(district = replace(district, district == "Amolatar", "Amoleta")), uga_start_res)
 print(uga_param_data)
-
+saveRDS(uga_param_data, "analysis/data-derived/uga_param_data.rds")
 # Each Ugandan district has a range for ft and EIR, and what the starting freq of resistance is
 # and how many years there were from the Meier-Scherling paper
 # Run model for comparison between those upper and lower values for each one, use that to generate your selection coefficients

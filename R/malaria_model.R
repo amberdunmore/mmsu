@@ -18,6 +18,7 @@
 #' @param resistance_failed_ratio infectiousness ratio for treatment failure (default = 1)
 #' @param c_mult function to convert ratios into adjusted onward contibution terms
 #' @param verbose Logical. If TRUE, prints detailed logs. Default is FALSE.
+#' @param resistance_asymptomatic_ratio Asymptomatic cA multiplier for res. Default = 1
 #' @return An object of class `odin_model`.
 #' @export
 malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
@@ -27,7 +28,8 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           resistance_trans_mult = 1, resistance_dur_mult = 1,
                           resistance_baseline_ratio = 1, resistance_cleared_ratio = 1,
                           resistance_failed_ratio = 1, c_mult = c_multiplier,
-                          verbose = FALSE) {
+                          verbose = FALSE,
+                          resistance_asymptomatic_ratio = 1) {
 
   # UPDATE the function definition to include new parameters:
   #malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
@@ -42,6 +44,7 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
   resistance_baseline_ratio <- c_mult(resistance_baseline_ratio)
   resistance_cleared_ratio <- c_mult(resistance_cleared_ratio)
   resistance_failed_ratio <- c_mult(resistance_failed_ratio)
+  resistance_asymptomatic_ratio <- c_mult(resistance_asymptomatic_ratio)
 
   # UPDATE the parameter processing:
   #resistance_asymptomatic_ratio <- c_mult(resistance_asymptomatic_ratio)  # NEW
@@ -61,7 +64,8 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                           resistance_dur_mult = resistance_dur_mult,
                           resistance_baseline_ratio = resistance_baseline_ratio, # = resistance_clinical_ratio instead
                           resistance_cleared_ratio = resistance_cleared_ratio,
-                          resistance_failed_ratio = resistance_failed_ratio)
+                          resistance_failed_ratio = resistance_failed_ratio,
+                          resistance_asymptomatic_ratio = resistance_asymptomatic_ratio)
   }
 
   # Update parameters
@@ -77,7 +81,7 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
   params$resistance_baseline_ratio <- resistance_baseline_ratio
   params$resistance_cleared_ratio <- resistance_cleared_ratio
   params$resistance_failed_ratio <- resistance_failed_ratio
-  #params$resistance_asymptomatic_ratio <- resistance_asymptomatic_ratio  # NEW
+  params$resistance_asymptomatic_ratio <- resistance_asymptomatic_ratio  # NEW
   #params$resistance_clinical_ratio <- resistance_clinical_ratio          # NEW
 
 
@@ -115,7 +119,8 @@ malaria_model <- function(params = NULL, EIR = NULL, ft = NULL,
                        "resistance_trans_mult", "resistance_dur_mult",
                        "resistance_baseline_ratio",
                        "resistance_cleared_ratio",
-                       "resistance_failed_ratio")
+                       "resistance_failed_ratio",
+                       "resistance_asymptomatic_ratio")
   # UPDATE required_params list: add "resistance_asymptomatic_ratio", "resistance_clinical_raatio"
 
   missing_params <- setdiff(required_params, names(params))

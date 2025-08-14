@@ -14,13 +14,14 @@ malaria_model(
   init_res = 0,
   res_time = 0,
   treatment_failure_rate = 0.3,
-  rT_r_cleared = 0.1,
-  rT_r_failed = 0.1,
+  rT_r_cleared = 0.2,
+  rT_r_failed = 0.2,
   resistance_trans_mult = 1,
   resistance_dur_mult = 1,
   resistance_baseline_ratio = 1,
   resistance_cleared_ratio = 1,
   resistance_failed_ratio = 1,
+  c_mult = c_multiplier,
   verbose = FALSE
 )
 }
@@ -56,6 +57,8 @@ malaria_model(
 \item{resistance_cleared_ratio}{infectiousness ratio for partial treatment response (default = 1)}
 
 \item{resistance_failed_ratio}{infectiousness ratio for treatment failure (default = 1)}
+
+\item{c_mult}{function to convert ratios into adjusted onward contibution terms}
 
 \item{verbose}{Logical. If TRUE, prints detailed logs. Default is FALSE.}
 }

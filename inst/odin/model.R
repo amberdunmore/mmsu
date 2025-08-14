@@ -157,7 +157,7 @@ resistance_dur_mult <- user()
 resistance_baseline_ratio <- user()
 resistance_cleared_ratio <- user()
 resistance_failed_ratio <- user()
-#resistance_asymptomatic_ratio <- user()  # NEW: For Ar compartment specifically
+resistance_asymptomatic_ratio <- user()  # NEW: For Ar compartment specifically
 #resistance_clinical_ratio <- user()      # NEW: For Dr compartment specifically
 #COMMENT OUT the old parameter: resistance_baseline_ratio <- user()
 
@@ -175,7 +175,7 @@ cT_s <- cT  # baseline treated infectiousness (sensitive)
 
 # Resistant infectiousness parameters (time-dependent activation)
 #cA_r <- cA * if (t > ton && t < toff) resistance_asymptomatic_ratio else 1  # Asymptomatic resistant
-cA_r <- cA * if (t > ton && t < toff) 1 else 1
+cA_r <- cA * if (t > ton && t < toff) resistance_asymptomatic_ratio else 1
 cD_r <- cD * if (t > ton && t < toff) resistance_baseline_ratio else 1 # resistance_baseline_ratio only applies to those symptomatic
 #cD_r <- cD * if (t > ton && t < toff) resistance_clinical_ratio else 1      # Clinical resistant (untreated)
 cT_r_cleared <- cT * if (t > ton && t < toff) resistance_cleared_ratio else 1 # Keep the same as baseline for in vivo
